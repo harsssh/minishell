@@ -1,0 +1,6 @@
+-Ilibft/include
+-Iinclude
+-lreadline
+-Wall
+-Wextra
+-Werror
