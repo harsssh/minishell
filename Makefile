@@ -6,6 +6,7 @@ BUILD_DIR:=build
 LIBFT:=libft/libft.a
 
 CFLAGS:=-Wall -Wextra -Werror -Ilibft/include -Iinclude
+LDFLAGS:=-lreadline
 DEPFLAGS=-MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.d
 
 SRC:=$(shell find $(SRC_DIR) -name '*.c')
@@ -16,7 +17,7 @@ DEP:=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.d,$(SRC))
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
