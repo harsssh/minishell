@@ -1,0 +1,7 @@
+a.out
+main.c
+libft.a
+*.o
+build
+.idea
+cmake-build-debug

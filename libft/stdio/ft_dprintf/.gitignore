@@ -1,0 +1,9 @@
+libftprintf.a
+main.c
+*.o
+a.out
+compile_commands.json
+main
+.cache
+ft_printf_tester
+printfTester
