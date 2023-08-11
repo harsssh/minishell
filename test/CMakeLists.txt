@@ -3,7 +3,6 @@ project(test)
 
 set(CMAKE_CXX_STANDARD 11)
 
-enable_testing()
 find_package(GTest CONFIG REQUIRED)
 include(GoogleTest)
 

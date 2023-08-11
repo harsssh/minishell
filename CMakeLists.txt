@@ -4,6 +4,8 @@ project(minishell C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Werror")
 
+enable_testing()
+
 add_subdirectory(libft)
 add_subdirectory(test)
 
