@@ -3,7 +3,6 @@ project(minishell_test)
 
 set(CMAKE_CXX_STANDARD 11)
 
-enable_testing()
 find_package(GTest CONFIG REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
