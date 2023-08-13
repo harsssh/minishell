@@ -59,5 +59,5 @@ long long	ft_atoll(const char *str)
 		}
 		num = num * 10 + x;
 	}
-	return ((long long)(sign * num));
+	return ((long long)(num * sign));
 }

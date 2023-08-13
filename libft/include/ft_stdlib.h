@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/06/13 01:01:11 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ long		ft_atol(const char *str);
 long long	ft_atoll(const char *str);
 void		*ft_calloc(size_t count, size_t size);
 char		*ft_itoa(int n);
+int			ft_setenv(const char *name, const char *value, int overwrite);
 
 #endif

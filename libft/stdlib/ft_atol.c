@@ -59,5 +59,5 @@ long	ft_atol(const char *str)
 		}
 		num = num * 10 + x;
 	}
-	return ((long)(sign * num));
+	return ((long)(num * sign));
 }

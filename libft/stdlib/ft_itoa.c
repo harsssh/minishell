@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 11:07:46 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/23 18:54:21 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/14 00:59:43 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	store_digit(unsigned int n, char *buf, size_t len)
 		buf[0] = '0';
 		return ;
 	}
-	buf[len--] = '\0';
+	buf[--len] = '\0';
 	while (n && len--)
 	{
 		buf[len] = (n % 10) + '0';
