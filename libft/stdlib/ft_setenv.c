@@ -13,7 +13,6 @@
 #include "ft_stdlib.h"
 #include "ft_string.h"
 #include <errno.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 static char	**find_env(const char *name, size_t name_len)
@@ -58,7 +57,6 @@ static int	ensure_sufficient_environ_allocated(char ***envpp)
 	if (*envpp == NULL || **envpp == NULL)
 	{
 		env_len = *envpp - environ;
-		printf("%zu\n", env_len);
 		new_environ = reallocate_environ(last_environ, (env_len + 2)
 				* sizeof(char *), (env_len + 1) * sizeof(char *));
 		if (new_environ == NULL)
