@@ -6,6 +6,8 @@ BUILD_DIR:=build
 LIBFT:=libft/libft.a
 
 CFLAGS:=-Wall -Wextra -Werror -Ilibft/include -Iinclude
+RELEASE_FLAGS:=-O3
+DEBUG_FLAGS:=-g -O0 -fsanitize=address
 LDFLAGS:=-lreadline
 DEPFLAGS=-MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.d
 
@@ -14,7 +16,12 @@ OBJ:=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC))
 DEP:=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.d,$(SRC))
 
 .PHONY: all
+all: CFLAGS+=$(RELEASE_FLAGS)
 all: $(NAME)
+
+.PHONY: debug
+debug: CFLAGS+=$(DEBUG_FLAGS)
+debug: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
