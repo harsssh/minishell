@@ -104,6 +104,20 @@ TEST(ft_list_get, normal) {
 		ASSERT_TRUE(ft_list_get(list, i) == &data[i]);
 }
 
+// find
+TEST(ft_list_find, normal) {
+	int data[3] = {42, 43, 44};
+	t_list *list;
+
+	list = ft_list_create();
+	for (int &i: data)
+		ft_list_push_back(list, &i);
+	void *found = ft_list_find(list, &data[1], [](void *a, void *b) -> int {
+		return *(int *)a - *(int *)b;
+	});
+	ASSERT_TRUE(found == &data[1]);
+}
+
 // pop_front
 TEST(ft_list_pop_front, normal) {
 	int data[3] = {42, 43, 44};

@@ -33,6 +33,7 @@ t_list	*ft_list_create(void);
 void	ft_list_destroy(t_list *list, void (*del)(void *));
 
 void	*ft_list_get(t_list *list, unsigned int index);
+void	*ft_list_find(t_list *list, void *value, int (*cmp)(void *, void *));
 
 void	ft_list_push_front(t_list *list, void *data);
 void	ft_list_push_back(t_list *list, void *data);
