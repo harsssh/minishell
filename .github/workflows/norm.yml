@@ -6,11 +6,6 @@ on:
       - "libft/**"
       - "include/**"
       - "src/**"
-  pull_request:
-    paths:
-      - "libft/**"
-      - "include/**"
-      - "src/**"
   workflow_dispatch:
 
 jobs:
