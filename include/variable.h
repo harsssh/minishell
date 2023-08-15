@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stdlib.h                                        :+:      :+:    :+:   */
+/*   variable.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 04:32:03 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/15 19:58:46 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_STDLIB_H
-# define FT_STDLIB_H
+#ifndef VARIABLE_H
+# define VARIABLE_H
 
-# include <stddef.h>
+# include "context.h"
 
-int			ft_atoi(const char *str);
-long		ft_atol(const char *str);
-long long	ft_atoll(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-char		*ft_itoa(int n);
+# define ATTR_EXPORTED 1
+
+typedef struct s_variable
+{
+	char	*name;
+	char	*value;
+	char	*envstr;
+	int		attributes;
+}			t_variable;
+
+t_variable	*getvar(t_context *ctx, char *name);
+int			setvar(t_context *ctx, char *name, char *value, int overwrite);
+int			unsetvar(t_context *ctx, char *name);
 
 #endif

@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stdlib.h                                        :+:      :+:    :+:   */
+/*   list_destroy.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 07:22:36 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/15 07:22:37 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_STDLIB_H
-# define FT_STDLIB_H
+#include "ft_list.h"
+#include <stdlib.h>
 
-# include <stddef.h>
-
-int			ft_atoi(const char *str);
-long		ft_atol(const char *str);
-long long	ft_atoll(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-char		*ft_itoa(int n);
-
-#endif
+void	ft_list_destroy(t_list *list, void (*del)(void *))
+{
+	if (list == NULL)
+		return ;
+	ft_list_clear(list, del);
+	free(list);
+}

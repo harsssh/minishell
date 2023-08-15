@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stdlib.h                                        :+:      :+:    :+:   */
+/*   list_clear.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 07:22:29 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/15 07:22:30 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_STDLIB_H
-# define FT_STDLIB_H
+#include "ft_list.h"
+#include <stdlib.h>
 
-# include <stddef.h>
+void	ft_list_clear(t_list *list, void (*del)(void *))
+{
+	t_node	*node;
+	t_node	*next;
 
-int			ft_atoi(const char *str);
-long		ft_atol(const char *str);
-long long	ft_atoll(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-char		*ft_itoa(int n);
-
-#endif
+	if (list == NULL)
+		return ;
+	node = list->head;
+	while (node != NULL)
+	{
+		next = node->next;
+		if (del != NULL)
+			del(node->data);
+		free(node);
+		node = next;
+	}
+	list->head = NULL;
+	list->tail = NULL;
+	list->size = 0;
+}

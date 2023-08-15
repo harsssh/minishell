@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stdlib.h                                        :+:      :+:    :+:   */
+/*   getvar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 19:14:48 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/15 19:14:49 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_STDLIB_H
-# define FT_STDLIB_H
+#include "libft.h"
+#include "variable.h"
 
-# include <stddef.h>
+static int	find_func(void *data, void *ref)
+{
+	return (ft_strcmp(((t_variable *)data)->name, (char *)ref));
+}
 
-int			ft_atoi(const char *str);
-long		ft_atol(const char *str);
-long long	ft_atoll(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-char		*ft_itoa(int n);
+t_variable	*getvar(t_context *ctx, char *name)
+{
+	t_variable	*var;
 
-#endif
+	var = ft_list_find(ctx->variables, name, find_func);
+	return (var);
+}

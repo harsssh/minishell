@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stdlib.h                                        :+:      :+:    :+:   */
+/*   list_filter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 18:20:52 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/15 18:20:53 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_STDLIB_H
-# define FT_STDLIB_H
+#include "ft_list.h"
+#include "list_internal.h"
 
-# include <stddef.h>
+void	ft_list_filter(t_list *list, void *ref, int (*cmp)(void *, void *),
+		void (*del)(void *))
+{
+	t_node	*node;
+	t_node	*next;
 
-int			ft_atoi(const char *str);
-long		ft_atol(const char *str);
-long long	ft_atoll(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-char		*ft_itoa(int n);
-
-#endif
+	if (list == NULL || cmp == NULL)
+		return ;
+	node = list->head;
+	while (node != NULL)
+	{
+		next = node->next;
+		if (cmp(node->data, ref) == 0)
+			ft_node_remove(list, node, del);
+		node = next;
+	}
+}

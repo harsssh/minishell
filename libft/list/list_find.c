@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stdlib.h                                        :+:      :+:    :+:   */
+/*   list_find.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/13 01:01:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/14 02:36:21 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 08:49:55 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/15 08:49:57 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_STDLIB_H
-# define FT_STDLIB_H
+#include "ft_list.h"
 
-# include <stddef.h>
+void	*ft_list_find(t_list *list, void *ref, int (*cmp)(void *, void *))
+{
+	t_node	*node;
 
-int			ft_atoi(const char *str);
-long		ft_atol(const char *str);
-long long	ft_atoll(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-char		*ft_itoa(int n);
-
-#endif
+	if (list == NULL || cmp == NULL)
+		return (NULL);
+	node = list->head;
+	while (node != NULL)
+	{
+		if (cmp(node->data, ref) == 0)
+			return (node->data);
+		node = node->next;
+	}
+	return (NULL);
+}
