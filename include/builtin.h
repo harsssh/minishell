@@ -13,6 +13,6 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-int	builtin_echo(int argc, char **argv);
+int	builtin_echo(char **args);
 
 #endif
