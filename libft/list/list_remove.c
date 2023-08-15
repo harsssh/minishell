@@ -19,18 +19,6 @@ void	ft_list_remove(t_list *list, unsigned int index, void (*del)(void *))
 	t_node	*node;
 
 	node = ft_node_get(list, index);
-	if (node == NULL)
-		return ;
-	if (node->prev == NULL)
-		list->head = node->next;
-	else
-		node->prev->next = node->next;
-	if (node->next == NULL)
-		list->tail = node->prev;
-	else
-		node->next->prev = node->prev;
-	if (del != NULL)
-		del(node->data);
-	free(node);
-	--list->size;
+	if (node != NULL)
+		ft_node_remove(list, node, del);
 }

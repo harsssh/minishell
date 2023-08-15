@@ -37,3 +37,21 @@ t_node	*ft_node_get(t_list *list, unsigned int index)
 		node = node->next;
 	return (node);
 }
+
+void	ft_node_remove(t_list *list, t_node *node, void (*del)(void *))
+{
+	if (list == NULL || node == NULL)
+		return ;
+	if (node->prev == NULL)
+		list->head = node->next;
+	else
+		node->prev->next = node->next;
+	if (node->next == NULL)
+		list->tail = node->prev;
+	else
+		node->next->prev = node->prev;
+	if (del != NULL)
+		del(node->data);
+	free(node);
+	--list->size;
+}

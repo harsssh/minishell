@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 07:21:03 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 07:21:46 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/15 18:23:05 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_list	*ft_list_create(void);
 void	ft_list_destroy(t_list *list, void (*del)(void *));
 
 void	*ft_list_get(t_list *list, unsigned int index);
-void	*ft_list_find(t_list *list, void *value, int (*cmp)(void *, void *));
+void	*ft_list_find(t_list *list, void *ref, int (*cmp)(void *, void *));
 
 void	ft_list_push_front(t_list *list, void *data);
 void	ft_list_push_back(t_list *list, void *data);
@@ -42,6 +42,10 @@ void	ft_list_insert(t_list *list, unsigned int index, void *data);
 void	*ft_list_pop_front(t_list *list);
 void	*ft_list_pop_back(t_list *list);
 void	ft_list_remove(t_list *list, unsigned int index, void (*del)(void *));
+void	ft_list_filter(t_list *list, void *ref,
+			int (*cmp)(void *, void *), void (*del)(void *));
+void	ft_list_exclude(t_list *list, void *ref,
+			int (*cmp)(void *, void *), void (*del)(void *));
 void	ft_list_clear(t_list *list, void (*del)(void *));
 
 #endif

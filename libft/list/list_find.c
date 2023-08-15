@@ -12,7 +12,7 @@
 
 #include "ft_list.h"
 
-void	*ft_list_find(t_list *list, void *value, int (*cmp)(void *, void *))
+void	*ft_list_find(t_list *list, void *ref, int (*cmp)(void *, void *))
 {
 	t_node	*node;
 
@@ -21,7 +21,7 @@ void	*ft_list_find(t_list *list, void *value, int (*cmp)(void *, void *))
 	node = list->head;
 	while (node != NULL)
 	{
-		if (cmp(node->data, value) == 0)
+		if (cmp(node->data, ref) == 0)
 			return (node->data);
 		node = node->next;
 	}
