@@ -99,3 +99,44 @@ TEST(setvar, invalid_name)
 
 	ASSERT_TRUE(ctx.variables->size == 0);
 }
+
+// unsetvar
+TEST(unsetvar, normal)
+{
+	t_context ctx;
+
+	ctx.variables = ft_list_create();
+	setvar(&ctx, "name1", "value1", 1);
+	setvar(&ctx, "name2", "value2", 1);
+	ASSERT_TRUE(ctx.variables->size == 2);
+
+	unsetvar(&ctx, "name1");
+	ASSERT_TRUE(ctx.variables->size == 1);
+	ASSERT_TRUE(getvar(&ctx, "name1") == nullptr);
+	ASSERT_TRUE(getvar(&ctx, "name2") != nullptr);
+
+	unsetvar(&ctx, "name2");
+	ASSERT_TRUE(ctx.variables->size == 0);
+	ASSERT_TRUE(getvar(&ctx, "name1") == nullptr);
+	ASSERT_TRUE(getvar(&ctx, "name2") == nullptr);
+}
+
+// unsetvar, nameが不正
+TEST(unsetvar, invalid_name)
+{
+	t_context ctx;
+
+	ctx.variables = ft_list_create();
+	setvar(&ctx, "name1", "value1", 1);
+	setvar(&ctx, "name2", "value2", 1);
+	ASSERT_TRUE(ctx.variables->size == 2);
+
+	unsetvar(&ctx, NULL);
+	ASSERT_TRUE(ctx.variables->size == 2);
+
+	unsetvar(&ctx, "");
+	ASSERT_TRUE(ctx.variables->size == 2);
+
+	unsetvar(&ctx, "name1=value1");
+	ASSERT_TRUE(ctx.variables->size == 2);
+}
