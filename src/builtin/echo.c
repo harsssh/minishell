@@ -6,73 +6,56 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 14:17:25 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/11 15:47:49 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/16 00:44:23 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <errno.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-static bool	is_option(char *arg)
+static char	**skip_options(char **args, bool *newline)
 {
-	unsigned int	count;
+	char	*str;
 
-	if (*arg != '-')
-		return (false);
-	arg++;
-	count = 0;
-	while (*arg)
+	*newline = true;
+	while (args && *args && **args == '-')
 	{
-		if (*arg != 'n')
-			return (false);
-		arg++;
-		count++;
-	}
-	return (count > 0);
-}
-
-static unsigned int	count_option(int argc, char **argv)
-{
-	unsigned int	i;
-	unsigned int	count;
-
-	i = 1;
-	count = 0;
-	while (i < (unsigned int)argc)
-	{
-		if (!is_option(argv[i]))
+		str = *args;
+		while (*(++str) == 'n')
+			;
+		if ((*args)[1] == '\0' || *str != '\0')
 			break ;
-		i++;
-		count++;
+		*newline = false;
+		++args;
 	}
-	return (count);
+	return (args);
 }
 
-static void	print_args(unsigned int n, char **array)
+static void	print_args(char **args, bool newline)
 {
-	unsigned int	i;
-
-	i = 0;
-	while (i < n)
+	while (args && *args)
 	{
-		printf("%s", array[i]);
-		if (i < n - 1)
-			printf(" ");
-		i++;
+		ft_putstr_fd(*args, STDOUT_FILENO);
+		++args;
+		if (*args)
+			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
+	if (newline)
+		ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-int	builtin_echo(int argc, char **argv)
+// TODO: print error message
+int	builtin_echo(char **args)
 {
-	unsigned int	options;
+	bool	newline;
 
-	if (argc < 1 || argv == NULL)
+	args = skip_options(args, &newline);
+	errno = 0;
+	print_args(args, newline);
+	if (errno)
 		return (EXIT_FAILURE);
-	options = count_option(argc, argv);
-	print_args(argc - options - 1, argv + options + 1);
-	if (options == 0)
-		printf("\n");
 	return (EXIT_SUCCESS);
 }

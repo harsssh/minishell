@@ -8,9 +8,8 @@ extern "C" {
 // オプションなし
 TEST(builtin_echo, no_option) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "hello", "world"};
-	int argc = 3;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"hello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -20,9 +19,8 @@ TEST(builtin_echo, no_option) {
 // オプションなし, 引数なし
 TEST(builtin_echo, no_option_no_arg) {
 	testing::internal::CaptureStdout();
-	char *argv[] = {"echo"};
-	int argc = 1;
-	int ret = builtin_echo(argc, argv);
+	char *args[] = {nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -32,9 +30,8 @@ TEST(builtin_echo, no_option_no_arg) {
 // オプションなし, 空文字含む
 TEST(builtin_echo, no_option_empty) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "", "hello", "", "world", ""};
-	int argc = 6;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"", "hello", "", "world", "", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -44,9 +41,8 @@ TEST(builtin_echo, no_option_empty) {
 // オプションあり
 TEST(builtin_echo, with_n_option) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-n", "hello", "world"};
-	int argc = 4;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-n", "hello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -56,9 +52,8 @@ TEST(builtin_echo, with_n_option) {
 // オプションあり, 引数なし
 TEST(builtin_echo, with_n_option_no_arg) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-n"};
-	int argc = 2;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-n", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -68,9 +63,8 @@ TEST(builtin_echo, with_n_option_no_arg) {
 // オプションあり, 空文字含む
 TEST(builtin_echo, with_n_option_empty) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-n", "", "hello", "", "world", ""};
-	int argc = 7;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-n", "", "hello", "", "world", "", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -80,9 +74,8 @@ TEST(builtin_echo, with_n_option_empty) {
 // オプションの位置が違う
 TEST(builtin_echo, wrong_option_position) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "hello", "-n", "world"};
-	int argc = 4;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"hello", "-n", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -92,9 +85,8 @@ TEST(builtin_echo, wrong_option_position) {
 // オプションっぽい文字列
 TEST(builtin_echo, option_like_string) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "--n", "hello", "world"};
-	int argc = 4;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"--n", "hello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -103,9 +95,8 @@ TEST(builtin_echo, option_like_string) {
 
 TEST(builtin_echo, option_like_string2) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-nhello", "world"};
-	int argc = 3;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-nhello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -114,9 +105,8 @@ TEST(builtin_echo, option_like_string2) {
 
 TEST(builtin_echo, option_like_string3) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-n ", "hello", "world"};
-	int argc = 4;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-n ", "hello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -126,9 +116,8 @@ TEST(builtin_echo, option_like_string3) {
 // オプション複数
 TEST(builtin_echo, multiple_options) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-n", "-n", "hello", "world"};
-	int argc = 5;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-n", "-n", "hello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -138,12 +127,33 @@ TEST(builtin_echo, multiple_options) {
 // nが複数
 TEST(builtin_echo, multiple_n) {
 	testing::internal::CaptureStdout();
-	const char *argv[] = {"echo", "-nn", "-nnn", "hello", "world"};
-	int argc = 5;
-	int ret = builtin_echo(argc, const_cast<char **>(argv));
+	char *args[] = {"-nn", "-nnn", "hello", "world", nullptr};
+	int ret = builtin_echo(args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
 	EXPECT_EQ(output, "hello world");
+}
+
+// ハイフンだけ
+TEST(builtin_echo, only_hyphen) {
+	testing::internal::CaptureStdout();
+	char *args[] = {"-", nullptr};
+	int ret = builtin_echo(args);
+	auto output = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(ret, EXIT_SUCCESS);
+	EXPECT_EQ(output, "-\n");
+}
+
+// -n以外
+TEST(builtin_echo, not_n_option) {
+	testing::internal::CaptureStdout();
+	char *args[] = {"-a", "hello", "world", nullptr};
+	int ret = builtin_echo(args);
+	auto output = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(ret, EXIT_SUCCESS);
+	EXPECT_EQ(output, "-a hello world\n");
 }
 
