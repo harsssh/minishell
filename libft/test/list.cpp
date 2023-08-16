@@ -280,3 +280,28 @@ TEST(ft_list_clear, normal) {
 	ASSERT_TRUE(list->tail == nullptr);
 	ASSERT_TRUE(list->size == 0);
 }
+
+// iter
+TEST(ft_list_iter, normal) {
+	int data[3] = {42, 43, 44};
+	t_list *list;
+	t_list *copy;
+
+	list = ft_list_create();
+	for (int &i: data)
+		ft_list_push_back(list, &i);
+	auto copy_func = [](void *data) -> void * {
+		return new int(*(int *)data);
+	};
+	copy = ft_list_copy(list, copy_func, nullptr);
+	auto iter_func = [](void *data) -> void {
+		*(int *)data += 1;
+	};
+	ft_list_iter(copy, iter_func);
+	ASSERT_TRUE(*(int *)copy->head->data == 43);
+	ASSERT_TRUE(*(int *)copy->head->next->data == 44);
+	ASSERT_TRUE(*(int *)copy->head->next->next->data == 45);
+	ASSERT_TRUE(*(int *)copy->tail->data == 45);
+	ASSERT_TRUE(*(int *)copy->tail->prev->data == 44);
+	ASSERT_TRUE(*(int *)copy->tail->prev->prev->data == 43);
+}
