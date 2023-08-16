@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal.h"
+#include "dprintf_internal.h"
 #include "ft_ctype.h"
 #include "ft_stdlib.h"
 #include <stdbool.h>

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal.h"
+#include "dprintf_internal.h"
 
 t_spec	to_specifier(char c)
 {

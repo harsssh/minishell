@@ -12,7 +12,7 @@
 
 #include "ft_stdio.h"
 #include "ft_string.h"
-#include "internal.h"
+#include "dprintf_internal.h"
 #include <stdarg.h>
 #include <unistd.h>
 

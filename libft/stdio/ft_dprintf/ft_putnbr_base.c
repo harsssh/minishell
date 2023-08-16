@@ -12,7 +12,7 @@
 
 #include "ft_stdio.h"
 #include "ft_string.h"
-#include "internal.h"
+#include "dprintf_internal.h"
 #include <unistd.h>
 
 size_t	ft_putunbr_base(int fd, unsigned long long nbr, char *base)
