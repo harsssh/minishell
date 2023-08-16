@@ -1,6 +1,12 @@
 ---
 name: CTest
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "libft/**"
+      - "src/**"
   pull_request:
     paths:
       - "libft/**"

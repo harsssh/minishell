@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "builtin_internal.h"
 #include <errno.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -47,8 +48,7 @@ static void	print_args(char **args, bool newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-// TODO: print error message
-int	builtin_echo(char **args)
+int	builtin_echo(t_context *ctx, char **args)
 {
 	bool	newline;
 
@@ -56,6 +56,9 @@ int	builtin_echo(char **args)
 	errno = 0;
 	print_args(args, newline);
 	if (errno)
+	{
+		builtin_write_error(ctx, "echo");
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }

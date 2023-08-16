@@ -15,6 +15,7 @@
 #include "dprintf_internal.h"
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdint.h>
 
 static ssize_t	write_byte(int fd, unsigned char c)
 {
