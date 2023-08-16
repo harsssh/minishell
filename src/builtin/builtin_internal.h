@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
+/*   builtin_internal.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 04:44:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 19:14:11 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/16 20:19:23 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/16 20:19:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTEXT_H
-# define CONTEXT_H
+#ifndef BUILTIN_INTERNAL_H
+# define BUILTIN_INTERNAL_H
 
-# include "ft_list.h"
+# include "context.h"
 
-typedef struct s_context
-{
-	const char	*shell_name;
-	t_list		*variables;
-}				t_context;
+void	builtin_write_error(t_context *ctx, const char *cmd_name);
 
 #endif

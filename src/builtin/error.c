@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 04:44:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 19:14:11 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/16 20:19:32 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/16 20:19:58 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTEXT_H
-# define CONTEXT_H
+#include "context.h"
+#include "libft.h"
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
 
-# include "ft_list.h"
-
-typedef struct s_context
+void	builtin_write_error(t_context *ctx, const char *cmd_name)
 {
-	const char	*shell_name;
-	t_list		*variables;
-}				t_context;
-
-#endif
+	ft_dprintf(STDERR_FILENO, "%s: %s: write error: %s\n",
+		ctx->shell_name, cmd_name, strerror(errno));
+}

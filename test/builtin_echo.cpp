@@ -3,13 +3,15 @@
 
 extern "C" {
 #include "builtin.h"
+#include "context.h"
 }
 
 // オプションなし
 TEST(builtin_echo, no_option) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -20,7 +22,8 @@ TEST(builtin_echo, no_option) {
 TEST(builtin_echo, no_option_no_arg) {
 	testing::internal::CaptureStdout();
 	char *args[] = {nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -31,7 +34,8 @@ TEST(builtin_echo, no_option_no_arg) {
 TEST(builtin_echo, no_option_empty) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"", "hello", "", "world", "", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -42,7 +46,8 @@ TEST(builtin_echo, no_option_empty) {
 TEST(builtin_echo, with_n_option) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-n", "hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -53,7 +58,8 @@ TEST(builtin_echo, with_n_option) {
 TEST(builtin_echo, with_n_option_no_arg) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-n", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -64,7 +70,8 @@ TEST(builtin_echo, with_n_option_no_arg) {
 TEST(builtin_echo, with_n_option_empty) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-n", "", "hello", "", "world", "", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -75,7 +82,8 @@ TEST(builtin_echo, with_n_option_empty) {
 TEST(builtin_echo, wrong_option_position) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"hello", "-n", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -86,7 +94,8 @@ TEST(builtin_echo, wrong_option_position) {
 TEST(builtin_echo, option_like_string) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"--n", "hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -96,7 +105,8 @@ TEST(builtin_echo, option_like_string) {
 TEST(builtin_echo, option_like_string2) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-nhello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -106,7 +116,8 @@ TEST(builtin_echo, option_like_string2) {
 TEST(builtin_echo, option_like_string3) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-n ", "hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -117,7 +128,8 @@ TEST(builtin_echo, option_like_string3) {
 TEST(builtin_echo, multiple_options) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-n", "-n", "hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -128,7 +140,8 @@ TEST(builtin_echo, multiple_options) {
 TEST(builtin_echo, multiple_n) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-nn", "-nnn", "hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -139,7 +152,8 @@ TEST(builtin_echo, multiple_n) {
 TEST(builtin_echo, only_hyphen) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
@@ -150,10 +164,10 @@ TEST(builtin_echo, only_hyphen) {
 TEST(builtin_echo, not_n_option) {
 	testing::internal::CaptureStdout();
 	char *args[] = {"-a", "hello", "world", nullptr};
-	int ret = builtin_echo(args);
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtin_echo(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 
 	EXPECT_EQ(ret, EXIT_SUCCESS);
 	EXPECT_EQ(output, "-a hello world\n");
 }
-
