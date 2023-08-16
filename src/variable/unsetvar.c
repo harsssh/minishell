@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 19:52:07 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 19:56:26 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/16 19:17:32 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	variable_destroy(void *data)
 	free(var);
 }
 
-static int	exclude_func(void *data, void *ref)
+static bool	exclude_func(void *data, void *ref)
 {
 	t_variable	*var;
 	char		*name;
@@ -43,7 +43,6 @@ int	unsetvar(t_context *ctx, char *name)
 		errno = EINVAL;
 		return (-1);
 	}
-	ft_list_exclude(ctx->variables, name, exclude_func,
-		variable_destroy);
+	ft_list_remove_if(ctx->variables, name, exclude_func, variable_destroy);
 	return (0);
 }

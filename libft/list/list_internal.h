@@ -17,8 +17,4 @@
 
 t_node	*ft_node_create(void *data);
 
-t_node	*ft_node_get(t_list *list, unsigned int index);
-
-void	ft_node_remove(t_list *list, t_node *node, void (*del)(void *));
-
 #endif

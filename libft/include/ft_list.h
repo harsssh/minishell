@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 07:21:03 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 18:23:05 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/16 19:14:03 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_LIST_H
 
 # include <stddef.h>
+# include <stdbool.h>
 
 typedef struct s_node
 {
@@ -30,22 +31,40 @@ typedef struct s_list
 }					t_list;
 
 t_list	*ft_list_create(void);
-void	ft_list_destroy(t_list *list, void (*del)(void *));
+t_list	*ft_list_copy(t_list *list, void *(*cpy)(void *data),
+			void (*del)(void *data));
+void	ft_list_destroy(t_list *list, void (*del)(void *data));
 
-void	*ft_list_get(t_list *list, unsigned int index);
-void	*ft_list_find(t_list *list, void *ref, int (*cmp)(void *, void *));
+// Creates a new list by including only elements
+// for which the 'pred' function returns true,
+// without modifying the original list
+t_list	*ft_list_filter(t_list *list, bool (*pred)(void *data),
+			void *(*cpy)(void *data), void (*del)(void *data));
+// Creates a new list by excluding elements
+// for which the 'pred' function returns true,
+// without modifying the original list
+t_list	*ft_list_exclude(t_list *list, bool (*pred)(void *data),
+			void *(*cpy)(void *data), void (*del)(void *data));
+
+// Searches for an element that satisfies the condition
+void	*ft_list_find(t_list *list, void *ref,
+			bool (*pred)(void *data, void *ref));
 
 void	ft_list_push_front(t_list *list, void *data);
 void	ft_list_push_back(t_list *list, void *data);
-void	ft_list_insert(t_list *list, unsigned int index, void *data);
+// Inserts a new node containing the provided data
+// before the specified position
+void	ft_list_insert(t_list *list, t_node *pos, void *data);
 
 void	*ft_list_pop_front(t_list *list);
 void	*ft_list_pop_back(t_list *list);
-void	ft_list_remove(t_list *list, unsigned int index, void (*del)(void *));
-void	ft_list_filter(t_list *list, void *ref,
-			int (*cmp)(void *, void *), void (*del)(void *));
-void	ft_list_exclude(t_list *list, void *ref,
-			int (*cmp)(void *, void *), void (*del)(void *));
+// Removes the node at the specified position,
+// invoking the provided 'del' function
+void	ft_list_remove(t_list *list, t_node *pos, void (*del)(void *data));
+// Removes all elements that satisfy the condition
+// invoking the provided 'del' function for each removed element.
+void	ft_list_remove_if(t_list *list, void *ref,
+			bool (*pred)(void *data, void *ref), void (*del)(void *data));
 void	ft_list_clear(t_list *list, void (*del)(void *));
 
 #endif

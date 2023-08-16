@@ -13,30 +13,21 @@
 #include "ft_list.h"
 #include "list_internal.h"
 
-void	ft_list_insert(t_list *list, unsigned int index, void *data)
+void	ft_list_insert(t_list *list, t_node *pos, void *data)
 {
-	t_node	*new;
 	t_node	*node;
 
-	if (list == NULL)
+	if (list == NULL || pos == NULL)
 		return ;
-	if (index == 0)
-	{
-		ft_list_push_front(list, data);
+	node = ft_node_create(data);
+	if (node == NULL)
 		return ;
-	}
-	if (index >= list->size)
-	{
-		ft_list_push_back(list, data);
-		return ;
-	}
-	new = ft_node_create(data);
-	if (new == NULL)
-		return ;
-	node = ft_node_get(list, index);
-	new->next = node;
-	new->prev = node->prev;
-	node->prev->next = new;
-	node->prev = new;
+	node->prev = pos->prev;
+	node->next = pos;
+	if (pos->prev != NULL)
+		pos->prev->next = node;
+	pos->prev = node;
+	if (list->head == pos)
+		list->head = node;
 	++list->size;
 }

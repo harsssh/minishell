@@ -21,7 +21,7 @@ void	*ft_list_pop_front(t_list *list)
 	if (list->head == NULL)
 		return (NULL);
 	data = list->head->data;
-	ft_list_remove(list, 0, NULL);
+	ft_list_remove(list, list->head, NULL);
 	return (data);
 }
 
@@ -34,6 +34,6 @@ void	*ft_list_pop_back(t_list *list)
 	if (list->tail == NULL)
 		return (NULL);
 	data = list->tail->data;
-	ft_list_remove(list, list->size - 1, NULL);
+	ft_list_remove(list, list->tail, NULL);
 	return (data);
 }

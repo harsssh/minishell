@@ -78,30 +78,23 @@ TEST(ft_list_insert, normal) {
 	int data[3] = {42, 43, 44};
 
 	list = ft_list_create();
-	ft_list_insert(list, 0, &data[0]);
-	ft_list_insert(list, 1, &data[1]);
-	ft_list_insert(list, 1, &data[2]);
+	ft_list_push_back(list, &data[0]);
+	ft_list_push_back(list, &data[1]);
+	ft_list_push_back(list, &data[2]);
+	int *insert_data = new int(99);
+	ft_list_insert(list, list->head->next, insert_data);
+
 	ASSERT_TRUE(list->head != nullptr);
 	ASSERT_TRUE(list->tail != nullptr);
-	ASSERT_TRUE(list->size == 3);
+	ASSERT_TRUE(list->size == 4);
 	ASSERT_TRUE(list->head->data == &data[0]);
-	ASSERT_TRUE(list->head->next->data == &data[2]);
+	ASSERT_TRUE(list->head->next->data == insert_data);
 	ASSERT_TRUE(list->head->next->next->data == &data[1]);
-	ASSERT_TRUE(list->tail->data == &data[1]);
-	ASSERT_TRUE(list->tail->prev->data == &data[2]);
-	ASSERT_TRUE(list->tail->prev->prev->data == &data[0]);
-}
-
-// get
-TEST(ft_list_get, normal) {
-	int data[3] = {42, 43, 44};
-	t_list *list;
-
-	list = ft_list_create();
-	for (int &i: data)
-		ft_list_push_back(list, &i);
-	for (int i = 0; i < 3; i++)
-		ASSERT_TRUE(ft_list_get(list, i) == &data[i]);
+	ASSERT_TRUE(list->head->next->next->next->data == &data[2]);
+	ASSERT_TRUE(list->tail->data == &data[2]);
+	ASSERT_TRUE(list->tail->prev->data == &data[1]);
+	ASSERT_TRUE(list->tail->prev->prev->data == insert_data);
+	ASSERT_TRUE(list->tail->prev->prev->prev->data == &data[0]);
 }
 
 // find
@@ -112,9 +105,10 @@ TEST(ft_list_find, normal) {
 	list = ft_list_create();
 	for (int &i: data)
 		ft_list_push_back(list, &i);
-	void *found = ft_list_find(list, &data[1], [](void *a, void *b) -> int {
-		return *(int *)a - *(int *)b;
-	});
+	auto pred = [](void *data, void *ref) -> bool {
+		return *(int *)data == *(int *)ref;
+	};
+	void *found = ft_list_find(list, &data[1], pred);
 	ASSERT_TRUE(found == &data[1]);
 }
 
@@ -156,7 +150,7 @@ TEST(ft_list_remove, normal) {
 	list = ft_list_create();
 	for (int &i: data)
 		ft_list_push_back(list, &i);
-	ft_list_remove(list, 1, nullptr);
+	ft_list_remove(list, list->head->next, nullptr);
 	ASSERT_TRUE(list->head != nullptr);
 	ASSERT_TRUE(list->tail != nullptr);
 	ASSERT_TRUE(list->size == 2);
@@ -166,35 +160,15 @@ TEST(ft_list_remove, normal) {
 	ASSERT_TRUE(list->tail->prev->data == &data[0]);
 }
 
-// filter
-TEST(ft_list_filter, normal) {
+// remove_if
+TEST(ft_list_remove_if, normal) {
 	int data[5] = {1, 2, 3, 4, 5};
 	t_list *list;
 
 	list = ft_list_create();
 	for (int &i: data)
 		ft_list_push_back(list, &i);
-	ft_list_filter(list, nullptr, [](void *data, void *ref) -> int {
-		return *(int *)data % 2 == 0;
-	}, nullptr);
-	ASSERT_TRUE(list->head != nullptr);
-	ASSERT_TRUE(list->tail != nullptr);
-	ASSERT_TRUE(list->size == 2);
-	ASSERT_TRUE(list->head->data == &data[1]);
-	ASSERT_TRUE(list->head->next->data == &data[3]);
-	ASSERT_TRUE(list->tail->data == &data[3]);
-	ASSERT_TRUE(list->tail->prev->data == &data[1]);
-}
-
-// exclude
-TEST(ft_list_exclude, normal) {
-	int data[5] = {1, 2, 3, 4, 5};
-	t_list *list;
-
-	list = ft_list_create();
-	for (int &i: data)
-		ft_list_push_back(list, &i);
-	ft_list_exclude(list, nullptr, [](void *data, void *ref) -> int {
+	ft_list_remove_if(list, nullptr, [](void *data, void *ref) -> bool {
 		return *(int *)data % 2 == 0;
 	}, nullptr);
 	ASSERT_TRUE(list->head != nullptr);
@@ -206,6 +180,91 @@ TEST(ft_list_exclude, normal) {
 	ASSERT_TRUE(list->tail->data == &data[4]);
 	ASSERT_TRUE(list->tail->prev->data == &data[2]);
 	ASSERT_TRUE(list->tail->prev->prev->data == &data[0]);
+}
+
+// copy
+TEST(ft_list_copy, normal) {
+	int data[3] = {42, 43, 44};
+	t_list *list;
+	t_list *copy;
+
+	list = ft_list_create();
+	for (int &i: data)
+		ft_list_push_back(list, &i);
+	auto copy_func = [](void *data) -> void * {
+		return new int(*(int *)data);
+	};
+	copy = ft_list_copy(list, copy_func, nullptr);
+	// 元のリストは変更されない
+	ASSERT_TRUE(list->head != nullptr);
+	ASSERT_TRUE(list->tail != nullptr);
+	ASSERT_TRUE(list->size == 3);
+	// コピーされたリストを確認
+	ASSERT_TRUE(copy->head != nullptr);
+	ASSERT_TRUE(copy->tail != nullptr);
+	ASSERT_TRUE(copy->size == 3);
+	ASSERT_TRUE(*(int *)copy->head->data == 42);
+	ASSERT_TRUE(*(int *)copy->head->next->data == 43);
+	ASSERT_TRUE(*(int *)copy->head->next->next->data == 44);
+	ASSERT_TRUE(*(int *)copy->tail->data == 44);
+	ASSERT_TRUE(*(int *)copy->tail->prev->data == 43);
+	ASSERT_TRUE(*(int *)copy->tail->prev->prev->data == 42);
+	// アドレスは元とは違う
+	ASSERT_TRUE(copy->head->data != list->head->data);
+	ASSERT_TRUE(copy->head->next->data != list->head->next->data);
+	ASSERT_TRUE(copy->head->next->next->data != list->head->next->next->data);
+}
+
+// filter
+TEST(ft_list_filter, normal) {
+	int data[5] = {1, 2, 3, 4, 5};
+	t_list *list;
+	t_list *filtered;
+
+	list = ft_list_create();
+	for (int &i: data)
+		ft_list_push_back(list, &i);
+	auto filter_func = [](void *data) -> bool {
+		return *(int *)data % 2 == 0;
+	};
+	auto copy_func = [](void *data) -> void * {
+		return new int(*(int *)data);
+	};
+	filtered = ft_list_filter(list, filter_func, copy_func, nullptr);
+	ASSERT_TRUE(filtered->head != nullptr);
+	ASSERT_TRUE(filtered->tail != nullptr);
+	ASSERT_TRUE(filtered->size == 2);
+	ASSERT_TRUE(*(int *)filtered->head->data == 2);
+	ASSERT_TRUE(*(int *)filtered->head->next->data == 4);
+	ASSERT_TRUE(*(int *)filtered->tail->data == 4);
+	ASSERT_TRUE(*(int *)filtered->tail->prev->data == 2);
+}
+
+// exclude
+TEST(ft_list_exclude, normal) {
+	int data[5] = {1, 2, 3, 4, 5};
+	t_list *list;
+	t_list *excluded;
+
+	list = ft_list_create();
+	for (int &i: data)
+		ft_list_push_back(list, &i);
+	auto exclude_func = [](void *data) -> bool {
+		return *(int *)data % 2 == 0;
+	};
+	auto copy_func = [](void *data) -> void * {
+		return new int(*(int *)data);
+	};
+	excluded = ft_list_exclude(list, exclude_func, copy_func, nullptr);
+	ASSERT_TRUE(excluded->head != nullptr);
+	ASSERT_TRUE(excluded->tail != nullptr);
+	ASSERT_TRUE(excluded->size == 3);
+	ASSERT_TRUE(*(int *)excluded->head->data == 1);
+	ASSERT_TRUE(*(int *)excluded->head->next->data == 3);
+	ASSERT_TRUE(*(int *)excluded->head->next->next->data == 5);
+	ASSERT_TRUE(*(int *)excluded->tail->data == 5);
+	ASSERT_TRUE(*(int *)excluded->tail->prev->data == 3);
+	ASSERT_TRUE(*(int *)excluded->tail->prev->prev->data == 1);
 }
 
 // clear

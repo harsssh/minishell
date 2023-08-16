@@ -12,16 +12,16 @@
 
 #include "ft_list.h"
 
-void	*ft_list_find(t_list *list, void *ref, int (*cmp)(void *, void *))
+void	*ft_list_find(t_list *list, void *ref, bool (*pred)(void *, void *))
 {
 	t_node	*node;
 
-	if (list == NULL || cmp == NULL)
+	if (list == NULL || pred == NULL)
 		return (NULL);
 	node = list->head;
 	while (node != NULL)
 	{
-		if (cmp(node->data, ref) == 0)
+		if (pred(node->data, ref))
 			return (node->data);
 		node = node->next;
 	}
