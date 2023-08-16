@@ -16,5 +16,7 @@
 # include "context.h"
 
 void	builtin_write_error(t_context *ctx, const char *cmd_name);
+void	builtin_stdout_error(t_context *ctx, const char *cmd_name);
+void	builtin_not_implemented(t_context *ctx, const char *cmd_name);
 
 #endif
