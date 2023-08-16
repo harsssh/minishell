@@ -8,6 +8,6 @@ enable_testing()
 
 add_subdirectory(test)
 
-file(GLOB SOURCES *.c **/*.c)
+file(GLOB_RECURSE SOURCES *.c)
 add_library(ft STATIC ${SOURCES})
 target_include_directories(ft PUBLIC include)
