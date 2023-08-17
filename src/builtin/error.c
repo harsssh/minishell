@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 20:19:32 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/16 20:19:58 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/18 01:14:25 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@
 #include <string.h>
 #include <unistd.h>
 
-void	builtin_write_error(t_context *ctx, const char *cmd_name)
+void	perror_builtin(t_context *ctx, const char *cmd, const char *prefix)
 {
-	ft_dprintf(STDERR_FILENO, "%s: %s: write error: %s\n",
-		ctx->shell_name, cmd_name, strerror(errno));
+	ft_dprintf(STDERR_FILENO, "%s: %s: %s: %s\n",
+		ctx->shell_name, cmd, prefix, strerror(errno));
 }
 
-void	builtin_stdout_error(t_context *ctx, const char *cmd_name)
+void	print_error_builtin(t_context *ctx, const char *cmd, const char *msg)
 {
-	ft_dprintf(STDERR_FILENO, "%s: %s: stdout: %s\n",
-		ctx->shell_name, cmd_name, strerror(errno));
+	ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", ctx->shell_name, cmd, msg);
 }
 
-void	builtin_not_implemented(t_context *ctx, const char *cmd_name)
+void	print_custom_error_builtin(t_context *ctx, const char *cmd,
+		const char *loc, const char *msg)
 {
-	ft_dprintf(STDERR_FILENO, "%s: %s: not implemented\n",
-		ctx->shell_name, cmd_name);
+	ft_dprintf(STDERR_FILENO, "%s: %s: %s: %s\n",
+		ctx->shell_name, cmd, loc, msg);
 }

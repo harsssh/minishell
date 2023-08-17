@@ -18,5 +18,6 @@
 int	builtin_echo(t_context *ctx, char **args);
 int	builtin_env(t_context *ctx, char **args);
 int	builtin_unset(t_context *ctx, char **args);
+int	builtin_exit(t_context *ctx, char **args);
 
 #endif

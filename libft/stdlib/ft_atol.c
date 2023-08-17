@@ -14,7 +14,7 @@
 #include <errno.h>
 #include <limits.h>
 
-static int	read_up_to_sign(const char **s)
+static int	skip_to_number(const char **s)
 {
 	while (**s && ft_isspace(**s))
 		(*s)++;
@@ -46,8 +46,10 @@ long	ft_atol(const char *str)
 	unsigned long	x;
 
 	num = 0;
-	sign = read_up_to_sign(&str);
-	while (*str && ft_isdigit(*str))
+	sign = skip_to_number(&str);
+	if (!ft_isdigit(*str))
+		errno = EINVAL;
+	while (ft_isdigit(*str))
 	{
 		x = *str++ - '0';
 		if (is_overflow(sign, num, x))
@@ -59,5 +61,9 @@ long	ft_atol(const char *str)
 		}
 		num = num * 10 + x;
 	}
+	while (*str && ft_isspace(*str))
+		str++;
+	if (*str)
+		errno = EINVAL;
 	return ((long)(num * sign));
 }
