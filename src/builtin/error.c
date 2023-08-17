@@ -21,3 +21,15 @@ void	builtin_write_error(t_context *ctx, const char *cmd_name)
 	ft_dprintf(STDERR_FILENO, "%s: %s: write error: %s\n",
 		ctx->shell_name, cmd_name, strerror(errno));
 }
+
+void	builtin_stdout_error(t_context *ctx, const char *cmd_name)
+{
+	ft_dprintf(STDERR_FILENO, "%s: %s: stdout: %s\n",
+		ctx->shell_name, cmd_name, strerror(errno));
+}
+
+void	builtin_not_implemented(t_context *ctx, const char *cmd_name)
+{
+	ft_dprintf(STDERR_FILENO, "%s: %s: not implemented\n",
+		ctx->shell_name, cmd_name);
+}

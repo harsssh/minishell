@@ -15,7 +15,7 @@
 
 # include "context.h"
 
-# define ATTR_EXPORTED 1
+# define VAR_ATTR_EXPORTED 1
 
 typedef struct s_variable
 {

@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_internal.h                                 :+:      :+:    :+:   */
+/*   list_iter.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/16 20:19:23 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/16 20:19:24 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/17 02:14:55 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/17 02:14:55 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_INTERNAL_H
-# define BUILTIN_INTERNAL_H
+#include "ft_list.h"
 
-# include "context.h"
+void	ft_list_iter(t_list *list, void (*f)(void *))
+{
+	t_node	*node;
 
-void	builtin_write_error(t_context *ctx, const char *cmd_name);
-void	builtin_stdout_error(t_context *ctx, const char *cmd_name);
-void	builtin_not_implemented(t_context *ctx, const char *cmd_name);
-
-#endif
+	if (list == NULL || f == NULL)
+		return ;
+	node = list->head;
+	while (node != NULL)
+	{
+		f(node->data);
+		node = node->next;
+	}
+}

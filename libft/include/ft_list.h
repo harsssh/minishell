@@ -67,4 +67,6 @@ void	ft_list_remove_if(t_list *list, void *ref,
 			bool (*pred)(void *data, void *ref), void (*del)(void *data));
 void	ft_list_clear(t_list *list, void (*del)(void *));
 
+void	ft_list_iter(t_list *list, void (*f)(void *data));
+
 #endif
