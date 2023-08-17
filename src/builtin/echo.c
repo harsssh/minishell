@@ -57,7 +57,7 @@ int	builtin_echo(t_context *ctx, char **args)
 	print_args(args, newline);
 	if (errno)
 	{
-		builtin_write_error(ctx, "echo");
+		perror_builtin(ctx, "echo", ERR_WRITE);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
