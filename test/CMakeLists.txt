@@ -6,23 +6,31 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(GTest CONFIG REQUIRED)
 include(GoogleTest)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+# src/main.c 以外のファイル
+file(GLOB_RECURSE SRC ${CMAKE_SOURCE_DIR}/src/*/*.c)
+# src直下のディレクトリ
+file(GLOB TMP ${CMAKE_SOURCE_DIR}/src/*)
+set(DIR_LIST "")
+foreach (TMP_PATH ${TMP})
+    if (IS_DIRECTORY ${TMP_PATH})
+        list(APPEND DIR_LIST ${TMP_PATH})
+    endif ()
+endforeach ()
+
+include_directories(${CMAKE_SOURCE_DIR}/include ${DIR_LIST})
 link_libraries(ft GTest::gtest GTest::gtest_main)
 
-file(GLOB VAR_SRC ${CMAKE_SOURCE_DIR}/src/variable/*.c)
-file(GLOB BUILTIN_SRC ${CMAKE_SOURCE_DIR}/src/builtin/*.c)
+add_executable(test_variable variable.cpp ${SRC})
+gtest_discover_tests(test_variable)
 
-add_executable(test_variable variable.cpp ${VAR_SRC})
-target_include_directories(test_variable PUBLIC ${CMAKE_SOURCE_DIR}/src/variable)
+add_executable(test_get_next_option get_next_option.cpp ${SRC})
+gtest_discover_tests(test_get_next_option)
 
-add_executable(test_builtin_echo builtin_echo.cpp ${BUILTIN_SRC})
-target_include_directories(test_builtin_echo)
+add_executable(test_builtin_echo builtin_echo.cpp ${SRC})
+gtest_discover_tests(test_builtin_echo)
 
-add_executable(test_builtin_env builtin_env.cpp ${BUILTIN_SRC} ${VAR_SRC})
-target_include_directories(test_builtin_env)
+add_executable(test_builtin_env builtin_env.cpp ${SRC})
+gtest_discover_tests(test_builtin_env)
 
-add_executable(test_get_next_option get_next_option.cpp ${BUILTIN_SRC})
-target_include_directories(test_get_next_option PUBLIC ${CMAKE_SOURCE_DIR}/src/builtin)
-
-add_executable(test_builtin_unset builtin_unset.cpp ${BUILTIN_SRC} ${VAR_SRC})
-target_include_directories(test_builtin_unset)
+add_executable(test_builtin_unset builtin_unset.cpp ${SRC})
+gtest_discover_tests(test_builtin_unset)
