@@ -10,5 +10,4 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 link_libraries(ft GTest::gtest GTest::gtest_main)
 
 add_executable(test_list list.cpp)
-
 gtest_discover_tests(test_list)
