@@ -33,12 +33,16 @@ static int	get_status_or_exit(t_context *ctx, char **args)
 	if (args[1] == NULL)
 		exit(status);
 	print_error_builtin(ctx, "exit", ERR_TOO_MANY_ARG);
-	return (status);
+	if (ctx->last_exit_status == 0)
+		return (1);
+	return (ctx->last_exit_status & 0xFF);
 }
 
 // TODO: Assumes a non-login, interactive shell context
 int	builtin_exit(t_context *ctx, char **args)
 {
+	if (*args && ft_strcmp(*args, "--") == 0)
+		++args;
 	ft_putendl_fd("exit", STDERR_FILENO);
 	return (get_status_or_exit(ctx, args));
 }

@@ -287,3 +287,36 @@ TEST_F(BuiltinExitTest, two_args_first_digit) {
 				 "exit\n"
 				 "minishell: exit: too many arguments\n");
 }
+
+// 引数2つ, 最初が数字, 前回の終了ステータスが0
+TEST_F(BuiltinExitTest, two_args_first_digit_last_exit_status_zero) {
+	testing::internal::CaptureStderr();
+	char *args[] = {"42", "a", nullptr};
+	this->ctx.last_exit_status = 0;
+	int ret = builtin_exit(&this->ctx, args);
+
+	EXPECT_EQ(ret, 1);
+	EXPECT_STREQ(testing::internal::GetCapturedStderr().c_str(),
+				 "exit\n"
+				 "minishell: exit: too many arguments\n");
+}
+
+// 引数2つ, 1つ目が "--"
+TEST_F(BuiltinExitTest, two_args_first_double_hyphen) {
+	char *args[] = {"--", "42", nullptr};
+
+	EXPECT_EXIT(builtin_exit(&this->ctx, args), ::testing::ExitedWithCode(42), "exit\n");
+}
+
+// 最初でなければエラー
+TEST_F(BuiltinExitTest, two_args_not_first_double_hyphen) {
+	testing::internal::CaptureStderr();
+	char *args[] = {"42", "--", nullptr};
+	this->ctx.last_exit_status = 42;
+	int ret = builtin_exit(&this->ctx, args);
+
+	EXPECT_EQ(ret, 42);
+	EXPECT_STREQ(testing::internal::GetCapturedStderr().c_str(),
+				 "exit\n"
+				 "minishell: exit: too many arguments\n");
+}
