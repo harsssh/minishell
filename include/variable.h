@@ -15,7 +15,8 @@
 
 # include "context.h"
 
-# define VAR_ATTR_EXPORTED 1
+# define VAR_ATTR_EXPORTED 1 << 0
+# define VAR_ATTR_NO_VALUE 1 << 1
 
 typedef struct s_variable
 {
@@ -27,6 +28,7 @@ typedef struct s_variable
 
 t_variable	*getvar(t_context *ctx, char *name);
 int			setvar(t_context *ctx, char *name, char *value, int overwrite);
+int 		setvar_from_str(t_context *ctx, char *str, int overwrite);
 int			unsetvar(t_context *ctx, char *name);
 
 #endif
