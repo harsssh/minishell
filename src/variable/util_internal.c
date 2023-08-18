@@ -86,5 +86,6 @@ int	update_variable(t_variable *var, char *value)
 	free(var->envstr);
 	var->value = tmp.value;
 	var->envstr = tmp.envstr;
+	var->attributes &= ~VAR_ATTR_NO_VALUE;
 	return (0);
 }

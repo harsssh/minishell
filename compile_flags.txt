@@ -1,5 +1,6 @@
 -Ilibft/include
 -Iinclude
+-Isrc
 -lreadline
 -Wall
 -Wextra

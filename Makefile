@@ -5,7 +5,7 @@ BUILD_DIR:=build
 
 LIBFT:=libft/libft.a
 
-CFLAGS:=-Wall -Wextra -Werror -Ilibft/include -Iinclude
+CFLAGS:=-Wall -Wextra -Werror -Ilibft/include -Iinclude -Isrc
 RELEASE_FLAGS:=-O3
 DEBUG_FLAGS:=-g -O0 -fsanitize=address
 LDFLAGS:=-lreadline

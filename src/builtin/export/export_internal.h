@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   export_internal.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/11 13:35:06 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/17 22:19:46 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/18 19:17:39 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/18 19:17:44 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#ifndef EXPORT_INTERNAL_H
+# define EXPORT_INTERNAL_H
 
 # include "context.h"
 
-int	builtin_echo(t_context *ctx, char **args);
-int	builtin_env(t_context *ctx, char **args);
-int	builtin_unset(t_context *ctx, char **args);
-int	builtin_exit(t_context *ctx, char **args);
-int	builtin_export(t_context *ctx, char **args);
+int	builtin_export_no_arg(t_context *ctx);
+int	export_each_arg(t_context *ctx, char *arg);
 
 #endif

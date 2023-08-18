@@ -17,7 +17,7 @@ foreach (TMP_PATH ${TMP})
     endif ()
 endforeach ()
 
-include_directories(${CMAKE_SOURCE_DIR}/include ${DIR_LIST})
+include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src ${DIR_LIST})
 link_libraries(ft GTest::gtest GTest::gtest_main)
 
 add_executable(test_variable variable.cpp ${SRC})
