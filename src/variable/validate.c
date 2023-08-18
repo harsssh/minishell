@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/11 13:35:06 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/17 22:19:46 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/18 19:22:23 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/18 19:22:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "libft.h"
+#include "variable.h"
 
-# include "context.h"
+static int	is_valid_character(int c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
 
-int	builtin_echo(t_context *ctx, char **args);
-int	builtin_env(t_context *ctx, char **args);
-int	builtin_unset(t_context *ctx, char **args);
-int	builtin_exit(t_context *ctx, char **args);
-int	builtin_export(t_context *ctx, char **args);
-
-#endif
+bool	is_valid_identifier(const char *identifier)
+{
+	if (!(ft_isalpha(*identifier) || *identifier == '_'))
+		return (0);
+	return (ft_strall(identifier + 1, is_valid_character));
+}

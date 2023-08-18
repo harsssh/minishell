@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   no_arg.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/17 02:15:01 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/17 02:15:02 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/18 19:17:23 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/18 19:17:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include "builtin_internal.h"
-#include "libft.h"
 #include "variable.h"
-#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+
+#define LINE_FORMAT_EXPORTED "declare -x %s=\"%s\"\n"
+#define LINE_FORMAT_NO_VALUE "declare -x %s\n"
 
 static void	print_env(void *data)
 {
@@ -24,22 +24,16 @@ static void	print_env(void *data)
 
 	var = (t_variable *)data;
 	if (var->attributes & VAR_ATTR_EXPORTED)
-		ft_putendl_fd(var->envstr, STDOUT_FILENO);
+	{
+		if (var->attributes & VAR_ATTR_NO_VALUE)
+			printf(LINE_FORMAT_NO_VALUE, var->name);
+		else
+			printf(LINE_FORMAT_EXPORTED, var->name, var->value);
+	}
 }
 
-int	builtin_env(t_context *ctx, char **args)
+int	builtin_export_no_arg(t_context *ctx)
 {
-	if (*args != NULL)
-	{
-		print_simple_error_builtin(ctx, "env", ERR_NOT_IMPL);
-		return (EXIT_FAILURE);
-	}
-	errno = 0;
 	ft_list_iter(ctx->variables, print_env);
-	if (errno)
-	{
-		print_simple_error_builtin(ctx, "env", ERR_STDOUT);
-		return (EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }

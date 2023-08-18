@@ -15,7 +15,10 @@
 
 # include "variable.h"
 
-char		*make_envstr(char *name, char *value);
 t_variable	*variable_create(char *name, char *value);
+void		variable_destroy(void *data);
+int			add_new_variable(t_context *ctx, char *name, char *value);
+int			update_variable(t_variable *var, char *value);
+bool		is_valid_identifier(const char *identifier);
 
 #endif
