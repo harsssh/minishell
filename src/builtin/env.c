@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 02:15:01 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/17 02:15:02 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/18 22:36:31 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static void	print_env(void *data)
 	t_variable	*var;
 
 	var = (t_variable *)data;
-	if (var->attributes & VAR_ATTR_EXPORTED)
+	if (var->attributes & VAR_ATTR_EXPORTED
+		&& !(var->attributes & VAR_ATTR_NO_VALUE))
 		ft_putendl_fd(var->envstr, STDOUT_FILENO);
 }
 
