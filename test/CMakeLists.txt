@@ -40,3 +40,6 @@ gtest_discover_tests(test_builtin_unset)
 
 add_executable(test_builtin_exit builtin_exit.cpp ${SRC})
 gtest_discover_tests(test_builtin_exit)
+
+add_executable(test_builtin_export builtin_export.cpp ${SRC})
+gtest_discover_tests(test_builtin_export)

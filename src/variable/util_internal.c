@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create.c                                           :+:      :+:    :+:   */
+/*   util_internal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 19:14:46 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 19:14:47 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:11:00 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,17 @@ t_variable	*variable_create(char *name, char *value)
 	}
 	var->attributes = 0;
 	return (var);
+}
+
+void	variable_destroy(void *data)
+{
+	t_variable	*var;
+
+	var = data;
+	free(var->name);
+	free(var->value);
+	free(var->envstr);
+	free(var);
 }
 
 int	add_new_variable(t_context *ctx, char *name, char *value)
