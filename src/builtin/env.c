@@ -31,14 +31,14 @@ int	builtin_env(t_context *ctx, char **args)
 {
 	if (*args != NULL)
 	{
-		print_error_builtin(ctx, "env", ERR_NOT_IMPL);
+		print_simple_error_builtin(ctx, "env", ERR_NOT_IMPL);
 		return (EXIT_FAILURE);
 	}
 	errno = 0;
 	ft_list_iter(ctx->variables, print_env);
 	if (errno)
 	{
-		print_error_builtin(ctx, "env", ERR_STDOUT);
+		print_simple_error_builtin(ctx, "env", ERR_STDOUT);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
