@@ -23,6 +23,9 @@ link_libraries(ft GTest::gtest GTest::gtest_main)
 add_executable(test_variable variable.cpp ${SRC})
 gtest_discover_tests(test_variable)
 
+add_executable(test_variable_parse variable_parse.cpp ${SRC})
+gtest_discover_tests(test_variable_parse)
+
 add_executable(test_get_next_option get_next_option.cpp ${SRC})
 gtest_discover_tests(test_get_next_option)
 
