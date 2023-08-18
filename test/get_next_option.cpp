@@ -55,7 +55,7 @@ TEST(get_next_option, end_of_options)
 
 	reset_get_next_option();
 	ret = get_next_option(arg, optstring);
-	EXPECT_EQ(ret, END_OF_OPTIONS);
+	EXPECT_EQ(ret, END_OF_ARG);
 }
 
 // "--"

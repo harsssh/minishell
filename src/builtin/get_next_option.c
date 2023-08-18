@@ -31,8 +31,7 @@ int	get_next_option(char *arg, const char *optstring)
 	}
 	if (current_char == NULL)
 	{
-		if (*arg != '-'
-			|| ft_strcmp(arg, "-") == 0 || ft_strcmp(arg, "--") == 0)
+		if (*arg != '-' || ft_strcmp(arg, "--") == 0)
 			return (END_OF_OPTIONS);
 		current_char = arg + 1;
 	}
