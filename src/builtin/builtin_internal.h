@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 20:19:23 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/18 19:22:13 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/19 23:54:00 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,31 @@
 
 # include "context.h"
 
-# define ERR_TOO_MANY_ARG	"too many arguments"
-# define ERR_NUM_REQUIRED	"numeric argument required"
-# define ERR_WRITE			"write error"
-# define ERR_NOT_IMPL		"not implemented"
-# define ERR_STDOUT			"stdout"
-# define ERR_IDENTIFIER		"not a valid identifier"
+# define ERR_TOO_MANY_ARG "too many arguments"
+# define ERR_NUM_REQUIRED "numeric argument required"
+# define ERR_WRITE "write error"
+# define ERR_NOT_IMPL "not implemented"
+# define ERR_STDOUT "stdout"
+# define ERR_IDENTIFIER "not a valid identifier"
 
-# define END_OF_ARG		-1
-# define END_OF_OPTIONS	-2
-# define ILLEGAL_OPTION	-3
+typedef enum e_get_opt_status
+{
+	END_OF_ARG,
+	END_OF_OPTIONS,
+	ILLEGAL_OPTION,
+	INITIALIZE,
+}	t_get_opt_status;
 
-void	perror_builtin(t_context *ctx, const char *cmd, const char *prefix);
-void	print_error_builtin(t_context *ctx, const char *cmd,
-			const char *loc, const char *msg);
-void	print_quoted_error_builtin(t_context *ctx, const char *cmd,
-			const char *loc, const char *msg);
-void	print_simple_error_builtin(t_context *ctx, const char *cmd,
-			const char *msg);
+void				perror_builtin(t_context *ctx, const char *cmd,
+						const char *prefix);
+void				print_error_builtin(t_context *ctx, const char *cmd,
+						const char *loc, const char *msg);
+void				print_quoted_error_builtin(t_context *ctx, const char *cmd,
+						const char *loc, const char *msg);
+void				print_simple_error_builtin(t_context *ctx, const char *cmd,
+						const char *msg);
 
-void	reset_get_next_option(void);
-int		get_next_option(char *arg, const char *optstring);
+void				init_get_next_option(void);
+t_get_opt_status	get_next_option(char *arg, const char *optstring);
 
 #endif

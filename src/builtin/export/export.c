@@ -19,7 +19,7 @@ static char	**skip_options(char **args)
 {
 	int	c;
 
-	reset_get_next_option();
+	init_get_next_option();
 	while (*args)
 	{
 		c = get_next_option(*args, "");

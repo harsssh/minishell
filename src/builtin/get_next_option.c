@@ -14,24 +14,26 @@
 #include "libft.h"
 #include <stddef.h>
 
-void	reset_get_next_option(void)
+void	init_get_next_option(void)
 {
 	get_next_option(NULL, NULL);
 }
 
-int	get_next_option(char *arg, const char *optstring)
+// In a special case where both arguments are NULL,
+// initialize the static variable and return 0
+t_get_opt_status get_next_option(char *arg, const char *optstring)
 {
 	static char	*current_char = NULL;
 	char		*option;
 
-	if (arg == NULL || optstring == NULL)
+	if (arg == NULL && optstring == NULL)
 	{
 		current_char = NULL;
-		return (0);
+		return (INITIALIZE);
 	}
 	if (current_char == NULL)
 	{
-		if (*arg != '-' || ft_strcmp(arg, "--") == 0)
+		if (arg == NULL || *arg != '-' || ft_strcmp(arg, "--") == 0)
 			return (END_OF_OPTIONS);
 		current_char = arg + 1;
 	}
