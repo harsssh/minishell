@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 20:19:23 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/19 23:54:00 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/20 04:56:13 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ void				print_simple_error_builtin(t_context *ctx, const char *cmd,
 void				init_get_next_option(void);
 t_get_opt_status	get_next_option(char *arg, const char *optstring);
 char				**ignore_options(char **args);
+char				*get_working_directory(t_context *ctx, char *for_whom);
 
 #endif
