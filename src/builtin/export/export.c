@@ -15,27 +15,11 @@
 #include "export_internal.h"
 #include <stdlib.h>
 
-static char	**skip_options(char **args)
-{
-	int	c;
-
-	init_get_next_option();
-	while (*args)
-	{
-		c = get_next_option(*args, "");
-		if (c == END_OF_OPTIONS)
-			break ;
-		if (c == END_OF_ARG)
-			++args;
-	}
-	return (args);
-}
-
 int	builtin_export(t_context *ctx, char **args)
 {
 	int	status;
 
-	args = skip_options(args);
+	args = ignore_options(args);
 	if (*args == NULL)
 		return (builtin_export_no_arg(ctx));
 	status = EXIT_SUCCESS;

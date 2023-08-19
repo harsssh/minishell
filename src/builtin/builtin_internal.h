@@ -41,5 +41,6 @@ void				print_simple_error_builtin(t_context *ctx, const char *cmd,
 
 void				init_get_next_option(void);
 t_get_opt_status	get_next_option(char *arg, const char *optstring);
+char				**ignore_options(char **args);
 
 #endif

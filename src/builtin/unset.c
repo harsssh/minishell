@@ -15,25 +15,9 @@
 #include "variable.h"
 #include <stdlib.h>
 
-static char	**skip_options(char **args)
-{
-	int	c;
-
-	init_get_next_option();
-	while (true)
-	{
-		c = get_next_option(*args, "");
-		if (c == END_OF_OPTIONS)
-			break ;
-		if (c == END_OF_ARG)
-			++args;
-	}
-	return (args);
-}
-
 int	builtin_unset(t_context *ctx, char **args)
 {
-	args = skip_options(args);
+	args = ignore_options(args);
 	while (*args != NULL)
 	{
 		unsetvar(ctx, *args);
