@@ -20,5 +20,7 @@ int	builtin_env(t_context *ctx, char **args);
 int	builtin_unset(t_context *ctx, char **args);
 int	builtin_exit(t_context *ctx, char **args);
 int	builtin_export(t_context *ctx, char **args);
+int	builtin_pwd(t_context *ctx, char **args);
+int	builtin_cd(t_context *ctx, char **args);
 
 #endif
