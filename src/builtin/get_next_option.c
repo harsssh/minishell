@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 05:33:57 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/17 06:14:24 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/08/20 01:04:05 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ void	init_get_next_option(void)
 
 // In a special case where both arguments are NULL,
 // initialize the static variable and return 0
-t_get_opt_status get_next_option(char *arg, const char *optstring)
+t_get_opt_status	get_next_option(char *arg, const char *optstring)
 {
-	static char	*current_char = NULL;
+	static char	*current_char;
 	char		*option;
 
+	current_char = NULL;
 	if (arg == NULL && optstring == NULL)
 	{
 		current_char = NULL;
