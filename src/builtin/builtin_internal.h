@@ -43,5 +43,6 @@ void				init_get_next_option(void);
 t_get_opt_status	get_next_option(char *arg, const char *optstring);
 char				**ignore_options(char **args);
 char				*get_working_directory(t_context *ctx, char *for_whom);
+void				sync_working_directory(t_context *ctx, char *for_whom);
 
 #endif
