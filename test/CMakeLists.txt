@@ -43,3 +43,6 @@ gtest_discover_tests(test_builtin_exit)
 
 add_executable(test_builtin_export builtin_export.cpp ${SRC})
 gtest_discover_tests(test_builtin_export)
+
+add_executable(test_join_path join_path.cpp ${SRC})
+gtest_discover_tests(test_join_path)
