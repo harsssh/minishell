@@ -26,7 +26,6 @@ t_get_opt_status	get_next_option(char *arg, const char *optstring)
 	static char	*current_char;
 	char		*option;
 
-	current_char = NULL;
 	if (arg == NULL && optstring == NULL)
 	{
 		current_char = NULL;
