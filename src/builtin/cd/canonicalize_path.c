@@ -15,14 +15,14 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-static bool is_existing_directory(char *path)
-{
-	struct stat st;
+// static bool is_existing_directory(char *path)
+// {
+// 	struct stat st;
 
-	if (stat(path, &st) != 0)
-		return (false);
-	return (S_ISDIR(st.st_mode));
-}
+// 	if (stat(path, &st) != 0)
+// 		return (false);
+// 	return (S_ISDIR(st.st_mode));
+// }
 
 /*
 /path/to/.. -> /path	| /path/to 	: 前の / まで戻す
@@ -34,38 +34,56 @@ path/.. 	-> .		| path 		: 最初に戻す
 // /path/INVALID/.. は /path じゃない
 char	*canonicalize_path(char *path, bool check_existence)
 {
-	char *buf;
-	char *ret;
-	char *tmp;
+	char	*buf;
+	char	*ret;
+	char 	*prev_slash;
+	bool	is_absolute_path;
 
+	(void)check_existence;
 	if (path == NULL)
 		return (NULL);
 	buf = ft_strdup(path);
 	if (buf == NULL)
 		return (NULL);
 	ret = buf;
+	is_absolute_path = false;
 	if (*path == '/')
-		*buf++ = '/';
-	tmp = buf;
-	// bufには構築中のパス (末尾はslashなし): /path/to/dir
-	// pathは読んでいるパス (先頭はスラッシュでない): path/[to/dir]
+	{
+		*buf++ = *path++;
+		is_absolute_path = true;
+	}
 	while (*path)
 	{
-		if (*path == '/') // / は読み飛ばす
+		if (*path == '/')
 			++path;
-		else if (*path == '.' && (path[1] == '/' || path[1] == '\0')) // ./ or . 
+		else if (*path == '.' && (path[1] == '/' || path[1] == '\0'))
 			++path;
-		else if (ft_strncmp(path, "..", 2) == 0 && (path[1] == '/' || path[1] == '\0')) // ../ or ..
+		else if (ft_strncmp(path, "..", 2) == 0 && (path[2] == '/' || path[2] == '\0'))
 		{
+			// strrchrで戻る。先頭だったらその次、/がなければ最初に
+			*buf = '\0';
+			prev_slash = ft_strrchr(buf, '/');
+			if (prev_slash == NULL)
+				buf = ret;
+			else if (prev_slash == ret)
+				buf = ret + 1;
+			else
+				buf = prev_slash;
+			path += 2;
 		} else {
-			// 最初でなければ, / を入れる
-			if (buf != ret)
+			if (buf != ret && buf[-1] != '/')
 				*buf++ = '/';
-			// / までコピー
 			while(*path && *path != '/')
 				*buf++ = *path++;
-			*buf = '\0';
 		}
 	}
+	if (buf == ret)
+	{
+		if (is_absolute_path)
+			*buf++ = '/';
+		else
+			*buf++ = '.';
+	}
+	*buf = '\0';
 	return (ret);
 }

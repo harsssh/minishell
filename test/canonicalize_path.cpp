@@ -192,3 +192,33 @@ TEST(canonicalize_path, normal16)
 	EXPECT_STREQ(result, "path/to");
 	free(result);
 }
+
+// 複数回 ..
+TEST(canonicalize_path, normal17)
+{
+	char	*result;
+
+	result = canonicalize_path("/path/to/dir/../..", false);
+	EXPECT_STREQ(result, "/path");
+	free(result);
+}
+
+// 複数回 .. で / になる
+TEST(canonicalize_path, normal18)
+{
+	char	*result;
+
+	result = canonicalize_path("/path/to/dir/../../..", false);
+	EXPECT_STREQ(result, "/");
+	free(result);
+}
+
+// 複数回 .. で . になる 
+TEST(canonicalize_path, normal19)
+{
+	char	*result;
+
+	result = canonicalize_path("path/to/dir/../../..", false);
+	EXPECT_STREQ(result, ".");
+	free(result);
+}
