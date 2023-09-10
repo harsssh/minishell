@@ -46,3 +46,6 @@ gtest_discover_tests(test_builtin_export)
 
 add_executable(test_join_path join_path.cpp ${SRC})
 gtest_discover_tests(test_join_path)
+
+add_executable(test_canonicalize_path canonicalize_path.cpp ${SRC})
+gtest_discover_tests(test_canonicalize_path)

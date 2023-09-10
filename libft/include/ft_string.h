@@ -24,6 +24,7 @@ char	**ft_split(char const *s, char c);
 int		ft_strall(const char *str, int (*f)(int));
 int		ft_strany(const char *str, int (*f)(int));
 char	*ft_strchr(const char *s, int c);
+char	*ft_strcpy(char * dst, const char * src);
 char	*ft_strdup(const char *src);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 char	*ft_strjoin(char const *s1, char const *s2);

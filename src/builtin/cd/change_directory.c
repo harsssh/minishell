@@ -39,7 +39,7 @@ bool	get_absolute_destination_path(t_context *ctx, char *newdir,
 		abspath = ft_strdup(newdir);
 	else
 		abspath = join_path(ctx->cwd, newdir);
-	*result = canonicalize_path(abspath);
+	*result = canonicalize_path(abspath, true);
 	if (*result == NULL || **result == '\0')
 	{
 		free(*result);
