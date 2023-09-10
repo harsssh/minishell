@@ -24,12 +24,19 @@ static bool is_existing_directory(char *path)
 	return (S_ISDIR(st.st_mode));
 }
 
-// 解決するときに, 各ディレクトリは存在するのかを確認する
-// ./INVALID/../VALID -> ./VALID にはならない (単純な文字列操作ではだめ)
+/*
+/path/to/.. -> /path	| /path/to 	: 前の / まで戻す
+/path/.. 	-> /		| /path 	: 最初の / の次まで戻す
+/.. 		-> /		| /			: 最初の / の次まで戻す
+path/.. 	-> .		| path 		: 最初に戻す
+.. 			-> .		| ""		: 最初に戻す
+*/
+// /path/INVALID/.. は /path じゃない
 char	*canonicalize_path(char *path, bool check_existence)
 {
 	char *buf;
 	char *ret;
+	char *tmp;
 
 	if (path == NULL)
 		return (NULL);
@@ -37,37 +44,27 @@ char	*canonicalize_path(char *path, bool check_existence)
 	if (buf == NULL)
 		return (NULL);
 	ret = buf;
+	if (*path == '/')
+		*buf++ = '/';
+	tmp = buf;
 	// bufには構築中のパス (末尾はslashなし): /path/to/dir
 	// pathは読んでいるパス (先頭はスラッシュでない): path/[to/dir]
 	while (*path)
 	{
-		if (*path == '/')
+		if (*path == '/') // / は読み飛ばす
 			++path;
-		else if (*path == '.' && (path[1] == '/' || path[1] == '\0'))
+		else if (*path == '.' && (path[1] == '/' || path[1] == '\0')) // ./ or . 
 			++path;
-		else if (ft_strncmp(path, "..", 2) == 0 && (path[1] == '/' || path[1] == '\0'))
+		else if (ft_strncmp(path, "..", 2) == 0 && (path[1] == '/' || path[1] == '\0')) // ../ or ..
 		{
-			// /INVALID/../ は, これまで構築したパスが有効化どうかを確認
-			// TODO: bufに何も入っていなかったら? 空文字でチェックが入る
-			*buf = '\0';
-			if (check_existence && !is_existing_directory(ret)) {
-				free(ret);
-				return (NULL);
-			}
-			// /path/to -> /path (/ の前まで戻す)
-			// /path -> /, / -> / (/ の前がなければ, / のまま)
-			// .. -> ../.., . -> .., path -> . (/ がない. どうしよう)
 		} else {
-			// /path/[to]/dir, /path/to/[dir]
+			// 最初でなければ, / を入れる
 			if (buf != ret)
 				*buf++ = '/';
+			// / までコピー
 			while(*path && *path != '/')
 				*buf++ = *path++;
 			*buf = '\0';
-			if (check_existence && !is_existing_directory(ret)) {
-				free(ret);
-				return (NULL);
-			}
 		}
 	}
 	return (ret);

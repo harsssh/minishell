@@ -98,8 +98,8 @@ TEST(canonicalize_path, normal7)
 {
 	char	*result;
 
-	result = canonicalize_path("/path/../../../to/dir", false);
-	EXPECT_STREQ(result, "/to/dir");
+	result = canonicalize_path("/..", false);
+	EXPECT_STREQ(result, "/");
 	free(result);
 }
 
@@ -160,5 +160,35 @@ TEST(canonicalize_path, normal13)
 
 	result = canonicalize_path("", false);
 	EXPECT_STREQ(result, ".");
+	free(result);
+}
+
+// .. だけ
+TEST(canonicalize_path, normal14)
+{
+	char	*result;
+
+	result = canonicalize_path("..", false);
+	EXPECT_STREQ(result, "..");
+	free(result);
+}
+
+// 最後が . で / なし
+TEST(canonicalize_path, normal15)
+{
+	char	*result;
+
+	result = canonicalize_path("path/to/dir/.", false);
+	EXPECT_STREQ(result, "path/to/dir");
+	free(result);
+}
+
+// 最後が .. で / なし
+TEST(canonicalize_path, normal16)
+{
+	char	*result;
+
+	result = canonicalize_path("path/to/dir/..", false);
+	EXPECT_STREQ(result, "path/to");
 	free(result);
 }
