@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 01:01:27 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/07/31 00:42:32 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/11 17:36:27 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**ft_split(char const *s, char c);
 int		ft_strall(const char *str, int (*f)(int));
 int		ft_strany(const char *str, int (*f)(int));
 char	*ft_strchr(const char *s, int c);
-char	*ft_strcpy(char * dst, const char * src);
+char	*ft_strcpy(char *dst, const char *src);
 char	*ft_strdup(const char *src);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 char	*ft_strjoin(char const *s1, char const *s2);
