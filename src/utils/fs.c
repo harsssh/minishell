@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_internal.h                                      :+:      :+:    :+:   */
+/*   fs.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/20 17:19:50 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/20 17:19:52 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/09/11 17:34:14 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/11 17:34:15 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CD_INTERNAL_H
-# define CD_INTERNAL_H
+#include "utils.h"
+#include <sys/stat.h>
 
-# include "context.h"
+bool	is_existing_directory(const char *path)
+{
+	struct stat	st;
 
-int		change_directory(t_context *ctx, char *newdir);
-char	*join_path(char *base, char *relpath);
-char	*canonicalize_absolute_path(const char *path, bool check_existence);
-
-#endif
+	if (stat(path, &st) != 0)
+		return (false);
+	return (S_ISDIR(st.st_mode));
+}

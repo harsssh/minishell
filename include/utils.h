@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_internal.h                                      :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/20 17:19:50 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/20 17:19:52 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/09/11 17:34:27 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/11 17:37:26 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CD_INTERNAL_H
-# define CD_INTERNAL_H
+#ifndef UTILS_H
+# define UTILS_H
 
-# include "context.h"
+# include <stdbool.h>
 
-int		change_directory(t_context *ctx, char *newdir);
-char	*join_path(char *base, char *relpath);
-char	*canonicalize_absolute_path(const char *path, bool check_existence);
+bool	is_existing_directory(const char *path);
 
 #endif
