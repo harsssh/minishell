@@ -1,6 +1,9 @@
 # Output
 minishell
 
+# Others
+.cache
+
 # Editor
 .idea/
 .vscode/

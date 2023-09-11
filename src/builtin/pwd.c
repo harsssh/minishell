@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/18 19:17:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/18 22:23:54 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/19 02:34:42 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/19 02:34:44 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include "builtin/builtin_internal.h"
-#include "export_internal.h"
+#include "builtin_internal.h"
+#include "libft.h"
 #include <stdlib.h>
+#include <unistd.h>
 
-int	builtin_export(t_context *ctx, char **args)
+int	builtin_pwd(t_context *ctx, char **args)
 {
-	int	status;
+	char	*directory;
 
 	args = ignore_options(args);
-	if (*args == NULL)
-		return (builtin_export_no_arg(ctx));
-	status = EXIT_SUCCESS;
-	while (*args)
-	{
-		if (export_each_arg(ctx, *args) == EXIT_FAILURE)
-			status = EXIT_FAILURE;
-		++args;
-	}
-	return (status);
+	directory = get_working_directory(ctx, "pwd");
+	if (directory == NULL)
+		return (EXIT_FAILURE);
+	ft_putendl_fd(directory, STDOUT_FILENO);
+	free(directory);
+	return (EXIT_SUCCESS);
 }

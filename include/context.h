@@ -20,6 +20,7 @@ typedef struct s_context
 	const char	*shell_name;
 	t_list		*variables;
 	int			last_exit_status;
+	char		*cwd;
 }				t_context;
 
 #endif

@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   fs.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/18 19:17:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/18 22:23:54 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/09/11 17:34:14 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/11 17:34:15 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "builtin/builtin_internal.h"
-#include "export_internal.h"
-#include <stdlib.h>
+#include "utils.h"
+#include <sys/stat.h>
 
-int	builtin_export(t_context *ctx, char **args)
+bool	is_existing_directory(const char *path)
 {
-	int	status;
+	struct stat	st;
 
-	args = ignore_options(args);
-	if (*args == NULL)
-		return (builtin_export_no_arg(ctx));
-	status = EXIT_SUCCESS;
-	while (*args)
-	{
-		if (export_each_arg(ctx, *args) == EXIT_FAILURE)
-			status = EXIT_FAILURE;
-		++args;
-	}
-	return (status);
+	if (stat(path, &st) != 0)
+		return (false);
+	return (S_ISDIR(st.st_mode));
 }

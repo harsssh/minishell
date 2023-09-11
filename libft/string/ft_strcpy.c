@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/18 19:17:10 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/18 22:23:54 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/09/11 17:36:40 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/11 17:36:41 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "builtin/builtin_internal.h"
-#include "export_internal.h"
-#include <stdlib.h>
+#include "ft_string.h"
 
-int	builtin_export(t_context *ctx, char **args)
+char	*ft_strcpy(char *dst, const char *src)
 {
-	int	status;
+	char	*ret;
 
-	args = ignore_options(args);
-	if (*args == NULL)
-		return (builtin_export_no_arg(ctx));
-	status = EXIT_SUCCESS;
-	while (*args)
-	{
-		if (export_each_arg(ctx, *args) == EXIT_FAILURE)
-			status = EXIT_FAILURE;
-		++args;
-	}
-	return (status);
+	ret = dst;
+	while (*src)
+		*dst++ = *src++;
+	*dst = '\0';
+	return (ret);
 }
