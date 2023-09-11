@@ -20,11 +20,11 @@ endforeach ()
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src ${DIR_LIST})
 link_libraries(ft GTest::gtest GTest::gtest_main)
 
-add_executable(test_variable variable.cpp ${SRC})
-gtest_discover_tests(test_variable)
+add_executable(test_variables variables.cpp ${SRC})
+gtest_discover_tests(test_variables)
 
-add_executable(test_variable_parse variable_parse.cpp ${SRC})
-gtest_discover_tests(test_variable_parse)
+add_executable(test_parse_variable_assignment parse_variable_assignment.cpp ${SRC})
+gtest_discover_tests(test_parse_variable_assignment)
 
 add_executable(test_get_next_option get_next_option.cpp ${SRC})
 gtest_discover_tests(test_get_next_option)
