@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   variable_internal.h                                :+:      :+:    :+:   */
+/*   variables_internal.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 19:14:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/15 19:14:53 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/11 19:13:48 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VARIABLE_INTERNAL_H
-# define VARIABLE_INTERNAL_H
+#ifndef VARIABLES_INTERNAL_H
+# define VARIABLES_INTERNAL_H
 
 # include "variables.h"
 

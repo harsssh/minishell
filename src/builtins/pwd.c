@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	builtin_pwd(t_context *ctx, char **args)
+int	builtins_pwd(t_context *ctx, char **args)
 {
 	char	*directory;
 

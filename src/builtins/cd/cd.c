@@ -32,7 +32,7 @@ static int	bindpwd(t_context *ctx)
 	return (result);
 }
 
-int	builtin_cd(t_context *ctx, char **args)
+int	builtins_cd(t_context *ctx, char **args)
 {
 	char	*dirname;
 

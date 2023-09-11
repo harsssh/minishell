@@ -28,7 +28,7 @@ static void	print_env(void *data)
 		ft_putendl_fd(var->envstr, STDOUT_FILENO);
 }
 
-int	builtin_env(t_context *ctx, char **args)
+int	builtins_env(t_context *ctx, char **args)
 {
 	if (*args != NULL)
 	{

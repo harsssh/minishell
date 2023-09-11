@@ -39,7 +39,7 @@ static int	get_status_or_exit(t_context *ctx, char **args)
 }
 
 // TODO: Assumes a non-login, interactive shell context
-int	builtin_exit(t_context *ctx, char **args)
+int	builtins_exit(t_context *ctx, char **args)
 {
 	if (*args && ft_strcmp(*args, "--") == 0)
 		++args;

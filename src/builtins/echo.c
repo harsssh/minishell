@@ -48,7 +48,7 @@ static void	print_args(char **args, bool newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-int	builtin_echo(t_context *ctx, char **args)
+int	builtins_echo(t_context *ctx, char **args)
 {
 	bool	newline;
 

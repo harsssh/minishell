@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_internal.h                                 :+:      :+:    :+:   */
+/*   builtins_internal.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 20:19:23 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/20 04:56:13 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/11 19:26:29 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_INTERNAL_H
-# define BUILTIN_INTERNAL_H
+#ifndef BUILTINS_INTERNAL_H
+# define BUILTINS_INTERNAL_H
 
 # include "context.h"
 
@@ -28,7 +28,7 @@ typedef enum e_get_opt_status
 	END_OF_OPTIONS,
 	ILLEGAL_OPTION,
 	INITIALIZE,
-}	t_get_opt_status;
+}					t_get_opt_status;
 
 void				perror_builtin(t_context *ctx, const char *cmd,
 						const char *prefix);

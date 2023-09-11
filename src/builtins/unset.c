@@ -15,7 +15,7 @@
 #include "variables.h"
 #include <stdlib.h>
 
-int	builtin_unset(t_context *ctx, char **args)
+int	builtins_unset(t_context *ctx, char **args)
 {
 	args = ignore_options(args);
 	while (*args != NULL)
