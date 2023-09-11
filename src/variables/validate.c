@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
+/*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 04:44:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/11 19:12:52 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/18 19:22:23 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/18 19:22:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTEXT_H
-# define CONTEXT_H
+#include "libft.h"
+#include "variables.h"
 
-# include "ft_list.h"
-
-typedef struct s_context
+static int	is_valid_character(int c)
 {
-	const char	*shell_name;
-	t_list		*variables;
-	int			last_exit_status;
-	char		*cwd;
-}				t_context;
+	return (ft_isalnum(c) || c == '_');
+}
 
-#endif
+bool	is_valid_identifier(const char *identifier)
+{
+	if (!(ft_isalpha(*identifier) || *identifier == '_'))
+		return (0);
+	return (ft_strall(identifier + 1, is_valid_character));
+}

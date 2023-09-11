@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
+/*   getvar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 04:44:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/11 19:12:52 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/15 19:14:48 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/16 19:17:21 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTEXT_H
-# define CONTEXT_H
+#include "libft.h"
+#include "variables.h"
+#include <stdbool.h>
 
-# include "ft_list.h"
-
-typedef struct s_context
+static bool	find_func(void *data, void *ref)
 {
-	const char	*shell_name;
-	t_list		*variables;
-	int			last_exit_status;
-	char		*cwd;
-}				t_context;
+	return (ft_strcmp(((t_variable *)data)->name, (char *)ref) == 0);
+}
 
-#endif
+t_variable	*getvar(t_context *ctx, char *name)
+{
+	t_variable	*var;
+
+	var = ft_list_find(ctx->variables, name, find_func);
+	return (var);
+}

@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 04:44:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/11 19:12:52 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/11 13:35:06 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/11 19:27:17 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTEXT_H
-# define CONTEXT_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-# include "ft_list.h"
+# include "context.h"
 
-typedef struct s_context
-{
-	const char	*shell_name;
-	t_list		*variables;
-	int			last_exit_status;
-	char		*cwd;
-}				t_context;
+int	builtins_echo(t_context *ctx, char **args);
+int	builtins_env(t_context *ctx, char **args);
+int	builtins_unset(t_context *ctx, char **args);
+int	builtins_exit(t_context *ctx, char **args);
+int	builtins_export(t_context *ctx, char **args);
+int	builtins_pwd(t_context *ctx, char **args);
+int	builtins_cd(t_context *ctx, char **args);
 
 #endif

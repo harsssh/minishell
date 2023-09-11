@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   context.h                                          :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/15 04:44:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/11 19:12:52 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/08/17 06:55:08 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/08/17 06:55:09 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTEXT_H
-# define CONTEXT_H
+#include "builtins.h"
+#include "builtins_internal.h"
+#include "variables.h"
+#include <stdlib.h>
 
-# include "ft_list.h"
-
-typedef struct s_context
+int	builtins_unset(t_context *ctx, char **args)
 {
-	const char	*shell_name;
-	t_list		*variables;
-	int			last_exit_status;
-	char		*cwd;
-}				t_context;
-
-#endif
+	args = ignore_options(args);
+	while (*args != NULL)
+	{
+		unsetvar(ctx, *args);
+		++args;
+	}
+	return (EXIT_SUCCESS);
+}
