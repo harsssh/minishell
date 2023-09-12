@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 
 #include "ast.h"
+#include "exec_internal.h"
 #include <unistd.h>
 
 static int	execute_ast_impl(t_context *ctx, t_ast_node *ast,
 	int fd_in, int fd_out)
 {
-	(void)ctx;
-	(void)ast;
-	(void)fd_in;
-	(void)fd_out;
-	return (0);
+	t_ast_handler	handler;
+
+	handler = get_ast_handler(ast->type);
+	return (handler(ctx, ast, fd_in, fd_out));
 }
 
 int	execute_ast(t_context *ctx, t_ast_node *ast)
