@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:22 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/12 18:47:59 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/12 18:50:27 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 static int	execute_ast_impl(t_context *ctx, t_ast_node *ast,
 	int fd_in, int fd_out)
 {
-    (void)ctx;
-    (void)ast;
-    (void)fd_in;
-    (void)fd_out;
+	(void)ctx;
+	(void)ast;
+	(void)fd_in;
+	(void)fd_out;
 	return (0);
 }
 
