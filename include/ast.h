@@ -13,6 +13,8 @@
 #ifndef AST_H
 # define AST_H
 
+#include "context.h"
+
 /**
  * @brief Enumeration of AST node types
  * 
@@ -56,5 +58,7 @@ typedef struct s_ast_node
 	char				**argv;
 	char				*filename;
 }	t_ast_node;
+
+int		execute_ast(t_context *ctx, t_ast_node *ast);
 
 #endif
