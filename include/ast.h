@@ -50,11 +50,11 @@ typedef enum e_ast_node_type
  */
 typedef struct s_ast_node
 {
-	t_ast_node_type	type;
-	struct ast_node	*left;
-	struct ast_node	*right;
-	char			**argv;
-	char			*filename;
+	t_ast_node_type		type;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+	char				**argv;
+	char				*filename;
 }	t_ast_node;
 
 #endif
