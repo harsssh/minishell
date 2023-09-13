@@ -21,7 +21,10 @@ static void configure_io(t_pipe *left, t_pipe *right)
 
 static int child_routine(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe)
 {
+    (void)ctx;
+    (void)ast;
     configure_io(left_pipe, right_pipe);
+    return (0);
 }
 
 int handle_command(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe) 
@@ -34,4 +37,5 @@ int handle_command(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *r
         child_routine(ctx, ast, left_pipe, right_pipe);
         exit(EXIT_FAILURE);
     }
+    return (0);
 }

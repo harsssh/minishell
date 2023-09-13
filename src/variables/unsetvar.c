@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include "variables.h"
+#include "variables_internal.h"
 #include <errno.h>
 #include <stdlib.h>
 

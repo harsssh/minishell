@@ -28,8 +28,8 @@ void        *variable_copy(void *data)
     t_variable *new;
 
     var = (t_variable *)data;
-    new = variable_create(var->name, var->value);
-    if (new == NULL)
+    new = variable_create(ft_strdup(var->name), ft_strdup(var->value));
+    if (new == NULL || new->name == NULL || new->value == NULL)
         return (NULL);
     new->envstr = ft_strdup(var->envstr);
     if (new->envstr == NULL)
