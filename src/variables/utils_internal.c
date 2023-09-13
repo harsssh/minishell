@@ -15,7 +15,7 @@
 #include "variables_internal.h"
 #include <stdlib.h>
 
-static char	*make_envstr(char *name, char *value)
+char	*make_envstr(char *name, char *value)
 {
 	char	*envstr;
 	char	*tmp;
@@ -29,25 +29,6 @@ static char	*make_envstr(char *name, char *value)
 	if (envstr == NULL)
 		return (NULL);
 	return (envstr);
-}
-
-t_variable	*variable_create(char *name, char *value)
-{
-	t_variable	*var;
-
-	var = malloc(sizeof(t_variable));
-	if (var == NULL)
-		return (NULL);
-	var->name = name;
-	var->value = value;
-	var->envstr = make_envstr(name, value);
-	if (var->envstr == NULL)
-	{
-		free(var);
-		return (NULL);
-	}
-	var->attributes = 0;
-	return (var);
 }
 
 void	variable_destroy(void *data)
