@@ -15,17 +15,6 @@
 #include <errno.h>
 #include <stdlib.h>
 
-static void	variable_destroy(void *data)
-{
-	t_variable	*var;
-
-	var = data;
-	free(var->name);
-	free(var->value);
-	free(var->envstr);
-	free(var);
-}
-
 static bool	exclude_func(void *data, void *ref)
 {
 	t_variable	*var;

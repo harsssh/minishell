@@ -2,32 +2,36 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-static void set_io(int fd_in, int fd_out)
+// for child process
+static void configure_io(t_pipe *left, t_pipe *right)
 {
-    if (fd_in != STDIN_FILENO)
+    if (left != NULL)
     {
-        dup2(fd_in, STDIN_FILENO);
-        close(fd_in);
+        dup2(left->fd_out, STDIN_FILENO);
+        close(left->fd_in);
+        close(left->fd_out);
     }
-    if (fd_out != STDOUT_FILENO)
+    if (right != NULL)
     {
-        dup2(fd_out, STDOUT_FILENO);
-        close(fd_out);
+        dup2(right->fd_in, STDOUT_FILENO);
+        close(right->fd_in);
+        close(right->fd_out);
     }
 }
 
-static void child_routine(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out)
+static int child_routine(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe)
 {
+    configure_io(left_pipe, right_pipe);
 }
 
-int handle_command(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out)
+int handle_command(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe) 
 {
     pid_t pid;
 
     pid = fork();
     if (pid == 0)
     {
-        child_routine(ctx, ast, fd_in, fd_out);
+        child_routine(ctx, ast, left_pipe, right_pipe);
         exit(EXIT_FAILURE);
     }
 }

@@ -16,14 +16,19 @@
 #include "context.h"
 #include "ast.h"
 
-typedef int (*t_ast_handler)(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out);
+typedef struct s_pipe {
+    int fd_in;
+    int fd_out;
+} t_pipe;
 
-t_ast_handler get_ast_handler(t_ast_node_type type);
+void new_pipe(t_pipe *p);
 
-int handle_command(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out);
-int handle_sequence(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out);
-int handle_logical_operator(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out);
-int handle_pipe(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out);
-int handle_redirect(t_context *ctx, t_ast_node *ast, int fd_in, int fd_out);
+typedef int (*t_ast_handler)(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
+
+int handle_command(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
+int handle_sequence(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
+int handle_logical_operator(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
+int handle_pipe(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
+int handle_redirect(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
 
 #endif

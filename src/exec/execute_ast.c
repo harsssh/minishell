@@ -14,16 +14,29 @@
 #include "exec_internal.h"
 #include <unistd.h>
 
-static int	execute_ast_impl(t_context *ctx, t_ast_node *ast,
-	int fd_in, int fd_out)
+static t_ast_handler get_ast_handler(t_ast_node_type type)
 {
-	t_ast_handler	handler;
-
-	handler = get_ast_handler(ast->type);
-	return (handler(ctx, ast, fd_in, fd_out));
+    if (type == N_COMMAND)
+        return handle_command;
+    else if (type == N_SEQUENCE)
+        return handle_sequence;
+    else if (type == N_AND || type == N_OR)
+        return handle_logical_operator;
+    else if (type == N_PIPE)
+        return handle_pipe;
+    else if (type == N_REDIRECT_IN || type == N_REDIRECT_OUT 
+        || type == N_REDIRECT_APPEND || type == N_REDIRECT_HERE_DOC)
+        return handle_redirect;
+    else if (type == N_REDIRECT_HERE_DOC)
+        return handle_redirect;
+    else
+        return NULL;
 }
 
 int	execute_ast(t_context *ctx, t_ast_node *ast)
 {
-	return (execute_ast_impl(ctx, ast, STDIN_FILENO, STDOUT_FILENO));
+	t_ast_handler handler;
+
+	handler = get_ast_handler(ast->type);
+	return (handler(ctx, ast, NULL, NULL));
 }

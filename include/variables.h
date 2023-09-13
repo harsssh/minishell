@@ -51,6 +51,8 @@ t_variable					*getvar(t_context *ctx, char *name);
 int							setvar(t_context *ctx, char *name, char *value,
 								int overwrite);
 int							unsetvar(t_context *ctx, char *name);
+
+char 						**get_environ(t_context *ctx);
 t_assignment_parse_status	parse_variable_assignment(
 								t_parsed_variable_assignment *result,
 								char *str);
