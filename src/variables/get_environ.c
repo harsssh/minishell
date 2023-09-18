@@ -11,6 +11,7 @@ static bool is_inheritable(void *data)
         && !(var->attributes & VAR_ATTR_NO_VALUE));
 }
 
+// reuse `envstr` of each variable node
 static char **to_environ_array(t_list *vars)
 {
     char        **array;
