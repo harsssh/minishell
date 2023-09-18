@@ -14,7 +14,13 @@
 # define UTILS_H
 
 # include <stdbool.h>
+# include "ft_list.h"
 
+// fs.c
 bool	is_existing_directory(const char *path);
+
+// list.c
+// `f` must not fail (e.g. malloc failure)
+char	**list_to_string_array(t_list *list, char *(*f)(void *data));
 
 #endif

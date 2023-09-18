@@ -1,6 +1,6 @@
 #include "variables.h"
 #include "variables_internal.h"
-#include <stdlib.h>
+#include "utils.h"
 
 static bool is_inheritable(void *data)
 {
@@ -11,29 +11,16 @@ static bool is_inheritable(void *data)
         && !(var->attributes & VAR_ATTR_NO_VALUE));
 }
 
-// reuse `envstr` of each variable node
-static char **to_environ_array(t_list *vars)
-{
-    char        **array;
-    char        **cur;
-    t_node      *node;
-    size_t      len;
+// reuse `envstr` in variable
+// `envstr` is NOT freed by variable destructor
+static char *get_envstr_from_variable(void *data) {
+	t_variable *var;
+	char *envstr;
 
-    len = vars->size;
-    array = (char **)malloc(sizeof(char *) * (len + 1));
-    if (array == NULL)
-        return (NULL);
-    cur = array;
-    node = vars->head;
-    while (len--)
-    {
-        *cur = ((t_variable *)node->data)->envstr;
-        ((t_variable *)node->data)->envstr = NULL;
-        ++cur;
-        node = node->next;
-    }
-    *cur = NULL;
-    return (array);
+	var = (t_variable *)data;
+	envstr = var->envstr;
+	var->envstr = NULL;
+	return (envstr);
 }
 
 char    **get_environ(t_context *ctx)
@@ -42,7 +29,7 @@ char    **get_environ(t_context *ctx)
     char    **envp;
 
     filtered = ft_list_filter(ctx->variables, is_inheritable, variable_copy, variable_destroy);
-    envp = to_environ_array(filtered);
+    envp = list_to_string_array(filtered, get_envstr_from_variable);
     ft_list_destroy(filtered, variable_destroy);
     return (envp);
 }
