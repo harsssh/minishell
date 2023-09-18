@@ -49,3 +49,6 @@ gtest_discover_tests(test_join_path)
 
 add_executable(test_canonicalize_absolute_path canonicalize_absolute_path.cpp ${SRC})
 gtest_discover_tests(test_canonicalize_absolute_path)
+
+add_executable(test_lexer lexer.cpp ${SRC})
+gtest_discover_tests(test_lexer)

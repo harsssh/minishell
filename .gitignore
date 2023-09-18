@@ -3,6 +3,7 @@ minishell
 
 # Others
 .cache
+.DS_Store
 
 # Editor
 .idea/
