@@ -347,6 +347,7 @@ TEST(lexer, redirect_pipe)
 			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "EOF");
 		}
+		cnt++;
 	});
 }
 
