@@ -25,3 +25,20 @@ void	ft_list_iter(t_list *list, void (*f)(void *))
 		node = node->next;
 	}
 }
+
+void	ft_list_iter_enumerate(t_list *list, void (*f)(size_t, void *))
+{
+	t_node			*node;
+	size_t			i;
+
+	if (list == NULL || f == NULL)
+		return ;
+	node = list->head;
+	i = 0;
+	while (node != NULL)
+	{
+		f(i, node->data);
+		node = node->next;
+		++i;
+	}
+}

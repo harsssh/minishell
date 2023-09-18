@@ -6,7 +6,7 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -Werror")
 
 enable_testing()
 
-add_subdirectory(test)
+add_subdirectory(tests)
 
 file(GLOB_RECURSE SOURCES *.c)
 add_library(ft STATIC ${SOURCES})
