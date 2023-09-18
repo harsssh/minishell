@@ -301,49 +301,52 @@ TEST(lexer, redirect_pipe)
 		t_token	*token = (t_token *)data;
 		static int cnt = 0;
 
-		if (cnt % 2) {
+		if (cnt == 0) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "cat");
+		} else if (cnt == 1) {
+			EXPECT_EQ(token->type, TK_REDIRECT_OUT);
+			EXPECT_STREQ(token->literal, ">");
+		} else if (cnt == 2) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "file1");
+		} else if (cnt == 3) {
 			EXPECT_EQ(token->type, TK_PIPE);
 			EXPECT_STREQ(token->literal, "|");
-		} else {
-			if (cnt == 0) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "cat");
-			} else if (cnt == 1) {
-				EXPECT_EQ(token->type, TK_REDIRECT_OUT);
-				EXPECT_STREQ(token->literal, ">");
-			} else if (cnt == 2) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "file1");
-			} else if (cnt == 3) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "cat");
-			} else if (cnt == 4) {
-				EXPECT_EQ(token->type, TK_REDIRECT_OUT);
-				EXPECT_STREQ(token->literal, "<");
-			} else if (cnt == 5) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "file2");
-			} else if (cnt == 6) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "cat");
-			} else if (cnt == 7) {
-				EXPECT_EQ(token->type, TK_REDIRECT_APPEND);
-				EXPECT_STREQ(token->literal, ">>");
-			} else if (cnt == 8) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "file3");
-			} else if (cnt == 9) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "cat");
-			} else if (cnt == 10) {
-				EXPECT_EQ(token->type, TK_REDIRECT_HERE_DOC);
-				EXPECT_STREQ(token->literal, "<<");
-			} else if (cnt == 11) {
-				EXPECT_EQ(token->type, TK_WORD);
-				EXPECT_STREQ(token->literal, "EOF");
-			}
+		} else if (cnt == 4) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "cat");
+		} else if (cnt == 5) {
+			EXPECT_EQ(token->type, TK_REDIRECT_IN);
+			EXPECT_STREQ(token->literal, "<");
+		} else if (cnt == 6) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "file2");
+		} else if (cnt == 7) {
+			EXPECT_EQ(token->type, TK_PIPE);
+			EXPECT_STREQ(token->literal, "|");
+		} else if (cnt == 8) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "cat");
+		} else if (cnt == 9) {
+			EXPECT_EQ(token->type, TK_REDIRECT_APPEND);
+			EXPECT_STREQ(token->literal, ">>");
+		} else if (cnt == 10) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "file3");
+		} else if (cnt == 11) {
+			EXPECT_EQ(token->type, TK_PIPE);
+			EXPECT_STREQ(token->literal, "|");
+		} else if (cnt == 12) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "cat");
+		} else if (cnt == 13) {
+			EXPECT_EQ(token->type, TK_REDIRECT_HERE_DOC);
+			EXPECT_STREQ(token->literal, "<<");
+		} else if (cnt == 14) {
+			EXPECT_EQ(token->type, TK_WORD);
+			EXPECT_STREQ(token->literal, "EOF");
 		}
-		cnt++;
 	});
 }
 
