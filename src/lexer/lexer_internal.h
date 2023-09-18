@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 11:08:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 19:30:01 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/18 20:54:48 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ void			take_input_snapshot(t_lexer *lexer);
 char			*get_input_snapshot(t_lexer *lexer);
 t_token			*get_next_token(t_lexer *lexer);
 void			skip_char(t_lexer *lexer);
+int				peek_input(t_lexer *lexer, char *expected);
 
 #endif

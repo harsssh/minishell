@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 19:39:19 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/18 21:12:25 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,12 @@ void	tokenize_quotes(t_lexer *lexer)
 	read_char(lexer);
 }
 
+int	is_startwith_operator(t_lexer *lexer)
+{
+	return (peek_input(lexer, "&&") || peek_input(lexer, "|")
+		|| peek_input(lexer, "<") || peek_input(lexer, ">"));
+}
+
 t_token	*get_next_token(t_lexer *lexer)
 {
 	char	cur_char;
@@ -70,11 +76,9 @@ t_token	*get_next_token(t_lexer *lexer)
 			tokenize_quotes(lexer);
 		else if (is_quoted(lexer))
 			read_char(lexer);
-		else if (ft_isspace(cur_char))
-		{
-			skip_char(lexer);
+		else if (ft_isspace(cur_char) || (is_startwith_operator(lexer)
+				&& get_cur_token_type(lexer) != TK_UNKNOWN))
 			break ;
-		}
 		else
 		{
 			token = tokenize_operators(lexer);
