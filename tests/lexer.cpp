@@ -177,12 +177,16 @@ TEST(lexer, quote_nest)
 	EXPECT_NE(result, nullptr);
 	ft_list_iter(result, [](void *data) {
 		t_token	*token = (t_token *)data;
+		static int cnt = 0;
 
-		if (token->type == TK_WORD) {
+		if (cnt == 0) {
+			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "echo");
-		} else if (token->type == TK_WORD) {
+		} else if (cnt == 1) {
+			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "\"'''42'''\"");
 		}
+		cnt++;
 	});
 }
 
@@ -195,12 +199,16 @@ TEST(lexer, quote_concat)
 	EXPECT_NE(result, nullptr);
 	ft_list_iter(result, [](void *data) {
 		t_token	*token = (t_token *)data;
+		static int cnt = 0;
 
-		if (token->type == TK_WORD) {
+		if (cnt == 0) {
+			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "echo");
-		} else if (token->type == TK_WORD) {
+		} else if (cnt == 1) {
+			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "\"42\"\"42\"");
 		}
+		cnt++;
 	});
 }
 
@@ -213,12 +221,16 @@ TEST(lexer, variables)
 	EXPECT_NE(result, nullptr);
 	ft_list_iter(result, [](void *data) {
 		t_token	*token = (t_token *)data;
+		static int cnt = 0;
 
-		if (token->type == TK_WORD) {
+		if (cnt == 0) {
+			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "echo");
-		} else if (token->type == TK_WORD) {
+		} else if (cnt == 1) {
+			EXPECT_EQ(token->type, TK_WORD);
 			EXPECT_STREQ(token->literal, "$A$B$C$D");
 		}
+		cnt++;
 	});
 }
 

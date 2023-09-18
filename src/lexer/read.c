@@ -6,12 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 13:08:50 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 19:23:23 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/18 21:14:30 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_string.h"
 #include "lexer_internal.h"
+#include "token.h"
 
 void	skip_char(t_lexer *lexer)
 {
@@ -32,12 +33,17 @@ void	skip_whitespaces(t_lexer *lexer)
 		skip_char(lexer);
 }
 
+int	peek_input(t_lexer *lexer, char *expected)
+{
+	return (ft_strncmp(expected, get_input(lexer),
+			ft_strlen(expected)) == 0);
+}
+
 int	consume_input(t_lexer *lexer, char *expected)
 {
 	size_t	expected_len;
 
-	if (ft_strncmp(expected, get_input_snapshot(lexer),
-			ft_strlen(expected)) == 0)
+	if (peek_input(lexer, expected))
 	{
 		expected_len = ft_strlen(expected);
 		while (expected_len-- > 0)
