@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 19:29:54 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/18 19:39:19 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,11 @@ t_token	*tokenize_operators(t_lexer *lexer)
 	else if (consume_input(lexer, "|"))
 		return (new_token(TK_PIPE, get_input_snapshot(lexer), 1));
 	else if (consume_input(lexer, "<<"))
-	{
-		if (ft_isspace(get_cur_char(lexer)))
-			return (new_token(TK_REDIRECT_APPEND,
-					get_input_snapshot(lexer), 2));
 		return (new_token(TK_REDIRECT_HERE_DOC, get_input_snapshot(lexer), 2));
-	}
 	else if (consume_input(lexer, "<"))
 		return (new_token(TK_REDIRECT_IN, get_input_snapshot(lexer), 1));
+	else if (consume_input(lexer, ">>"))
+		return (new_token(TK_REDIRECT_APPEND, get_input_snapshot(lexer), 2));
 	else if (consume_input(lexer, ">"))
 		return (new_token(TK_REDIRECT_OUT, get_input_snapshot(lexer), 1));
 	else
@@ -42,10 +39,10 @@ t_token	*tokenize_operators(t_lexer *lexer)
 
 void	get_next_token_helper(t_lexer *lexer)
 {
-	take_input_snapshot(lexer);
-	reset_token_len(lexer);
 	skip_whitespaces(lexer);
 	set_cur_token_type(lexer, TK_UNKNOWN);
+	take_input_snapshot(lexer);
+	reset_token_len(lexer);
 }
 
 void	tokenize_quotes(t_lexer *lexer)

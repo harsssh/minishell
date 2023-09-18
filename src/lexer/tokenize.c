@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:02:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 18:59:04 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/18 19:44:28 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	push_tokens(t_lexer *lexer, t_token_stream *stream)
 		cur_type = get_token_type(cur_token);
 		if (cur_token == NULL
 			|| cur_type == TK_UNKNOWN
+			|| is_quoted(lexer)
 			|| push_token(stream, cur_token))
 		{
 			destroy_token(cur_token);
