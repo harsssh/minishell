@@ -53,5 +53,5 @@ gtest_discover_tests(test_canonicalize_absolute_path)
 add_executable(test_lexer lexer.cpp ${SRC})
 gtest_discover_tests(test_lexer)
 
-add_executable(test_parser parser.cpp ${SRC})
+add_executable(test_parser parser.cpp utils/ast_builder.cpp ${SRC})
 gtest_discover_tests(test_parser)

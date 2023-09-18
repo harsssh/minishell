@@ -1,4 +1,2 @@
 #include <gtest/gtest.h>
-
-extern "C" {
-}
+#include "utils/ast_builder.hpp"
