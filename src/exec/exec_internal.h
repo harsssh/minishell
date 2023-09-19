@@ -31,4 +31,6 @@ int handle_logical_operator(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, 
 int handle_pipe(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
 int handle_redirect(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe);
 
+int internal_execvp(t_context *ctx, const char *file, char * const*argv);
+
 #endif

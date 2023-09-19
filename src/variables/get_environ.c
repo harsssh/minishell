@@ -29,6 +29,8 @@ char    **get_environ(t_context *ctx)
     char    **envp;
 
     filtered = ft_list_filter(ctx->variables, is_inheritable, variable_copy, variable_destroy);
+	if (filtered == NULL)
+		return (NULL);
     envp = list_to_string_array(filtered, get_envstr_from_variable);
     ft_list_destroy(filtered, variable_destroy);
     return (envp);
