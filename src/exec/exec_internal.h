@@ -41,4 +41,7 @@ int handle_redirect(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
 // execvp.c
 int internal_execvp(t_context *ctx, const char *file, char * const*argv);
 
+// execute_ast.c
+int execute_ast_impl(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
+
 #endif
