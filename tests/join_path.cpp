@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 extern "C" {
-#include "cd/cd_internal.h"
+#include "utils.h"
 }
 
 TEST(join_path, normal)

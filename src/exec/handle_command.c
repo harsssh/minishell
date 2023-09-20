@@ -2,39 +2,46 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-// for child process
-static void configure_io(t_pipe *left, t_pipe *right)
+static void close_iter_fn(void *data)
 {
-    if (left != NULL)
-    {
-        dup2(left->fd_out, STDIN_FILENO);
-        close(left->fd_in);
-        close(left->fd_out);
-    }
-    if (right != NULL)
-    {
-        dup2(right->fd_in, STDOUT_FILENO);
-        close(right->fd_in);
-        close(right->fd_out);
-    }
+	int *fd_ptr;
+
+	fd_ptr = data;
+	close(*fd_ptr);
 }
 
-static int child_routine(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe)
+// for child process
+static void configure_io(t_pipeline_info *info)
+{
+    if (info->fd_in != STDIN_FILENO)
+    {
+		dup2(info->fd_in, STDIN_FILENO);
+		close(info->fd_in);
+    }
+	if (info->fd_out != STDOUT_FILENO)
+	{
+		dup2(info->fd_out, STDOUT_FILENO);
+		close(info->fd_out);
+	}
+	ft_list_iter(info->fd_close_list, close_iter_fn);
+}
+
+static int child_routine(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
     (void)ctx;
     (void)ast;
-    configure_io(left_pipe, right_pipe);
+    configure_io(info);
     return (0);
 }
 
-int handle_command(t_context *ctx, t_ast_node *ast, t_pipe *left_pipe, t_pipe *right_pipe) 
+int handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
     pid_t pid;
 
     pid = fork();
     if (pid == 0)
     {
-        child_routine(ctx, ast, left_pipe, right_pipe);
+        child_routine(ctx, info, ast);
         exit(EXIT_FAILURE);
     }
     return (0);

@@ -33,10 +33,8 @@ void push_child_pid_list(t_pipeline_info *info, pid_t pid);
 typedef int (*t_ast_handler)(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
 
 int handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
-int handle_sequence(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
-int handle_logical_operator(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
+int handle_and_or(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
 int handle_pipeline(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
-int handle_redirect(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
 
 // execvp.c
 int internal_execvp(t_context *ctx, const char *file, char * const*argv);
