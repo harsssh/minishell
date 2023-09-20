@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:07:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/20 20:25:54 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/20 22:45:00 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,17 @@ static char *try_each_path(char **path_list, const char *file)
 	char **cur;
 	char *cmd_path;
 
+	cmd_path = NULL;
 	cur = path_list;
 	while (*cur != NULL)
 	{
 		cmd_path = join_path(*cur, (char *)file);
+		if (cmd_path == NULL)
+			return (NULL);
+		if (access(cmd_path, R_OK | X_OK) == 0)
+			return cmd_path;
+		free(cmd_path);
+		cmd_path = NULL;
 		++cur;
 	}
 	return (cmd_path);
@@ -36,7 +43,7 @@ static char	*find_command_path(t_context *ctx, const char *file)
 {
 	t_variable *var;
 	char **path_list;
-	cahr *cmd_path;
+	char *cmd_path;
 
 	if (file == NULL || *file == '\0')
 		return NULL;
