@@ -24,7 +24,7 @@ typedef struct s_pipeline_info {
 	t_list *child_pid_list;
 } t_pipeline_info;
 
-// pipeline_info
+// pipeline_info.c
 t_pipeline_info *new_pipeline_info(void);
 void destroy_pipeline_info(t_pipeline_info *info);
 void push_fd_close_list(t_pipeline_info *info, int fd);
@@ -38,6 +38,7 @@ int handle_logical_operator(t_context *ctx, t_pipeline_info *info, t_ast_node *a
 int handle_pipeline(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
 int handle_redirect(t_context *ctx, t_pipeline_info *info, t_ast_node *ast);
 
+// execvp.c
 int internal_execvp(t_context *ctx, const char *file, char * const*argv);
 
 #endif
