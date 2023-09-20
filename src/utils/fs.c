@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include "utils.h"
+#include "libft.h"
 #include <sys/stat.h>
+#include <stdlib.h>
 
 bool	is_existing_directory(const char *path)
 {
