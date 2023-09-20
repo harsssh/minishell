@@ -12,7 +12,7 @@
 
 #include "ast.h"
 #include "exec_internal.h"
-#include <unistd.h>
+#include <stdlib.h>
 
 static t_ast_handler get_ast_handler(t_ast_node_type type)
 {
@@ -38,7 +38,11 @@ static t_ast_handler get_ast_handler(t_ast_node_type type)
 int	execute_ast(t_context *ctx, t_ast_node *ast)
 {
 	t_ast_handler handler;
+	t_pipeline_info *info;
 
+	info = new_pipeline_info();
+	if (info == NULL)
+		return (EXIT_FAILURE);
 	handler = get_ast_handler(ast->type);
-	return (handler(ctx, ast, NULL, NULL));
+	return (handler(ctx, info, ast));
 }
