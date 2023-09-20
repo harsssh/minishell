@@ -21,3 +21,8 @@ bool	is_existing_directory(const char *path)
 		return (false);
 	return (S_ISDIR(st.st_mode));
 }
+
+bool	is_absolute_path(const char *path)
+{
+	return (path != NULL && *path == '/');
+}

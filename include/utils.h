@@ -18,6 +18,7 @@
 
 // fs.c
 bool	is_existing_directory(const char *path);
+bool	is_absolute_path(const char *path);
 
 // list.c
 // `f` must not fail (e.g. malloc failure)

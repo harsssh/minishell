@@ -13,6 +13,7 @@
 #include "builtins/builtins_internal.h"
 #include "cd_internal.h"
 #include "libft.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -20,11 +21,6 @@ static void	set_working_directory(t_context *ctx, char *path)
 {
 	free(ctx->cwd);
 	ctx->cwd = ft_strdup(path);
-}
-
-static bool	is_absolute_path(const char *path)
-{
-	return (*path == '/');
 }
 
 // return true if success
