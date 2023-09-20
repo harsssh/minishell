@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipeline_info.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/21 00:10:18 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/21 00:10:19 by kemizuki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "exec_internal.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-t_pipeline_info *new_pipeline_info(void)
+t_pipeline_info	*new_pipeline_info(void)
 {
-	t_pipeline_info *info;
+	t_pipeline_info	*info;
 
 	info = malloc(sizeof(t_pipeline_info));
 	if (info == NULL)
@@ -27,25 +39,25 @@ t_pipeline_info *new_pipeline_info(void)
 	return (info);
 }
 
-void destroy_pipeline_info(t_pipeline_info *info)
+void	destroy_pipeline_info(t_pipeline_info *info)
 {
 	ft_list_destroy(info->fd_close_list, free);
 	ft_list_destroy(info->child_pid_list, free);
 	free(info);
 }
 
-void push_fd_close_list(t_pipeline_info *info, int fd)
+void	push_fd_close_list(t_pipeline_info *info, int fd)
 {
-	int *fd_ptr;
+	int	*fd_ptr;
 
 	fd_ptr = malloc(sizeof(int));
 	*fd_ptr = fd;
 	ft_list_push_back(info->fd_close_list, fd_ptr);
 }
 
-void push_child_pid_list(t_pipeline_info *info, pid_t pid)
+void	push_child_pid_list(t_pipeline_info *info, pid_t pid)
 {
-	pid_t *pid_ptr;
+	pid_t	*pid_ptr;
 
 	pid_ptr = malloc(sizeof(pid_t));
 	*pid_ptr = pid;

@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 19:14:52 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/11 19:13:48 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/21 00:12:10 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 // constructor.c
 t_variable	*variable_create(char *name, char *value);
-void        *variable_copy(void *data);
+void		*variable_copy(void *data);
 
 // utils.internal.c
-char        *make_envstr(char *name, char *value);
+char		*make_envstr(char *name, char *value);
 void		variable_destroy(void *data);
 int			add_new_variable(t_context *ctx, char *name, char *value);
 int			update_variable(t_variable *var, char *value);
