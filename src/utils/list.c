@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:12:30 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 00:12:31 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:52:58 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ char	**list_to_string_array(t_list *list, char *(*f)(void *data))
 	node = list->head;
 	while (node != NULL)
 	{
-		*cur = f(node->data);
+		if (f != NULL)
+			*cur = f(node->data);
+		else
+			*cur = (char *)node->data;
 		++cur;
 		node = node->next;
 	}

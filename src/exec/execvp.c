@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:07:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 10:44:01 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:54:00 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,16 @@ static char	*find_command_path(t_context *ctx, const char *file)
 	return (cmd_path);
 }
 
-int	internal_execvp(t_context *ctx, const char *file, char *const *argv)
+int	internal_execvp(t_context *ctx, t_list *arg_list)
 {
+	char **argv;
 	char	*cmd_path;
 	char	**envp;
 
-	cmd_path = find_command_path(ctx, file);
+	argv = list_to_string_array(arg_list, NULL);
+	if (argv == NULL)
+		return (-1);
+	cmd_path = find_command_path(ctx, argv[0]);
 	if (cmd_path == NULL)
 		return (-1);
 	envp = get_environ(ctx);
