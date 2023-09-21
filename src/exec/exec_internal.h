@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:21 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 14:58:01 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/21 20:10:54 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,11 @@ int				internal_execvp(t_context *ctx, t_list *arg_list);
 // execute_ast.c
 int				execute_ast_impl(t_context *ctx, t_pipeline_info *info,
 					t_ast_node *ast);
+
+// wait_children.c
+void	wait_children(t_context *ctx, t_list *child_pid_list);
+
+// utils_internal.c
+bool is_in_pipeline(t_pipeline_info *info);
 
 #endif

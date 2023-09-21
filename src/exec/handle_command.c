@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 19:05:17 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/21 20:12:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,7 @@ int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 		exit(EXIT_FAILURE);
 	}
 	push_child_pid_list(info, pid);
+	if (!is_in_pipeline(info))
+		wait_children(ctx, info->child_pid_list);
 	return (EXIT_SUCCESS);
 }
