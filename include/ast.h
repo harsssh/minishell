@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/13 23:44:31 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/21 20:38:12 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef enum e_ast_node_type
 
 /**
  * @brief Structure representing nodes in an Abstract Syntax Tree (AST)
- * 
+ *
  * - type: The type of the AST node (e.g., N_COMMAND for a regular command)
  * - left: Pointer to the left child node in the AST
  * - right: Pointer to the right child node in the AST
