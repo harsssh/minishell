@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:07:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 00:11:00 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:44:01 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// `file` must be a relative path
+// `file` is a command name
 static char	*try_each_path(char **path_list, const char *file)
 {
 	char	**cur;
@@ -47,7 +47,7 @@ static char	*find_command_path(t_context *ctx, const char *file)
 
 	if (file == NULL || *file == '\0')
 		return (NULL);
-	if (is_absolute_path(file))
+	if (ft_strchr(file, '/') != NULL)
 		return (ft_strdup(file));
 	var = getvar(ctx, "PATH");
 	if (var == NULL)
