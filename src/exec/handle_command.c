@@ -18,8 +18,7 @@
 #include "utils.h"
 #include <stdlib.h>
 
-static int	call_builtin_func(t_context *ctx, t_list *argv_list,
-		t_builtin_func func)
+static int call_builtin_func(t_context *ctx, t_builtin_func func, t_list *argv_list)
 {
 	char	**argv;
 	int		ret;
@@ -42,9 +41,9 @@ static void	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		return ;
 	if (pid == 0)
 	{
-		configure_io(ast->redirects, info);
+		configure_io(info, ast->redirects);
 		if (func != NULL)
-			exit(call_builtin_func(ctx, ast->argv, func));
+			exit(call_builtin_func(ctx, func, ast->argv));
 		else
 			internal_execvp(ctx, ast->argv);
 		exit(EXIT_FAILURE);
@@ -62,8 +61,8 @@ static void	execute_builtin(t_context *ctx, t_pipeline_info *info,
 
 	saved_stdin_fd = dup(STDIN_FILENO);
 	saved_stdout_fd = dup(STDOUT_FILENO);
-	configure_io(ast->redirects, info);
-	ctx->last_exit_status = call_builtin_func(ctx, ast->argv, func);
+	configure_io(info, ast->redirects);
+	ctx->last_exit_status = call_builtin_func(ctx, func, ast->argv);
 	dup2(saved_stdin_fd, STDIN_FILENO);
 	dup2(saved_stdout_fd, STDOUT_FILENO);
 	close(saved_stdin_fd);

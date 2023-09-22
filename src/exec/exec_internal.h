@@ -55,6 +55,6 @@ void			wait_children(t_context *ctx, t_list *child_pid_list);
 bool			is_in_pipeline(t_pipeline_info *info);
 
 // configure_io.c
-void			configure_io(t_list *redirect_list, t_pipeline_info *info);
+void configure_io(t_pipeline_info *info, t_list *redirect_list);
 
 #endif

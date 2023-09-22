@@ -25,25 +25,25 @@ static void	pop_back_and_close(t_list *fd_close_list)
 }
 
 static void	execute_left(t_context *ctx, t_pipeline_info *info, t_ast_node *ast,
-		int *fd_pipe)
+		const int *fd_pipe)
 {
-	int	fd_out_copy;
+	int	saved_fd_out;
 
-	fd_out_copy = info->fd_out;
+	saved_fd_out = info->fd_out;
 	info->fd_out = fd_pipe[1];
 	execute_ast_impl(ctx, info, ast->left);
-	info->fd_out = fd_out_copy;
+	info->fd_out = saved_fd_out;
 }
 
 static void	execute_right(t_context *ctx, t_pipeline_info *info,
-		t_ast_node *ast, int *fd_pipe)
+		t_ast_node *ast, const int *fd_pipe)
 {
-	int	fd_in_copy;
+	int	saved_fd_in;
 
-	fd_in_copy = info->fd_in;
+	saved_fd_in = info->fd_in;
 	info->fd_in = fd_pipe[0];
 	execute_ast_impl(ctx, info, ast->right);
-	info->fd_in = fd_in_copy;
+	info->fd_in = saved_fd_in;
 }
 
 // TODO: handle error

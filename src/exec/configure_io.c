@@ -59,7 +59,7 @@ static void	set_redirect_iter_fn(void *data)
 }
 
 // for child process
-void	configure_io(t_list *redirect_list, t_pipeline_info *info)
+void configure_io(t_pipeline_info *info, t_list *redirect_list)
 {
 	if (info->fd_in != STDIN_FILENO)
 		dup2(info->fd_in, STDIN_FILENO);
