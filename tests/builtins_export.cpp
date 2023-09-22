@@ -32,8 +32,8 @@ protected:
 		ft_list_destroy(ctx.variables, variable_destroy);
 	}
 
-	int run_export(char *s) {
-		char *argv[2] = {nullptr};
+	int run_export(const char *s) {
+		const char *argv[2] = {nullptr};
 		if (s == nullptr)
 			return builtins_export(&ctx, argv);
 		argv[0] = s;
@@ -262,7 +262,7 @@ TEST(TestbuiltinsExportMultiple, ExportMultiple) {
 			.shell_name = "minishell",
 			.variables = ft_list_create(),
 	};
-	char *argv[] = {"VAR1=value", "=value", "VAR2", "0=1", nullptr};
+	const char *argv[] = {"VAR1=value", "=value", "VAR2", "0=1", nullptr};
 	auto status = builtins_export(&ctx, argv);
 
 	EXPECT_EQ(status, EXIT_FAILURE);

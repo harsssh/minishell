@@ -15,19 +15,19 @@
 #include "export_internal.h"
 #include <stdlib.h>
 
-int	builtins_export(t_context *ctx, char **args)
+int	builtins_export(t_context *ctx, const char **argv)
 {
 	int	status;
 
-	args = ignore_options(args);
-	if (*args == NULL)
+	argv = ignore_options(argv);
+	if (*argv == NULL)
 		return (builtin_export_no_arg(ctx));
 	status = EXIT_SUCCESS;
-	while (*args)
+	while (*argv)
 	{
-		if (export_each_arg(ctx, *args) == EXIT_FAILURE)
+		if (export_each_arg(ctx, *argv) == EXIT_FAILURE)
 			status = EXIT_FAILURE;
-		++args;
+		++argv;
 	}
 	return (status);
 }

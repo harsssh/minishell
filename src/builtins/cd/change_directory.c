@@ -6,13 +6,14 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 17:20:07 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/20 17:21:00 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:44:13 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins/builtins_internal.h"
 #include "cd_internal.h"
 #include "libft.h"
+#include "utils.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -22,13 +23,8 @@ static void	set_working_directory(t_context *ctx, char *path)
 	ctx->cwd = ft_strdup(path);
 }
 
-static bool	is_absolute_path(const char *path)
-{
-	return (*path == '/');
-}
-
 // return true if success
-bool	get_absolute_destination_path(t_context *ctx, char *newdir,
+bool	get_absolute_destination_path(t_context *ctx, const char *newdir,
 		char **result)
 {
 	char	*abspath;
@@ -51,7 +47,7 @@ bool	get_absolute_destination_path(t_context *ctx, char *newdir,
 }
 
 // return the value of chdir
-int	change_directory(t_context *ctx, char *newdir)
+int	change_directory(t_context *ctx, const char *newdir)
 {
 	int		ret;
 	char	*path;

@@ -16,8 +16,8 @@
 #include <stdlib.h>
 
 static t_assignment_parse_status	only_identifier(
-	t_parsed_variable_assignment *result,
-	char *str
+		t_parsed_variable_assignment *result,
+		const char *str
 )
 {
 	if (!is_valid_identifier(str))
@@ -28,7 +28,7 @@ static t_assignment_parse_status	only_identifier(
 	return (ASSIGN_PARSE_ONLY_IDENTIFIER);
 }
 
-static int	extract_pair(char *str, char **name, char **value)
+static int	extract_pair(const char *str, char **name, char **value)
 {
 	char	*offset;
 	char	*name_end;
@@ -54,8 +54,8 @@ static int	extract_pair(char *str, char **name, char **value)
 
 // str != NULL
 static t_assignment_parse_status	parse_operation(
-	t_parsed_variable_assignment *result,
-	char *str
+		t_parsed_variable_assignment *result,
+		const char *str
 )
 {
 	char	*offset;
@@ -75,8 +75,8 @@ static t_assignment_parse_status	parse_operation(
 }
 
 static t_assignment_parse_status	parse_pair(
-	t_parsed_variable_assignment *result,
-	char *str
+		t_parsed_variable_assignment *result,
+		const char *str
 )
 {
 	t_assignment_parse_status	status;
@@ -99,8 +99,8 @@ static t_assignment_parse_status	parse_pair(
 }
 
 t_assignment_parse_status	parse_variable_assignment(
-	t_parsed_variable_assignment *result,
-	char *str
+		t_parsed_variable_assignment *result,
+		const char *str
 )
 {
 	t_assignment_parse_status	status;

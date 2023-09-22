@@ -13,8 +13,8 @@ TEST(builtins_unset, normal)
 	setvar(&ctx, "NAME1", "VALUE1", 1);
 	setvar(&ctx, "NAME2", "VALUE2", 1);
 
-	char *args[] = {(char *)"NAME1", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"NAME1", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME1"), nullptr);
 	EXPECT_NE(getvar(&ctx, "NAME2"), nullptr);
@@ -29,8 +29,8 @@ TEST(builtins_unset, normal2)
 	setvar(&ctx, "NAME1", "VALUE1", 1);
 	setvar(&ctx, "NAME2", "VALUE2", 1);
 
-	char *args[] = {(char *)"NAME1", (char *)"NAME2", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"NAME1", (char *)"NAME2", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME1"), nullptr);
 	EXPECT_EQ(getvar(&ctx, "NAME2"), nullptr);
@@ -44,8 +44,8 @@ TEST(builtins_unset, ignore_option)
 
 	setvar(&ctx, "NAME", "VALUE", 1);
 
-	char *args[] = {(char *)"-a", (char *)"NAME", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"-a", (char *)"NAME", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME"), nullptr);
 }
@@ -58,8 +58,8 @@ TEST(builtins_unset, multiple_option)
 
 	setvar(&ctx, "NAME", "VALUE", 1);
 
-	char *args[] = {(char *)"-ab", (char *)"NAME", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"-ab", (char *)"NAME", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME"), nullptr);
 }
@@ -72,8 +72,8 @@ TEST(builtins_unset, multiple_option2)
 
 	setvar(&ctx, "NAME", "VALUE", 1);
 
-	char *args[] = {(char *)"-a", (char *)"-b", (char *)"NAME", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"-a", (char *)"-b", (char *)"NAME", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME"), nullptr);
 }
@@ -86,8 +86,8 @@ TEST(builtins_unset, include_end_of_options)
 
 	setvar(&ctx, "NAME", "VALUE", 1);
 
-	char *args[] = {(char *)"-a", (char *)"--", (char *)"NAME", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"-a", (char *)"--", (char *)"NAME", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME"), nullptr);
 }
@@ -100,8 +100,8 @@ TEST(builtins_unset, include_end_of_options2)
 
 	setvar(&ctx, "NAME", "VALUE", 1);
 
-	char *args[] = {(char *)"-a", (char *)"-", (char *)"NAME", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"-a", (char *)"-", (char *)"NAME", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME"), nullptr);
 }
@@ -114,8 +114,8 @@ TEST(builtins_unset, start_with_end_of_options)
 
 	setvar(&ctx, "NAME", "VALUE", 1);
 
-	char *args[] = {(char *)"--", (char *)"NAME", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"--", (char *)"NAME", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME"), nullptr);
 }
@@ -129,8 +129,8 @@ TEST(builtins_unset, continue_on_unsetvar_error)
 	setvar(&ctx, "NAME1", "VALUE1", 1);
 	setvar(&ctx, "NAME2", "VALUE2", 1);
 
-	char *args[] = {(char *)"NAME1", (char *)"INVALID=NAME",(char *)"NAME2", nullptr};
-	builtins_unset(&ctx, args);
+	const char *argv[] = {(char *)"NAME1", (char *)"INVALID=NAME",(char *)"NAME2", nullptr};
+	builtins_unset(&ctx, argv);
 
 	EXPECT_EQ(getvar(&ctx, "NAME1"), nullptr);
 	EXPECT_EQ(getvar(&ctx, "NAME2"), nullptr);

@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 17:34:27 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/20 19:30:29 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/09/19 22:15:40 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/09/19 22:18:16 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include <stdlib.h>
 
-# include <stdbool.h>
-# include "ft_list.h"
+void	destroy_string_array(char **array)
+{
+	char	**cur;
 
-// fs.c
-bool	is_existing_directory(const char *path);
-bool	is_absolute_path(const char *path);
-char	*join_path(const char *base, const char *relpath);
-
-// list.c
-char	**list_to_string_array(t_list *list, char *(*f)(void *data));
-
-// memory.c
-void	destroy_string_array(char **array);
-
-#endif
+	if (array == NULL)
+		return ;
+	cur = array;
+	while (*cur)
+	{
+		free(*cur);
+		++cur;
+	}
+	free(array);
+}

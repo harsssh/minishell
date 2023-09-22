@@ -19,10 +19,10 @@ static bool	find_func(void *data, void *ref)
 	return (ft_strcmp(((t_variable *)data)->name, (char *)ref) == 0);
 }
 
-t_variable	*getvar(t_context *ctx, char *name)
+t_variable	*getvar(t_context *ctx, const char *name)
 {
 	t_variable	*var;
 
-	var = ft_list_find(ctx->variables, name, find_func);
+	var = ft_list_find(ctx->variables, (char *)name, find_func);
 	return (var);
 }

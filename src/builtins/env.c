@@ -25,12 +25,12 @@ static void	print_env(void *data)
 	var = (t_variable *)data;
 	if (var->attributes & VAR_ATTR_EXPORTED
 		&& !(var->attributes & VAR_ATTR_NO_VALUE))
-		ft_putendl_fd(var->envstr, STDOUT_FILENO);
+		ft_putendl_fd((char *)var->envstr, STDOUT_FILENO);
 }
 
-int	builtins_env(t_context *ctx, char **args)
+int	builtins_env(t_context *ctx, const char **argv)
 {
-	if (*args != NULL)
+	if (*argv != NULL)
 	{
 		print_simple_error_builtin(ctx, "env", ERR_NOT_IMPL);
 		return (EXIT_FAILURE);

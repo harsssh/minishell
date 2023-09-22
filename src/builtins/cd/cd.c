@@ -32,17 +32,17 @@ static int	bindpwd(t_context *ctx)
 	return (result);
 }
 
-int	builtins_cd(t_context *ctx, char **args)
+int	builtins_cd(t_context *ctx, const char **argv)
 {
-	char	*dirname;
+	const char	*dirname;
 
-	if (*args == NULL)
+	if (*argv == NULL)
 	{
 		print_simple_error_builtin(ctx, "cd", ERR_NOT_IMPL);
 		return (EXIT_FAILURE);
 	}
-	args = ignore_options(args);
-	dirname = args[0];
+	argv = ignore_options(argv);
+	dirname = argv[0];
 	if (change_directory(ctx, dirname) == 0)
 		return (bindpwd(ctx));
 	perror_builtin(ctx, "cd", dirname);
