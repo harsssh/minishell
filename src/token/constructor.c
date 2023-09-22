@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:38:40 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 15:43:14 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/20 21:59:12 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,10 @@ t_token	*new_token(t_token_type type, char *input, size_t token_len)
 t_token_stream	*new_token_stream(void)
 {
 	return (ft_list_create());
+}
+
+t_token	*clone_token(t_token *token)
+{
+	return (new_token(get_token_type(token),
+			get_token_literal(token), ft_strlen(get_token_literal(token))));
 }

@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   setter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/14 03:56:30 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/14 04:01:50 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/09/20 21:59:40 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/09/20 22:12:44 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "ast.h"
+#include "ft_list.h"
+#include <stdlib.h>
 
-typedef struct s_parser
+int	add_node_argv(t_ast_node *node, char *arg)
 {
-	char	*input;
-	char	*cur;
-}	t_parser;
-
-#endif
+	if (node == NULL || arg == NULL
+		|| ft_list_push_back(get_node_argv(node), arg) == NULL)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS)
+}

@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   destructor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/19 16:45:24 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/09/19 16:57:55 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/09/19 17:04:14 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser_internal.h"
 #include "ast.h"
-#include "token.h"
-#include "lexer.h"
+#include "ft_list.h"
+#include <stdlib.h>
 
-t_ast_node	*parse(char *input)
+void	destroy_redirect(t_redirect *redirect)
 {
-	t_token_stream	*stream;
-	t_parser		*parser;
-	t_ast_node		*result;
+	free(redirect->filename);
+	free(redirect);
+}
 
-	stream = tokenize(input);
-	if (stream == NULL)
-		return (NULL);
-	parser = new_parser(stream);
-	if (parser == NULL)
-	{
-		destroy_token_stream(stream);
-		return (NULL);
-	}
-	return (parse_and_or(parser));
+void	destroy_node(t_ast_node *node)
+{
+	if (node == NULL)
+		return ;
+	destroy_node(node->left);
+	destroy_node(node->right);
+	ft_list_destroy(node->argv, free);
+	ft_list_destroy(node->redirects, (void (*)(void *data))destroy_redirect);
 }

@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 11:08:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 20:54:48 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/19 18:47:23 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void			destroy_lexer(t_lexer *lexer);
 char			*get_input(t_lexer *lexer);
 char			get_cur_char(t_lexer *lexer);
 char			get_quote_char(t_lexer *lexer);
-size_t			get_token_len(t_lexer *lexer);
+size_t			get_cur_token_len(t_lexer *lexer);
 int				has_empty_input(t_lexer *lexer);
 void			skip_whitespaces(t_lexer *lexer);
 void			read_char(t_lexer *lexer);

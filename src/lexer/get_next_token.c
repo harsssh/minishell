@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 21:12:25 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/19 18:47:23 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,5 @@ t_token	*get_next_token(t_lexer *lexer)
 		}
 	}
 	return (new_token(get_cur_token_type(lexer),
-			get_input_snapshot(lexer), get_token_len(lexer)));
+			get_input_snapshot(lexer), get_cur_token_len(lexer)));
 }

@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/19 16:45:24 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/09/19 17:06:55 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/09/19 17:11:55 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser_internal.h"
 #include "ast.h"
-#include "token.h"
-#include "lexer.h"
+#include "parser_internal.h"
 
-t_ast_node	*parse(char *input)
+t_ast_node	*parse_pipeline(t_parser *parser)
 {
-	t_token_stream	*stream;
-	t_parser		*parser;
-	t_ast_node		*result;
+	t_ast_node	*node;
 
-	stream = tokenize(input);
-	if (stream == NULL)
-		return (NULL);
-	parser = new_parser(stream);
-	if (parser == NULL)
+	node = parse_simple_command();
+	while (!is_eof(parser) && node != NULL)
 	{
-		destroy_token_stream(stream);
-		return (NULL);
+		if (consume_token(parser, TK_PIPE))
+			node = new_ast_node(N_PIPE, node, parse_simple_command(parser));
+		else
+			break ;
 	}
-	return (parse_and_or(parser));
+	return (node);
 }
