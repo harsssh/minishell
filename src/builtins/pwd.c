@@ -16,11 +16,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	builtins_pwd(t_context *ctx, char **args)
+int	builtins_pwd(t_context *ctx, const char **argv)
 {
 	char	*directory;
 
-	args = ignore_options(args);
+	(void)argv;
 	directory = get_working_directory(ctx, "pwd");
 	if (directory == NULL)
 		return (EXIT_FAILURE);

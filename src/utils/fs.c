@@ -29,7 +29,7 @@ bool	is_absolute_path(const char *path)
 	return (path != NULL && *path == '/');
 }
 
-char	*join_path(char *base, char *relpath)
+char	*join_path(const char *base, const char *relpath)
 {
 	char	*joined_path;
 	char	*p;

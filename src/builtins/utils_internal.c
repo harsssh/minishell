@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util_internal.c                                    :+:      :+:    :+:   */
+/*   utils_internal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 01:53:17 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/20 17:21:41 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:45:40 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@
 #include <string.h>
 #include <unistd.h>
 
-char	**ignore_options(char **args)
+const char	**ignore_options(const char **argv)
 {
 	int	c;
 
 	init_get_next_option();
-	while (*args)
+	while (*argv)
 	{
-		c = get_next_option(*args, "");
+		c = get_next_option(*argv, "");
 		if (c == END_OF_OPTIONS)
 			break ;
 		if (c == END_OF_ARG)
-			++args;
+			++argv;
 	}
-	return (args);
+	return (argv);
 }
 
 void	sync_working_directory(t_context *ctx, char *for_whom)
@@ -40,8 +40,7 @@ void	sync_working_directory(t_context *ctx, char *for_whom)
 	if (ctx->cwd == NULL)
 		ft_dprintf(STDERR_FILENO,
 			"%s: getcwd: cannot access parent directories: %s\n",
-			for_whom,
-			strerror(errno));
+			for_whom, strerror(errno));
 }
 
 // This function sets `ctx->cwd` and returns its copy

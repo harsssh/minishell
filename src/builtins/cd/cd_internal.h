@@ -15,7 +15,7 @@
 
 # include "context.h"
 
-int		change_directory(t_context *ctx, char *newdir);
+int		change_directory(t_context *ctx, const char *newdir);
 char	*canonicalize_absolute_path(const char *path, bool check_existence);
 
 #endif

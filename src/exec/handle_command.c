@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/23 03:18:38 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:42:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include "utils.h"
 #include <stdlib.h>
 
-static int call_builtin_func(t_context *ctx, t_builtin_func func, t_list *argv_list)
+static int	call_builtin_func(t_context *ctx, t_builtin_func func,
+		t_list *argv_list)
 {
 	char	**argv;
 	int		ret;
@@ -26,7 +27,7 @@ static int call_builtin_func(t_context *ctx, t_builtin_func func, t_list *argv_l
 	argv = list_to_string_array(argv_list, NULL);
 	if (argv == NULL)
 		return (EXIT_FAILURE);
-	ret = func(ctx, argv);
+	ret = func(ctx, (const char **)argv);
 	destroy_string_array(argv);
 	return (ret);
 }

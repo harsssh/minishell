@@ -15,7 +15,7 @@
 #include "variables_internal.h"
 #include <stdlib.h>
 
-t_variable	*variable_create(char *name, char *value)
+t_variable	*variable_create(const char *name, const char *value)
 {
 	t_variable	*var;
 

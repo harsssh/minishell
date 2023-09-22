@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:26:39 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/22 15:28:54 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:42:33 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	set_redirect_iter_fn(void *data)
 }
 
 // for child process
-void configure_io(t_pipeline_info *info, t_list *redirect_list)
+void	configure_io(t_pipeline_info *info, t_list *redirect_list)
 {
 	if (info->fd_in != STDIN_FILENO)
 		dup2(info->fd_in, STDIN_FILENO);

@@ -13,6 +13,7 @@
 #include "utils.h"
 #include "variables.h"
 #include "variables_internal.h"
+#include "libft.h"
 
 static bool	is_inheritable(void *data)
 {
@@ -23,16 +24,13 @@ static bool	is_inheritable(void *data)
 		&& !(var->attributes & VAR_ATTR_NO_VALUE));
 }
 
-// reuse `envstr` in variable
-// `envstr` is NOT freed by variable destructor
 static char	*get_envstr_from_variable(void *data)
 {
 	t_variable	*var;
 	char		*envstr;
 
 	var = (t_variable *)data;
-	envstr = var->envstr;
-	var->envstr = NULL;
+	envstr = ft_strdup(var->envstr);
 	return (envstr);
 }
 
