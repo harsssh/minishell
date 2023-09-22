@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 07:21:03 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/16 19:14:03 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:59:15 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	*ft_list_find(t_list *list, void *ref,
 			bool (*pred)(void *data, void *ref));
 
 void	ft_list_push_front(t_list *list, void *data);
-void	ft_list_push_back(t_list *list, void *data);
+t_node	*ft_list_push_back(t_list *list, void *data);
 // Inserts a new node containing the provided data
 // before the specified position
 void	ft_list_insert(t_list *list, t_node *pos, void *data);
