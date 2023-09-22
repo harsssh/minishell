@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 20:12:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:39:41 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,9 @@ static void	set_redirect_iter_fn(void *data)
 static void	configure_io(t_list *redirect_list, t_pipeline_info *info)
 {
 	if (info->fd_in != STDIN_FILENO)
-	{
 		dup2(info->fd_in, STDIN_FILENO);
-		close(info->fd_in);
-	}
 	if (info->fd_out != STDOUT_FILENO)
-	{
 		dup2(info->fd_out, STDOUT_FILENO);
-		close(info->fd_out);
-	}
 	ft_list_iter(info->fd_close_list, close_iter_fn);
 	ft_list_iter(redirect_list, set_redirect_iter_fn);
 }

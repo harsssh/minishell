@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:07:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 10:54:00 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:46:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*find_command_path(t_context *ctx, const char *file)
 
 int	internal_execvp(t_context *ctx, t_list *arg_list)
 {
-	char **argv;
+	char	**argv;
 	char	*cmd_path;
 	char	**envp;
 
