@@ -21,14 +21,18 @@
 static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 		t_list *argv_list)
 {
-	char	**argv;
+	t_list args_list;
+	char	**args;
 	int		ret;
 
-	argv = list_to_string_array(argv_list, NULL);
-	if (argv == NULL)
+	args_list = *argv_list;
+	args_list.head = args_list.head->next;
+	--args_list.size;
+	args = list_to_string_array(&args_list, NULL);
+	if (args == NULL)
 		return (EXIT_FAILURE);
-	ret = func(ctx, (const char **)argv);
-	destroy_string_array(argv);
+	ret = func(ctx, (const char **)args);
+	destroy_string_array(args);
 	return (ret);
 }
 
