@@ -14,7 +14,7 @@ ASTBuilder &ASTBuilder::addArgument(const char *arg) {
 // リダイレクトを現在のノードに追加
 ASTBuilder &ASTBuilder::addRedirect(t_redirect_type type, const char *filename) {
 	if (current->type != N_COMMAND) return *this; // Ensure we're adding redirects to command nodes only
-	auto *redirect = (t_redirect *) malloc(sizeof(t_redirect));
+	auto *redirect = new t_redirect();
 	redirect->type = type;
 	redirect->filename = strdup(filename);
 	t_list *list = (current->redirects) ? current->redirects : ft_list_create();
@@ -90,7 +90,7 @@ t_ast_node *ASTBuilder::getAST() const {
 
 // ノードを作成するヘルパー関数
 t_ast_node *ASTBuilder::createNode(t_ast_node_type type) {
-	auto *node = (t_ast_node *) malloc(sizeof(t_ast_node));
+	auto *node = new t_ast_node();
 	memset(node, 0, sizeof(t_ast_node)); // Initialize all members to 0/NULL
 	node->type = type;
 	return node;
