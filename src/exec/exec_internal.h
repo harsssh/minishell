@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:21 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/22 14:46:08 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:27:03 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,8 @@ void			wait_children(t_context *ctx, t_list *child_pid_list);
 
 // utils_internal.c
 bool			is_in_pipeline(t_pipeline_info *info);
+
+// configure_io.c
+void	configure_io(t_list *redirect_list, t_pipeline_info *info);
 
 #endif

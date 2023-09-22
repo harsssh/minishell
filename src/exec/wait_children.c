@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 19:16:49 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 20:04:33 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:25:27 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	wait_and_get_exit_status(pid_t pid)
 	return (1);
 }
 
+// TODO: if the last command is built-in?
 void	wait_children(t_context *ctx, t_list *child_pid_list)
 {
 	pid_t	*pid_ptr;
