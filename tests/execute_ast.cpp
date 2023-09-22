@@ -32,6 +32,21 @@ TEST_F(TestExecuteAST, echo) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "hello world\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// built-in echo
+TEST_F(TestExecuteAST, builtin_echo) {
+	auto *ast = ASTBuilder(N_COMMAND)
+			.addArgument("echo").addArgument("hello").addArgument("world")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "hello world\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /usr/bin/true && /bin/echo success
@@ -47,6 +62,24 @@ TEST_F(TestExecuteAST, and_if) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "success\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// /usr/bin/true && echo success
+// use built-in echo
+TEST_F(TestExecuteAST, and_if_builtin) {
+	auto *ast = ASTBuilder(N_AND)
+			.moveToLeft(N_COMMAND).addArgument("/usr/bin/true")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("success")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "success\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /usr/bin/false && /bin/echo success
@@ -63,6 +96,7 @@ TEST_F(TestExecuteAST, and_if_false) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "");
+	ASSERT_EQ(ctx.last_exit_status, 1);
 }
 
 // /usr/bin/false || /bin/echo failure
@@ -78,6 +112,7 @@ TEST_F(TestExecuteAST, or_if) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "failure\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /usr/bin/true || /bin/echo failure
@@ -94,6 +129,7 @@ TEST_F(TestExecuteAST, or_if_true) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /usr/bin/true && /usr/bin/false || /bin/echo ok
@@ -112,6 +148,7 @@ TEST_F(TestExecuteAST, and_if_or_if) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "ok\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /usr/bin/false || /usr/bin/true && /bin/echo ok
@@ -130,6 +167,7 @@ TEST_F(TestExecuteAST, or_if_and_if) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "ok\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /bin/echo hello | /bin/cat
@@ -145,6 +183,7 @@ TEST_F(TestExecuteAST, pipe) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "hello\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
 // /bin/echo hello | /bin/cat | /bin/cat
@@ -163,17 +202,36 @@ TEST_F(TestExecuteAST, pipe_pipe) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "hello\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
-// /bin/echo hello world | /bin/tr o O | /bin/rev
+// 何も表示されないパターン
+// ls | false
+TEST_F(TestExecuteAST, pipe_false) {
+	auto *ast = ASTBuilder(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("ls")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("false")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "");
+	ASSERT_EQ(ctx.last_exit_status, 1);
+}
+
+// echo hello world | tr o O | rev
+// use only command name
 TEST_F(TestExecuteAST, echo_tr_rev_pipe) {
 	auto *ast = ASTBuilder(N_PIPE)
-			.moveToLeft(N_COMMAND).addArgument("/bin/echo").addArgument("hello world")
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello world")
 			.moveToParent()
 			.moveToRight(N_PIPE)
-			.moveToLeft(N_COMMAND).addArgument("/usr/bin/tr").addArgument("o").addArgument("O")
+			.moveToLeft(N_COMMAND).addArgument("tr").addArgument("o").addArgument("O")
 			.moveToParent()
-			.moveToRight(N_COMMAND).addArgument("/usr/bin/rev")
+			.moveToRight(N_COMMAND).addArgument("rev")
 			.getAST();
 
 	testing::internal::CaptureStdout();
@@ -181,4 +239,57 @@ TEST_F(TestExecuteAST, echo_tr_rev_pipe) {
 	auto output = testing::internal::GetCapturedStdout();
 
 	ASSERT_EQ(output, "dlrOw Olleh\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
 }
+
+// pipe and pipe
+// echo hello | cat && echo world | cat
+TEST_F(TestExecuteAST, pipe_and_pipe) {
+	auto *ast = ASTBuilder(N_AND)
+			.moveToLeft(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.moveToParent()
+			.moveToParent()
+			.moveToRight(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("world")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "hello\nworld\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// pipe or pipe
+// true | false || echo ok | cat
+TEST_F(TestExecuteAST, pipe_or_pipe) {
+	auto *ast = ASTBuilder(N_OR)
+			.moveToLeft(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("true")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("false")
+			.moveToParent()
+			.moveToParent()
+			.moveToRight(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("ok")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "ok\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// TODO: other built-in commands
+// TODO: redirect
+// TODO: check error message

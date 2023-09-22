@@ -16,6 +16,8 @@
 int	handle_and_or(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
 	execute_ast_impl(ctx, info, ast->left);
+	if (info->child_pid_list->size > 0)
+		wait_children(ctx, info->child_pid_list);
 	if ((ast->type == N_AND && ctx->last_exit_status == EXIT_SUCCESS)
 		|| (ast->type == N_OR && ctx->last_exit_status != EXIT_SUCCESS))
 		execute_ast_impl(ctx, info, ast->right);
