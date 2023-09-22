@@ -33,11 +33,11 @@ protected:
 	}
 
 	int run_export(const char *s) {
-		const char *argv[2] = {nullptr};
+		const char *args[2] = {nullptr};
 		if (s == nullptr)
-			return builtins_export(&ctx, argv);
-		argv[0] = s;
-		return builtins_export(&ctx, argv);
+			return builtins_export(&ctx, args);
+		args[0] = s;
+		return builtins_export(&ctx, args);
 	}
 };
 
@@ -262,8 +262,8 @@ TEST(TestbuiltinsExportMultiple, ExportMultiple) {
 			.shell_name = "minishell",
 			.variables = ft_list_create(),
 	};
-	const char *argv[] = {"VAR1=value", "=value", "VAR2", "0=1", nullptr};
-	auto status = builtins_export(&ctx, argv);
+	const char *args[] = {"VAR1=value", "=value", "VAR2", "0=1", nullptr};
+	auto status = builtins_export(&ctx, args);
 
 	EXPECT_EQ(status, EXIT_FAILURE);
 	// attributeを確認
@@ -281,8 +281,8 @@ TEST(TestbuiltinsExportMultiple, ExportMultiple) {
 			  "minishell: export: `0=1': not a valid identifier\n");
 
 	// exportを確認
-	argv[0] = nullptr;
-	status = builtins_export(&ctx, argv);
+	args[0] = nullptr;
+	status = builtins_export(&ctx, args);
 	EXPECT_EQ(status, EXIT_SUCCESS);
 	EXPECT_EQ(testing::internal::GetCapturedStdout(),
 			  "declare -x VAR1=\"value\"\n"

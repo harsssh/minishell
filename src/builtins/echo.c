@@ -17,44 +17,44 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static const char	**skip_options(const char **argv, bool *newline)
+static const char	**skip_options(const char **args, bool *newline)
 {
 	const char	*str;
 
 	*newline = true;
-	while (argv && *argv && **argv == '-')
+	while (args && *args && **args == '-')
 	{
-		str = *argv;
+		str = *args;
 		while (*(++str) == 'n')
 			;
-		if ((*argv)[1] == '\0' || *str != '\0')
+		if ((*args)[1] == '\0' || *str != '\0')
 			break ;
 		*newline = false;
-		++argv;
+		++args;
 	}
-	return (argv);
+	return (args);
 }
 
-static void	print_args(const char **argv, bool newline)
+static void	print_args(const char **args, bool newline)
 {
-	while (argv && *argv)
+	while (args && *args)
 	{
-		ft_putstr_fd((char *)*argv, STDOUT_FILENO);
-		++argv;
-		if (*argv)
+		ft_putstr_fd((char *)*args, STDOUT_FILENO);
+		++args;
+		if (*args)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-int	builtins_echo(t_context *ctx, const char **argv)
+int	builtins_echo(t_context *ctx, const char **args)
 {
 	bool	newline;
 
-	argv = skip_options(argv, &newline);
+	args = skip_options(args, &newline);
 	errno = 0;
-	print_args(argv, newline);
+	print_args(args, newline);
 	if (errno)
 	{
 		perror_builtin(ctx, "echo", ERR_WRITE);
