@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:22 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 00:10:37 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:46:03 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	execute_ast(t_context *ctx, t_ast_node *ast)
 	if (info == NULL)
 		return (EXIT_FAILURE);
 	ret = execute_ast_impl(ctx, info, ast);
+	if (info->child_pid_list->size > 0)
+		wait_children(ctx, info->child_pid_list);
 	destroy_pipeline_info(info);
 	return (ret);
 }
