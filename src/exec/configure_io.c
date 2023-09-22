@@ -50,10 +50,10 @@ static void	set_redirect_iter_fn(void *data)
 		return ;
 	if (redirect->type == REDIRECT_IN || redirect->type == REDIRECT_HERE_DOC)
 		fd_target = STDIN_FILENO;
-	else if (redirect->type == REDIRECT_OUT | redirect->type == REDIRECT_APPEND)
-		fd_target = STDIN_FILENO;
+	else if (redirect->type == REDIRECT_OUT || redirect->type == REDIRECT_APPEND)
+		fd_target = STDOUT_FILENO;
 	else
-		return ;
+		return;
 	dup2(fd_redirect, fd_target);
 	close(fd_redirect);
 }
