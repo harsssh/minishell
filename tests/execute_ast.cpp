@@ -33,3 +33,18 @@ TEST_F(TestExecuteAST, echo) {
 
 	ASSERT_EQ(output, "hello world\n");
 }
+
+// /bin/echo 42 && /bin/echo success を実行
+TEST_F(TestExecuteAST, and_if) {
+	auto *ast = ASTBuilder(N_AND)
+			.moveToLeft(N_COMMAND).addArgument("/bin/echo").addArgument("42")
+			.moveToParent()
+			.moveToRight(N_COMMAND).addArgument("/bin/echo").addArgument("success")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "42\nsuccess\n");
+}

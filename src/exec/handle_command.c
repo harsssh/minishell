@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/23 04:42:24 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/23 06:27:55 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 		t_list *argv_list)
 {
-	t_list args_list;
+	t_list	args_list;
 	char	**args;
 	int		ret;
 
