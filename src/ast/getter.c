@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 22:12:49 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/20 22:13:11 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/22 17:24:07 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,9 @@
 t_list	*get_node_argv(t_ast_node *node)
 {
 	return (node->argv);
+}
+
+t_list	*get_node_redirects(t_ast_node *node)
+{
+	return (node->redirects);
 }

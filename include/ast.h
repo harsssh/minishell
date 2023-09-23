@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/20 22:13:42 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/22 17:51:02 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,6 @@ typedef struct s_ast_node
 	t_list				*redirects;
 }	t_ast_node;
 
-t_ast_node	*new_ast_node(t_ast_node_type type,
-				t_ast_node *left, t_ast_node *right);
-void		destroy_node(t_ast_node *node);
-t_list		*get_node_argv(t_ast_node *node);
-int			add_node_argv(t_ast_node *node, char *arg);
-
 /**
  * @brief Enumeration of redirection types
  * 
@@ -83,6 +77,15 @@ typedef struct s_redirect
 	char			*filename;
 }	t_redirect;
 
+t_ast_node	*new_ast_node(t_ast_node_type type,
+				t_ast_node *left, t_ast_node *right);
+t_redirect	*new_redirect(t_redirect_type type, char *filename);
+void		destroy_node(t_ast_node *node);
 void		destroy_redirect(t_redirect *redirect);
+t_list		*get_node_argv(t_ast_node *node);
+t_list		*get_node_redirects(t_ast_node *node);
+int			add_node_argv(t_ast_node *node, char *arg);
+int			add_node_redirect(t_ast_node *node, t_redirect *redirect);
+void		set_node_redirects(t_ast_node *node, t_list *redirects);
 
 #endif

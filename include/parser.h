@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/24 07:59:00 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/09/22 18:27:03 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/09/24 07:58:30 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser_internal.h"
-#include "ast.h"
-#include "token.h"
-#include "lexer.h"
+#ifndef PARSER_H
+# define PARSER_H
 
-t_ast_node	*parse(char *input)
-{
-	t_parser	*parser;
+# include "ast.h"
 
-	parser = new_parser(input);
-	if (parser == NULL)
-		return (NULL);
-	return (parse_and_or(parser));
-}
+t_ast_node	*parse(char *input);
+
+#endif
