@@ -31,7 +31,6 @@ typedef struct s_pipeline_info
 t_pipeline_info	*new_pipeline_info(void);
 void			destroy_pipeline_info(t_pipeline_info *info);
 void			push_fd_close_list(t_pipeline_info *info, int fd);
-void			push_child_pid_list(t_pipeline_info *info, pid_t pid);
 
 int				handle_command(t_context *ctx, t_pipeline_info *info,
 					t_ast_node *ast);
