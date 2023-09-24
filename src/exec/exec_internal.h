@@ -18,6 +18,7 @@
 # include <unistd.h>
 
 # define ERR_PIPE "pipe error"
+# define ERR_AMBIGUOUS_REDIRECT "ambiguous redirect"
 
 typedef struct s_pipeline_info
 {

@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:26:39 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 04:38:51 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/25 04:57:11 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,26 @@ static void	close_iter_fn(void *data)
 	close(*fd_ptr);
 }
 
-static int	open_for_redirect(t_redirect *redirect)
+static int	open_for_redirect(t_context *ctx, t_redirect *redirect)
 {
+	int	fd;
+
+	if (redirect->filename == NULL)
+	{
+		print_simple_error(ctx, ERR_AMBIGUOUS_REDIRECT, strerror(errno));
+		return (-1);
+	}
 	if (redirect->type == REDIRECT_IN || redirect->type == REDIRECT_HERE_DOC)
-		return (open(redirect->filename, O_RDONLY));
+		fd = open(redirect->filename, O_RDONLY);
 	else if (redirect->type == REDIRECT_OUT)
-		return (open(redirect->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+		fd = open(redirect->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (redirect->type == REDIRECT_APPEND)
-		return (open(redirect->filename, O_WRONLY | O_CREAT | O_APPEND, 0666));
+		fd = open(redirect->filename, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	else
 		return (-1);
+	if (fd == -1)
+		print_simple_error(ctx, redirect->filename, strerror(errno));
+	return (fd);
 }
 
 // TODO?: handle dup2 error
@@ -48,12 +58,9 @@ static int	configure_redirect(t_context *ctx, t_list *redirects)
 	while (node != NULL)
 	{
 		redirect = (t_redirect *)node->data;
-		fd_redirect = open_for_redirect(redirect);
+		fd_redirect = open_for_redirect(ctx, redirect);
 		if (fd_redirect == -1)
-		{
-			print_simple_error(ctx, redirect->filename, strerror(errno));
 			return (EXIT_FAILURE);
-		}
 		if (redirect->type == REDIRECT_IN
 			|| redirect->type == REDIRECT_HERE_DOC)
 			dup2(fd_redirect, STDIN_FILENO);
