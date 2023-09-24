@@ -17,6 +17,8 @@
 # include "context.h"
 # include <unistd.h>
 
+# define ERR_PIPE "pipe error"
+
 typedef struct s_pipeline_info
 {
 	int			fd_in;
