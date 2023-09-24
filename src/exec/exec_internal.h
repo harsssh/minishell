@@ -56,6 +56,6 @@ void			wait_children_and_set_exit_status(t_context *ctx,
 					pid_t last_command_pid);
 
 // configure_io.c
-void			configure_io(t_pipeline_info *info, t_list *redirect_list);
+int configure_io(t_pipeline_info *info, t_list *redirect_list);
 
 #endif

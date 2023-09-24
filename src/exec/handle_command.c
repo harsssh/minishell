@@ -17,6 +17,8 @@
 #include "ft_list.h"
 #include "utils.h"
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
 static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 		t_list *argv_list)
@@ -36,17 +38,21 @@ static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 	return (ret);
 }
 
-static void	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
+static int execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
-		return ;
+	{
+		print_simple_error(ctx, "fork", strerror(errno));
+		return (EXIT_FAILURE);
+	}
 	if (pid == 0)
 	{
-		configure_io(info, ast->redirects);
+		if (configure_io(info, ast->redirects) == EXIT_FAILURE)
+			exit(EXIT_FAILURE);
 		if (func != NULL)
 			exit(call_builtin_func(ctx, func, ast->argv));
 		else
@@ -56,9 +62,10 @@ static void	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 	info->last_command_pid = pid;
 	if (!is_in_pipeline(info))
 		wait_children_and_set_exit_status(ctx, pid);
+	return (EXIT_SUCCESS);
 }
 
-static void	execute_builtin(t_context *ctx, t_pipeline_info *info,
+static int execute_builtin(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
 	int	saved_stdin_fd;
@@ -66,12 +73,14 @@ static void	execute_builtin(t_context *ctx, t_pipeline_info *info,
 
 	saved_stdin_fd = dup(STDIN_FILENO);
 	saved_stdout_fd = dup(STDOUT_FILENO);
-	configure_io(info, ast->redirects);
+	if (configure_io(info, ast->redirects) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	ctx->last_exit_status = call_builtin_func(ctx, func, ast->argv);
 	dup2(saved_stdin_fd, STDIN_FILENO);
 	dup2(saved_stdout_fd, STDOUT_FILENO);
 	close(saved_stdin_fd);
 	close(saved_stdout_fd);
+	return (EXIT_SUCCESS);
 }
 
 int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
@@ -80,8 +89,7 @@ int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 
 	func = get_builtin_func((char *)ast->argv->head->data);
 	if (func != NULL && !is_in_pipeline(info))
-		execute_builtin(ctx, info, ast, func);
+		return execute_builtin(ctx, info, ast, func);
 	else
-		execute_command_in_child(ctx, info, ast, func);
-	return (EXIT_SUCCESS);
+		return execute_command_in_child(ctx, info, ast, func);
 }

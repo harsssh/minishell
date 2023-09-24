@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec_internal.h"
+#include <stdlib.h>
 #include <fcntl.h>
 
 #define PERM_RW 0666
@@ -23,6 +24,7 @@ static void	close_iter_fn(void *data)
 	close(*fd_ptr);
 }
 
+// TODO: handle open error
 static int	open_for_redirect(t_redirect *redirect)
 {
 	int	fd;
@@ -60,7 +62,7 @@ static void	set_redirect_iter_fn(void *data)
 }
 
 // for child process
-void	configure_io(t_pipeline_info *info, t_list *redirect_list)
+int configure_io(t_pipeline_info *info, t_list *redirect_list)
 {
 	if (info->fd_in != STDIN_FILENO)
 		dup2(info->fd_in, STDIN_FILENO);
@@ -68,4 +70,5 @@ void	configure_io(t_pipeline_info *info, t_list *redirect_list)
 		dup2(info->fd_out, STDOUT_FILENO);
 	ft_list_iter(info->fd_close_list, close_iter_fn);
 	ft_list_iter(redirect_list, set_redirect_iter_fn);
+	return (EXIT_SUCCESS);
 }
