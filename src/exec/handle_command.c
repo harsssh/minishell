@@ -53,9 +53,9 @@ static void	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 			internal_execvp(ctx, ast->argv);
 		exit(EXIT_FAILURE);
 	}
-	push_child_pid_list(info, pid);
+	info->last_command_pid = pid;
 	if (!is_in_pipeline(info))
-		wait_children(ctx, info->child_pid_list);
+		wait_children_and_set_exit_status(ctx, pid);
 }
 
 static void	execute_builtin(t_context *ctx, t_pipeline_info *info,

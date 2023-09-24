@@ -6,13 +6,15 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:22 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/22 13:46:03 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/25 02:08:06 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "exec_internal.h"
 #include <stdlib.h>
+
+typedef int	(*t_ast_handler)(t_context *, t_pipeline_info *, t_ast_node *);
 
 static t_ast_handler	get_ast_handler(t_ast_node_type type)
 {
@@ -45,8 +47,7 @@ int	execute_ast(t_context *ctx, t_ast_node *ast)
 	if (info == NULL)
 		return (EXIT_FAILURE);
 	ret = execute_ast_impl(ctx, info, ast);
-	if (info->child_pid_list->size > 0)
-		wait_children(ctx, info->child_pid_list);
+	wait_children_and_set_exit_status(ctx, info->last_command_pid);
 	destroy_pipeline_info(info);
 	return (ret);
 }
