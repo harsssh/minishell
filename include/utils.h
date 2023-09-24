@@ -15,6 +15,8 @@
 
 # include "context.h"
 # include "ft_list.h"
+# include <string.h>
+# include "errno.h"
 # include <stdbool.h>
 
 // fs.c

@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:21 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 02:54:24 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/25 04:36:32 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void			wait_children_and_set_exit_status(t_context *ctx,
 					pid_t last_command_pid);
 
 // configure_io.c
-int configure_io(t_pipeline_info *info, t_list *redirect_list);
+int				configure_io(t_context *ctx, t_pipeline_info *info,
+					t_list *redirect_list);
 
 #endif

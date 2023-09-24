@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/23 06:27:55 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/25 04:37:33 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include "exec_internal.h"
 #include "ft_list.h"
 #include "utils.h"
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 		t_list *argv_list)
@@ -38,7 +38,7 @@ static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 	return (ret);
 }
 
-static int execute_command_in_child(t_context *ctx, t_pipeline_info *info,
+static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
 	pid_t	pid;
@@ -51,7 +51,7 @@ static int execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 	}
 	if (pid == 0)
 	{
-		if (configure_io(info, ast->redirects) == EXIT_FAILURE)
+		if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
 		if (func != NULL)
 			exit(call_builtin_func(ctx, func, ast->argv));
@@ -65,7 +65,7 @@ static int execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 	return (EXIT_SUCCESS);
 }
 
-static int execute_builtin(t_context *ctx, t_pipeline_info *info,
+static int	execute_builtin(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
 	int	saved_stdin_fd;
@@ -73,7 +73,7 @@ static int execute_builtin(t_context *ctx, t_pipeline_info *info,
 
 	saved_stdin_fd = dup(STDIN_FILENO);
 	saved_stdout_fd = dup(STDOUT_FILENO);
-	if (configure_io(info, ast->redirects) == EXIT_FAILURE)
+	if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	ctx->last_exit_status = call_builtin_func(ctx, func, ast->argv);
 	dup2(saved_stdin_fd, STDIN_FILENO);
@@ -89,7 +89,7 @@ int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 
 	func = get_builtin_func((char *)ast->argv->head->data);
 	if (func != NULL && !is_in_pipeline(info))
-		return execute_builtin(ctx, info, ast, func);
+		return (execute_builtin(ctx, info, ast, func));
 	else
-		return execute_command_in_child(ctx, info, ast, func);
+		return (execute_command_in_child(ctx, info, ast, func));
 }
