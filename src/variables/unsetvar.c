@@ -14,7 +14,6 @@
 #include "variables.h"
 #include "variables_internal.h"
 #include <errno.h>
-#include <stdlib.h>
 
 static bool	exclude_func(void *data, void *ref)
 {

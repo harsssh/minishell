@@ -12,7 +12,6 @@
 
 #include "builtins.h"
 #include "ft_string.h"
-#include "libft.h"
 
 t_builtin_func	get_builtin_func(char *cmd_name)
 {
