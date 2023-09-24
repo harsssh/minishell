@@ -38,13 +38,13 @@ int	builtins_cd(t_context *ctx, const char **argv)
 
 	if (*argv == NULL)
 	{
-		print_simple_error_builtin(ctx, "cd", ERR_NOT_IMPL);
+		print_simple_error(ctx, "cd", ERR_NOT_IMPL);
 		return (EXIT_FAILURE);
 	}
 	argv = ignore_options(argv);
 	dirname = argv[0];
 	if (change_directory(ctx, dirname) == 0)
 		return (bindpwd(ctx));
-	perror_builtin(ctx, "cd", dirname);
+	perror_verbose(ctx, "cd", dirname);
 	return (EXIT_FAILURE);
 }

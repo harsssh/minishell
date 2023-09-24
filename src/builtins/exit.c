@@ -27,12 +27,12 @@ static int	get_status_or_exit(t_context *ctx, const char **argv)
 	status = ft_atoi(*argv) & 0xFF;
 	if (errno)
 	{
-		print_error_builtin(ctx, "exit", *argv, ERR_NUM_REQUIRED);
+		print_error_verbose(ctx, "exit", *argv, ERR_NUM_REQUIRED);
 		exit(2);
 	}
 	if (argv[1] == NULL)
 		exit(status);
-	print_simple_error_builtin(ctx, "exit", ERR_TOO_MANY_ARG);
+	print_simple_error(ctx, "exit", ERR_TOO_MANY_ARG);
 	if (ctx->last_exit_status == 0)
 		return (1);
 	return (ctx->last_exit_status & 0xFF);
