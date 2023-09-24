@@ -72,7 +72,7 @@ static int	process_parse_result(
 		return (EXIT_SUCCESS);
 	if (status == ASSIGN_PARSE_INVALID_IDENTIFIER)
 	{
-		print_quoted_error_builtin(ctx, "export", arg, ERR_IDENTIFIER);
+		print_quoted_error(ctx, "export", arg, ERR_IDENTIFIER);
 		return (EXIT_FAILURE);
 	}
 	if (status == ASSIGN_PARSE_ONLY_IDENTIFIER)

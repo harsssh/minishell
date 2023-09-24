@@ -14,6 +14,7 @@
 # define BUILTINS_INTERNAL_H
 
 # include "context.h"
+# include "utils.h"
 
 # define ERR_TOO_MANY_ARG "too many arguments"
 # define ERR_NUM_REQUIRED "numeric argument required"
@@ -29,15 +30,6 @@ typedef enum e_get_opt_status
 	ILLEGAL_OPTION,
 	INITIALIZE,
 }					t_get_opt_status;
-
-void				perror_builtin(t_context *ctx, const char *cmd,
-						const char *prefix);
-void				print_error_builtin(t_context *ctx, const char *cmd,
-						const char *loc, const char *msg);
-void				print_quoted_error_builtin(t_context *ctx, const char *cmd,
-						const char *loc, const char *msg);
-void				print_simple_error_builtin(t_context *ctx, const char *cmd,
-						const char *msg);
 
 void				init_get_next_option(void);
 t_get_opt_status	get_next_option(char *arg, const char *optstring);
