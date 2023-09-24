@@ -15,10 +15,14 @@
 
 int	handle_and_or(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
-	execute_ast_impl(ctx, info, ast->left);
+	if (execute_ast_impl(ctx, info, ast->left) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	wait_children_and_set_exit_status(ctx, info->last_command_pid);
 	if ((ast->type == N_AND && ctx->last_exit_status == EXIT_SUCCESS)
 		|| (ast->type == N_OR && ctx->last_exit_status != EXIT_SUCCESS))
-		execute_ast_impl(ctx, info, ast->right);
+	{
+		if (execute_ast_impl(ctx, info, ast->right) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
