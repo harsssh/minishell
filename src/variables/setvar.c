@@ -14,7 +14,7 @@
 #include "variables_internal.h"
 #include <errno.h>
 
-int	setvar(t_context *ctx, char *name, char *value, int overwrite)
+int	setvar(t_context *ctx, const char *name, const char *value, int overwrite)
 {
 	t_variable	*var;
 

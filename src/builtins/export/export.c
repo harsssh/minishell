@@ -15,7 +15,7 @@
 #include "export_internal.h"
 #include <stdlib.h>
 
-int	builtins_export(t_context *ctx, char **args)
+int	builtins_export(t_context *ctx, const char **args)
 {
 	int	status;
 

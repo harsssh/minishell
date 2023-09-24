@@ -17,9 +17,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static char	**skip_options(char **args, bool *newline)
+static const char	**skip_options(const char **args, bool *newline)
 {
-	char	*str;
+	const char	*str;
 
 	*newline = true;
 	while (args && *args && **args == '-')
@@ -35,11 +35,11 @@ static char	**skip_options(char **args, bool *newline)
 	return (args);
 }
 
-static void	print_args(char **args, bool newline)
+static void	print_args(const char **args, bool newline)
 {
 	while (args && *args)
 	{
-		ft_putstr_fd(*args, STDOUT_FILENO);
+		ft_putstr_fd((char *)*args, STDOUT_FILENO);
 		++args;
 		if (*args)
 			ft_putchar_fd(' ', STDOUT_FILENO);
@@ -48,7 +48,7 @@ static void	print_args(char **args, bool newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
-int	builtins_echo(t_context *ctx, char **args)
+int	builtins_echo(t_context *ctx, const char **args)
 {
 	bool	newline;
 

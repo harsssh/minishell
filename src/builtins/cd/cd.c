@@ -32,9 +32,9 @@ static int	bindpwd(t_context *ctx)
 	return (result);
 }
 
-int	builtins_cd(t_context *ctx, char **args)
+int	builtins_cd(t_context *ctx, const char **args)
 {
-	char	*dirname;
+	const char	*dirname;
 
 	if (*args == NULL)
 	{

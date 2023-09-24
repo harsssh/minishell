@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	get_status_or_exit(t_context *ctx, char **args)
+static int	get_status_or_exit(t_context *ctx, const char **args)
 {
 	int	status;
 
@@ -39,7 +39,7 @@ static int	get_status_or_exit(t_context *ctx, char **args)
 }
 
 // TODO: Assumes a non-login, interactive shell context
-int	builtins_exit(t_context *ctx, char **args)
+int	builtins_exit(t_context *ctx, const char **args)
 {
 	if (*args && ft_strcmp(*args, "--") == 0)
 		++args;

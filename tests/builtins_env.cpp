@@ -20,7 +20,7 @@ TEST(builtins_env, normal) {
 	setvar(&ctx, "NAME3", "VALUE3", 1);
 
 	testing::internal::CaptureStdout();
-	char *args[] = {nullptr};
+	const char *args[] = {nullptr};
 	builtins_env(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 	ASSERT_STREQ(output.c_str(), "NAME1=VALUE1\nNAME2=VALUE2\n");
@@ -33,7 +33,7 @@ TEST(builtins_env, no_env) {
 	ctx.variables = ft_list_create();
 
 	testing::internal::CaptureStdout();
-	char *args[] = {nullptr};
+	const char *args[] = {nullptr};
 	builtins_env(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 	ASSERT_STREQ(output.c_str(), "");
@@ -53,7 +53,7 @@ TEST(builtins_env, no_value) {
 	var->attributes |= VAR_ATTR_EXPORTED;
 
 	testing::internal::CaptureStdout();
-	char *args[] = {nullptr};
+	const char *args[] = {nullptr};
 	builtins_env(&ctx, args);
 	auto output = testing::internal::GetCapturedStdout();
 	ASSERT_STREQ(output.c_str(), "NAME2=VALUE2\n");

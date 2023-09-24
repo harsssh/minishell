@@ -62,10 +62,10 @@ static int	handle_assignment(
 }
 
 static int	process_parse_result(
-	t_context *ctx,
-	char *arg,
-	t_assignment_parse_status status,
-	t_parsed_variable_assignment result
+		t_context *ctx,
+		const char *arg,
+		t_assignment_parse_status status,
+		t_parsed_variable_assignment result
 )
 {
 	if (status == ASSIGN_PARSE_IGNORE)
@@ -80,7 +80,7 @@ static int	process_parse_result(
 	return (handle_assignment(ctx, result));
 }
 
-int	export_each_arg(t_context *ctx, char *arg)
+int	export_each_arg(t_context *ctx, const char *arg)
 {
 	int								handler_status;
 	t_assignment_parse_status		parse_status;

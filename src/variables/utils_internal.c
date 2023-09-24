@@ -15,7 +15,7 @@
 #include "variables_internal.h"
 #include <stdlib.h>
 
-static char	*make_envstr(char *name, char *value)
+char	*make_envstr(const char *name, const char *value)
 {
 	char	*envstr;
 	char	*tmp;
@@ -31,37 +31,18 @@ static char	*make_envstr(char *name, char *value)
 	return (envstr);
 }
 
-t_variable	*variable_create(char *name, char *value)
-{
-	t_variable	*var;
-
-	var = malloc(sizeof(t_variable));
-	if (var == NULL)
-		return (NULL);
-	var->name = name;
-	var->value = value;
-	var->envstr = make_envstr(name, value);
-	if (var->envstr == NULL)
-	{
-		free(var);
-		return (NULL);
-	}
-	var->attributes = 0;
-	return (var);
-}
-
 void	variable_destroy(void *data)
 {
 	t_variable	*var;
 
 	var = data;
-	free(var->name);
-	free(var->value);
-	free(var->envstr);
+	free((void *)var->name);
+	free((void *)var->value);
+	free((void *)var->envstr);
 	free(var);
 }
 
-int	add_new_variable(t_context *ctx, char *name, char *value)
+int	add_new_variable(t_context *ctx, const char *name, const char *value)
 {
 	t_variable	*new;
 
@@ -71,7 +52,7 @@ int	add_new_variable(t_context *ctx, char *name, char *value)
 	value = ft_strdup(value);
 	if (value == NULL)
 	{
-		free(name);
+		free((void *)name);
 		return (-1);
 	}
 	new = variable_create(name, value);
@@ -81,7 +62,7 @@ int	add_new_variable(t_context *ctx, char *name, char *value)
 	return (0);
 }
 
-int	update_variable(t_variable *var, char *value)
+int	update_variable(t_variable *var, const char *value)
 {
 	t_variable	tmp;
 
@@ -89,12 +70,12 @@ int	update_variable(t_variable *var, char *value)
 	tmp.envstr = make_envstr(var->name, value);
 	if (tmp.value == NULL || tmp.envstr == NULL)
 	{
-		free(tmp.value);
-		free(tmp.envstr);
+		free((void *)tmp.value);
+		free((void *)tmp.envstr);
 		return (-1);
 	}
-	free(var->value);
-	free(var->envstr);
+	free((void *)var->value);
+	free((void *)var->envstr);
 	var->value = tmp.value;
 	var->envstr = tmp.envstr;
 	var->attributes &= ~VAR_ATTR_NO_VALUE;

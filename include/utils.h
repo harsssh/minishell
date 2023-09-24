@@ -15,8 +15,18 @@
 
 # include "context.h"
 # include <stdbool.h>
+# include "ft_list.h"
 
+// fs.c
 bool	is_existing_directory(const char *path);
+bool	is_absolute_path(const char *path);
+char	*join_path(const char *base, const char *relpath);
+
+// list.c
+char	**list_to_string_array(t_list *list, char *(*f)(void *data));
+
+// memory.c
+void	destroy_string_array(char **array);
 
 void	perror_verbose(t_context *ctx, const char *cmd,
 			const char *description);

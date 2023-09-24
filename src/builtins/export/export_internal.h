@@ -16,6 +16,6 @@
 # include "context.h"
 
 int	builtin_export_no_arg(t_context *ctx);
-int	export_each_arg(t_context *ctx, char *arg);
+int	export_each_arg(t_context *ctx, const char *arg);
 
 #endif
