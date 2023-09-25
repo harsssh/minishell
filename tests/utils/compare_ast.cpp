@@ -1,4 +1,4 @@
-#include <string>
+#include <cstring>
 
 extern "C" {
 #include "ast.h"
