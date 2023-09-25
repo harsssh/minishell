@@ -99,5 +99,5 @@ t_ast_node *ASTBuilder::createNode(t_ast_node_type type) {
 
 bool ASTBuilder::operator==(t_ast_node *node) const
 {
-	return CompareASTNodes(ast, node);
+	return compareASTNodes(ast, node);
 }

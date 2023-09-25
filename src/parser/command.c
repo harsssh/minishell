@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:10:38 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/22 17:50:17 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 19:27:47 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ t_ast_node	*parse_simple_command(t_parser *parser)
 		return (parse_simple_command_helper(parser));
 	if (peek_token(parser, TK_WORD))
 		return (parse_word_cmd_suffix(parser));
+	if (peek_token(parser, TK_EOF))
+		return (new_ast_node(N_COMMAND, NULL, NULL));
 	return (NULL);
 }

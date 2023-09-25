@@ -6,12 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 21:50:31 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 14:56:12 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 18:46:53 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "parser_internal.h"
+#include "token.h"
 #include <stdlib.h>
 
 char	*parse_word(t_parser *parser)
@@ -28,25 +29,34 @@ char	*parse_word(t_parser *parser)
 	return (word);
 }
 
-// ( io_redirect | 'WORD' )+
-int	parse_cmd_suffix(t_parser *parser, t_ast_node *node)
+static int	parse_cmd_suffix_helper_redreict(t_parser *parser, t_ast_node *node)
 {
 	t_redirect	*redirect;
+
+	redirect = parse_redirect(parser);
+	if (redirect == NULL
+		|| add_node_redirect(node, redirect))
+	{
+		destroy_redirect(redirect);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+static int	parse_cmd_suffix_helper(t_parser *parser,
+								t_ast_node *node, bool *flag)
+{
 	char		*word;
 
-	while (!is_eof(parser))
+	if (peek_redirect(parser))
 	{
-		if (peek_redirect(parser))
-		{
-			redirect = parse_redirect(parser);
-			if (redirect == NULL
-				|| add_node_redirect(node, redirect))
-			{
-				destroy_redirect(redirect);
-				return (EXIT_FAILURE);
-			}
-			continue ;
-		}
+		*flag = true;
+		if (parse_cmd_suffix_helper_redreict(parser, node))
+			return (EXIT_FAILURE);
+	}
+	else if (peek_token(parser, TK_WORD))
+	{
+		*flag = true;
 		word = parse_word(parser);
 		if (word == NULL
 			|| add_node_argv(node, word))
@@ -54,6 +64,26 @@ int	parse_cmd_suffix(t_parser *parser, t_ast_node *node)
 			free(word);
 			return (EXIT_FAILURE);
 		}
+	}
+	return (EXIT_SUCCESS);
+}
+
+// ( io_redirect | 'WORD' )+
+int	parse_cmd_suffix(t_parser *parser, t_ast_node *node)
+{	
+	bool	is_parsed;
+
+	is_parsed = false;
+	if (parse_cmd_suffix_helper(parser, node, &is_parsed)
+		|| !is_parsed)
+		return (EXIT_FAILURE);
+	while (!is_eof(parser))
+	{
+		is_parsed = false;
+		if (parse_cmd_suffix_helper(parser, node, &is_parsed))
+			return (EXIT_FAILURE);
+		if (!is_parsed)
+			break ;
 	}
 	return (EXIT_SUCCESS);
 }

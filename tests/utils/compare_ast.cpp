@@ -5,7 +5,7 @@ extern "C" {
 };
 
 // ASTを比較する再帰関数
-bool CompareASTNodes(const t_ast_node *node1, const t_ast_node *node2)
+bool compareASTNodes(const t_ast_node *node1, const t_ast_node *node2)
 {
 	if (node1 == nullptr && node2 == nullptr)
 		return true;
@@ -63,5 +63,5 @@ bool CompareASTNodes(const t_ast_node *node1, const t_ast_node *node2)
 		}
 	}
 
-	return CompareASTNodes(node1->left, node2->left) && CompareASTNodes(node1->right, node2->right);
+	return compareASTNodes(node1->left, node2->left) && compareASTNodes(node1->right, node2->right);
 }

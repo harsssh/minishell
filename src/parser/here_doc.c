@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 14:13:56 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 17:41:46 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ static t_redirect	*new_here_doc(char *delimiter)
 		if (line == NULL)
 		{
 			close(fd);
+			destroy_redirect(redirect);
 			return (NULL);
 		}
 		if (ft_strcmp(delimiter, line) == 0)
 			break ;
-		write(fd, line, ft_strlen(line));
+		ft_putendl_fd(line, fd);
 	}
 	return (redirect);
 }

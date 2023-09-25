@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/19 18:47:23 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 19:00:16 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ t_token	*get_next_token(t_lexer *lexer)
 	t_token	*token;	
 
 	get_next_token_helper(lexer);
+	if (get_cur_char(lexer) == '\0')
+		return (new_token(TK_EOF, get_input_snapshot(lexer), 0));
 	while (!has_empty_input(lexer))
 	{
 		cur_char = get_cur_char(lexer);

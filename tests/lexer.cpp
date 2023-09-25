@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "utils/compare_list.hpp"
 extern "C" {
 #include "lexer_internal.h"
 #include "token.h"
@@ -11,12 +12,7 @@ TEST(lexer, normal)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-
-		EXPECT_EQ(token->type, TK_WORD);
-		EXPECT_STREQ(token->literal, "ls");
-	});
+	ASSERT_TRUE(compareTokenStream(result, {{TK_WORD, "ls"}, {TK_EOF, ""}}));
 }
 
 TEST(lexer, pipe)
@@ -25,19 +21,13 @@ TEST(lexer, pipe)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt % 2) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "ls");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "ls"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "ls"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "ls"},
+		{TK_EOF, ""}}));
 }
 
 TEST(lexer, redirect)
@@ -46,34 +36,15 @@ TEST(lexer, redirect)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_REDIRECT_OUT);
-			EXPECT_STREQ(token->literal, ">");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file1");
-		} else if (cnt == 3) {
-			EXPECT_EQ(token->type, TK_REDIRECT_IN);
-			EXPECT_STREQ(token->literal, "<");
-		} else if (cnt == 4) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file2");
-		} else if (cnt == 5) {
-			EXPECT_EQ(token->type, TK_REDIRECT_APPEND);
-			EXPECT_STREQ(token->literal, ">>");
-		} else if (cnt == 6) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file3");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cat"},
+		{TK_REDIRECT_OUT, ">"},
+		{TK_WORD, "file1"},
+		{TK_REDIRECT_IN, "<"},
+		{TK_WORD, "file2"},
+		{TK_REDIRECT_APPEND, ">>"},
+		{TK_WORD, "file3"},
+		{TK_EOF, ""}}));
 }
 
 TEST(lexer, and_or)
@@ -82,28 +53,13 @@ TEST(lexer, and_or)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "./cmd1");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_AND);
-			EXPECT_STREQ(token->literal, "&&");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cmd2");
-		} else if (cnt == 3) {
-			EXPECT_EQ(token->type, TK_OR);
-			EXPECT_STREQ(token->literal, "||");
-		} else if (cnt == 4) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "/bin/cmd3");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "./cmd1"},
+		{TK_AND, "&&"},
+		{TK_WORD, "cmd2"},
+		{TK_OR, "||"},
+		{TK_WORD, "/bin/cmd3"},
+		{TK_EOF, ""}}));
 }
 
 TEST(lexer, quote)
@@ -112,22 +68,11 @@ TEST(lexer, quote)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "echo");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "\"hello world\"");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "'hello world'");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "echo"},
+		{TK_WORD, "\"hello world\""},
+		{TK_WORD, "'hello world'"},
+		{TK_EOF, ""}}));
 }
 
 TEST(lexer, error_quote)
@@ -153,19 +98,13 @@ TEST(lexer, no_space)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt % 2) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "ls");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "ls"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "ls"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "ls"},
+		{TK_EOF, ""}}));
 }
 
 // quoteをネスト
@@ -175,19 +114,10 @@ TEST(lexer, quote_nest)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "echo");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "\"'''42'''\"");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "echo"},
+		{TK_WORD, "\"'''42'''\""},
+		{TK_EOF, ""}}));
 }
 
 // quoted文字列の連接
@@ -197,19 +127,10 @@ TEST(lexer, quote_concat)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "echo");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "\"42\"\"42\"");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "echo"},
+		{TK_WORD, "\"42\"\"42\""},
+		{TK_EOF, ""}}));
 }
 
 // 変数いっぱい
@@ -219,19 +140,10 @@ TEST(lexer, variables)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "echo");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "$A$B$C$D");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "echo"},
+		{TK_WORD, "$A$B$C$D"},
+		{TK_EOF, ""}}));
 }
 
 // 環境変数をquoteしたり, しなかったり
@@ -241,28 +153,13 @@ TEST(lexer, quote_not_quote)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "echo");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "$A");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "\"$B\"");
-		} else if (cnt == 3) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "'$C'");
-		} else if (cnt == 4) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "$D");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "echo"},
+		{TK_WORD, "$A"},
+		{TK_WORD, "\"$B\""},
+		{TK_WORD, "'$C'"},
+		{TK_WORD, "$D"},
+		{TK_EOF, ""}}));
 }
 
 // exportコマンド
@@ -272,22 +169,11 @@ TEST(lexer, export)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "export");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "A=1");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "B=2");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "export"},
+		{TK_WORD, "A=1"},
+		{TK_WORD, "B=2"},
+		{TK_EOF, ""}}));
 }
 
 // redirectとpipe
@@ -297,58 +183,23 @@ TEST(lexer, redirect_pipe)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_REDIRECT_OUT);
-			EXPECT_STREQ(token->literal, ">");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file1");
-		} else if (cnt == 3) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else if (cnt == 4) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 5) {
-			EXPECT_EQ(token->type, TK_REDIRECT_IN);
-			EXPECT_STREQ(token->literal, "<");
-		} else if (cnt == 6) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file2");
-		} else if (cnt == 7) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else if (cnt == 8) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 9) {
-			EXPECT_EQ(token->type, TK_REDIRECT_APPEND);
-			EXPECT_STREQ(token->literal, ">>");
-		} else if (cnt == 10) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file3");
-		} else if (cnt == 11) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else if (cnt == 12) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 13) {
-			EXPECT_EQ(token->type, TK_REDIRECT_HERE_DOC);
-			EXPECT_STREQ(token->literal, "<<");
-		} else if (cnt == 14) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "EOF");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cat"},
+		{TK_REDIRECT_OUT, ">"},
+		{TK_WORD, "file1"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "cat"},
+		{TK_REDIRECT_IN, "<"},
+		{TK_WORD, "file2"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "cat"},
+		{TK_REDIRECT_APPEND, ">>"},
+		{TK_WORD, "file3"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "cat"},
+		{TK_REDIRECT_HERE_DOC, "<<"},
+		{TK_WORD, "EOF"},
+		{TK_EOF, ""}}));
 }
 
 // heredoc, delimiterに環境変数
@@ -358,47 +209,25 @@ TEST(lexer, heredoc)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_REDIRECT_HERE_DOC);
-			EXPECT_STREQ(token->literal, "<<");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "$DELIMITER");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cat"},
+		{TK_REDIRECT_HERE_DOC, "<<"},
+		{TK_WORD, "$DELIMITER"},
+		{TK_EOF, ""}}));
 }
 
 // heredoc, delimiterがquoted
 TEST(lexer, heredoc_quoted)
 {
-	char	*input = "cat << 'DELIMITER'";
+	char	*input = "cat << ' DELIMITER '";
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
-
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_REDIRECT_HERE_DOC);
-			EXPECT_STREQ(token->literal, "<<");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "'DELIMITER'");
-		}
-		cnt++;
-	});
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cat"},
+		{TK_REDIRECT_HERE_DOC, "<<"},
+		{TK_WORD, "' DELIMITER '"},
+		{TK_EOF, ""}}));
 }
 
 // pipe, redirect, and/or 全部入りで, スペース省略
@@ -408,47 +237,36 @@ TEST(lexer, mix_omit_space)
 	auto	result = tokenize(input);
 
 	EXPECT_NE(result, nullptr);
-	ft_list_iter(result, [](void *data) {
-		t_token	*token = (t_token *)data;
-		static int cnt = 0;
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "echo"},
+		{TK_WORD, "\"$A\""},
+		{TK_PIPE, "|"},
+		{TK_WORD, "cat"},
+		{TK_REDIRECT_OUT, ">"},
+		{TK_WORD, "file2"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "cat"},
+		{TK_AND, "&&"},
+		{TK_WORD, "cat"},
+		{TK_OR, "||"},
+		{TK_WORD, "cat"},
+		{TK_EOF, ""}}));
+}
 
-		if (cnt == 0) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "echo");
-		} else if (cnt == 1) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "\"$A\"");
-		} else if (cnt == 2) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else if (cnt == 3) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 4) {
-			EXPECT_EQ(token->type, TK_REDIRECT_OUT);
-			EXPECT_STREQ(token->literal, ">");
-		} else if (cnt == 5) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "file2");
-		} else if (cnt == 6) {
-			EXPECT_EQ(token->type, TK_PIPE);
-			EXPECT_STREQ(token->literal, "|");
-		} else if (cnt == 7) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 8) {
-			EXPECT_EQ(token->type, TK_AND);
-			EXPECT_STREQ(token->literal, "&&");
-		} else if (cnt == 9) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		} else if (cnt == 10) {
-			EXPECT_EQ(token->type, TK_OR);
-			EXPECT_STREQ(token->literal, "||");
-		} else if (cnt == 11) {
-			EXPECT_EQ(token->type, TK_WORD);
-			EXPECT_STREQ(token->literal, "cat");
-		}
-		cnt++;
-	});
+TEST(lexer, empty)
+{
+	char *input = "";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result, {{TK_EOF, ""}}));
+}
+
+TEST(lexer, empty2)
+{
+	char *input = "  ";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result, {{TK_EOF, ""}}));
 }

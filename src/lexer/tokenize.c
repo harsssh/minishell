@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:02:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/18 19:44:28 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 19:03:08 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	push_tokens(t_lexer *lexer, t_token_stream *stream)
 
 	if (stream == NULL || lexer == NULL)
 		return (EXIT_FAILURE);
-	while (!has_empty_input(lexer))
+	cur_type = TK_UNKNOWN;
+	while (cur_type != TK_EOF)
 	{
 		cur_token = get_next_token(lexer);
 		cur_type = get_token_type(cur_token);

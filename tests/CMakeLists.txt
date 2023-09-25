@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(minishell_test)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(GTest CONFIG REQUIRED)
 include(GoogleTest)
@@ -18,7 +18,7 @@ foreach (TMP_PATH ${TMP})
 endforeach ()
 
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src ${DIR_LIST})
-link_libraries(ft GTest::gtest GTest::gtest_main)
+link_libraries(ft GTest::gtest GTest::gtest_main readline)
 
 add_executable(test_variables variables.cpp ${SRC})
 gtest_discover_tests(test_variables)
@@ -50,9 +50,8 @@ gtest_discover_tests(test_join_path)
 add_executable(test_canonicalize_absolute_path canonicalize_absolute_path.cpp ${SRC})
 gtest_discover_tests(test_canonicalize_absolute_path)
 
-add_executable(test_lexer lexer.cpp ${SRC})
+add_executable(test_lexer lexer.cpp utils/compare_list.cpp ${SRC})
 gtest_discover_tests(test_lexer)
 
 add_executable(test_parser parser.cpp utils/ast_builder.cpp utils/compare_ast.cpp ${SRC})
-target_link_libraries(test_parser readline)
 gtest_discover_tests(test_parser)

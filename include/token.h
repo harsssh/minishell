@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:37:25 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/20 21:59:12 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 18:58:22 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 typedef enum e_token_type
 {
 	TK_UNKNOWN,
+	TK_EOF,
 	TK_PIPE,
 	TK_AND,
 	TK_OR,
