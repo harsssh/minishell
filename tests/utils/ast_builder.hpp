@@ -39,6 +39,8 @@ public:
 	// 完成したASTを取得
 	t_ast_node *getAST() const;
 
+	bool operator==(t_ast_node *node) const;
+
 private:
 	t_ast_node *ast;                          // Root of the AST
 	t_ast_node *current;                      // Current node being operated on

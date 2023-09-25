@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 21:50:31 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/22 17:23:08 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 14:56:12 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,16 @@
 
 char	*parse_word(t_parser *parser)
 {
+	char	*word;
+
 	if (!peek_token(parser, TK_WORD))
 		return (NULL);
-	return (get_token_literal(get_cur_token(parser)));
+	word = get_token_literal(get_cur_token(parser));
+	if (word == NULL)
+		return (NULL);
+	word = ft_strdup(word);
+	eat_token(parser);
+	return (word);
 }
 
 // ( io_redirect | 'WORD' )+
@@ -63,7 +70,8 @@ t_ast_node	*parse_word_cmd_suffix(t_parser *parser)
 	command_name = parse_word(parser);
 	if (command_name == NULL
 		|| add_node_argv(node, command_name)
-		|| parse_cmd_suffix(parser, node))
+		|| ((peek_token(parser, TK_WORD) || peek_redirect(parser))
+			&& parse_cmd_suffix(parser, node)))
 	{
 		destroy_node(node);
 		free(command_name);

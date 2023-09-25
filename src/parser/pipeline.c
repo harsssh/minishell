@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:06:55 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/22 17:53:53 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 14:47:53 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_ast_node	*parse_pipeline(t_parser *parser)
 	while (!is_eof(parser) && node != NULL)
 	{
 		if (consume_token(parser, TK_PIPE))
-			node = new_ast_node(N_PIPE, node, parse_simple_command(parser));
+			node = new_ast_node(N_PIPE, parse_simple_command(parser), node);
 		else
 			break ;
 	}

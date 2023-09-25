@@ -1,3 +1,4 @@
+#include "compare_ast.hpp"
 #include "ast_builder.hpp"
 
 ASTBuilder::ASTBuilder(t_ast_node_type rootType) : ast(createNode(rootType)), current(ast) {}
@@ -94,4 +95,9 @@ t_ast_node *ASTBuilder::createNode(t_ast_node_type type) {
 	memset(node, 0, sizeof(t_ast_node)); // Initialize all members to 0/NULL
 	node->type = type;
 	return node;
+}
+
+bool ASTBuilder::operator==(t_ast_node *node) const
+{
+	return CompareASTNodes(ast, node);
 }
