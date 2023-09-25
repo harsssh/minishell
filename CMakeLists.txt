@@ -12,6 +12,6 @@ add_subdirectory(tests)
 file(GLOB_RECURSE SRC src/*.c)
 
 add_executable(minishell ${SRC})
-target_link_libraries(minishell ft)
+target_link_libraries(minishell ft readline)
 target_include_directories(minishell PRIVATE include)
 target_include_directories(minishell PRIVATE src)
