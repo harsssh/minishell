@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 21:50:31 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 18:46:53 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 20:08:15 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	parse_cmd_suffix_helper(t_parser *parser,
 
 // ( io_redirect | 'WORD' )+
 int	parse_cmd_suffix(t_parser *parser, t_ast_node *node)
-{	
+{
 	bool	is_parsed;
 
 	is_parsed = false;

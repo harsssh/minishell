@@ -6,15 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 17:41:46 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 20:08:43 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "parser_internal.h"
 #include "fcntl.h"
-#include <sys/_types/_s_ifmt.h>
-#include <sys/fcntl.h>
 #include <readline/readline.h>
 #include <unistd.h>
 
