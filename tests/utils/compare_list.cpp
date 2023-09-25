@@ -6,12 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 19:16:15 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 19:21:10 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/25 23:55:08 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <utility>
+#include <cstring>
 
 using namespace std;
 
