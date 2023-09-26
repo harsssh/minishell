@@ -13,5 +13,6 @@ class Context {
 	public:
 		Context();
 		Context(vector<pair<const char *, const char *>> vars);
+		Context(int exit_status);
 		t_context *getCtx();
 };

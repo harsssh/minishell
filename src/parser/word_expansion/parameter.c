@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 13:40:17 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/27 00:32:11 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/27 00:57:56 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@
 
 static char	*take_first_param_value(t_context *ctx, char *s, char **endptr)
 {
-	size_t		i;
 	char		*name;
 	t_variable	*var;
 
-	if (!ft_isalpha(*s))
+	if (*s == '?')
 	{
-		*endptr = s;
-		return (ft_strdup("$"));
+		*endptr = s + 1;
+		return (ft_itoa(ctx->last_exit_status));
 	}
-	i = 0;
-	while (s[i] != '\0' && ft_isalnum(s[i]))
-		i++;
-	*endptr = s + i;
-	name = ft_substr(s, 0, i);
+	*endptr = s;
+	if (!ft_isalpha(*s) && *s != '_')
+		return (ft_strdup("$"));
+	while (**endptr != '\0' && ft_isalnum(**endptr))
+		(*endptr)++;
+	name = ft_substr(s, 0, *endptr - s);
 	if (name == NULL)
 		return (NULL);
 	var = getvar(ctx, name);

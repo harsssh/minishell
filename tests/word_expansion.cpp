@@ -70,7 +70,7 @@ TEST(parameter, only_doller) {
 	EXPECT_STREQ(expected, result);
 }
 
-TEST(paramter, illegal_name) {
+TEST(parameter, illegal_name) {
 	char *input = "$/42";
 	char *expected = "$/42";
 	t_context *ctx = Context().getCtx();
@@ -83,6 +83,15 @@ TEST(parameter, whitespace_in_value) {
 	char *input = "$hello";
 	char *expected = "hello world";
 	t_context *ctx = Context({{"hello", "hello world"}}).getCtx();
+	char *result = expand_parameter(input, ctx);
+
+	EXPECT_STREQ(expected, result);
+}
+
+TEST(parameter, exit_status) {
+	char *input = "$?";
+	char *expected = "42";
+	t_context *ctx = Context(42).getCtx();
 	char *result = expand_parameter(input, ctx);
 
 	EXPECT_STREQ(expected, result);

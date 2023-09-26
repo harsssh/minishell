@@ -20,6 +20,11 @@ Context::Context(vector<pair<const char *, const char *>> vars) {
 	}
 }
 
+Context::Context(int exit_status) {
+	*this = Context();
+	ctx.last_exit_status = exit_status;
+}
+
 t_context *Context::getCtx() {
 	return &ctx;
 }
