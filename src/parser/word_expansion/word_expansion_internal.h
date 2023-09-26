@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   word_expansion_internal.h                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/26 13:24:31 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/09/26 23:53:22 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/09/27 00:09:26 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser_internal.h"
-#include "ast.h"
-#include "token.h"
-#include "lexer.h"
+#ifndef WORD_EXPANSION_INTERNAL_H
+# define WORD_EXPANSION_INTERNAL_H
 
-t_ast_node	*parse(char *input, t_context *ctx)
-{
-	t_parser	*parser;
+# include "context.h"
 
-	parser = new_parser(input, ctx);
-	if (parser == NULL)
-		return (NULL);
-	return (parse_and_or(parser));
-}
+char	*expand_parameter(char *word, t_context *ctx);
+
+#endif

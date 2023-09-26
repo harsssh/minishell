@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:05:07 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/24 07:58:41 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/27 00:10:09 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@
 typedef struct s_parser {
 	t_token_stream	*stream;
 	t_token			*cur_token;
+	t_context		*ctx;
 }	t_parser;
 
-t_parser		*new_parser(char *input);
+t_parser		*new_parser(char *input, t_context *ctx);
 bool			is_eof(t_parser *parser);
 t_token			*get_cur_token(t_parser *parser);
 t_token_stream	*get_stream(t_parser *parser);
+t_context		*get_parser_ctx(t_parser *parser);
 void			set_cur_token(t_parser *parser, t_token *token);
 bool			consume_token(t_parser *parser, t_token_type type);
 void			eat_token(t_parser *parser);
@@ -38,5 +40,6 @@ t_ast_node		*parse_simple_command(t_parser *parser);
 t_ast_node		*parse_pipeline(t_parser *parser);
 t_ast_node		*parse_and_or(t_parser *parser);
 t_redirect		*parse_here_doc(t_parser *parser);
+char			*expand_word(char *word, t_context *ctx);
 
 #endif

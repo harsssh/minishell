@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 21:50:31 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 20:08:15 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/26 13:26:07 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*parse_word(t_parser *parser)
 	word = get_token_literal(get_cur_token(parser));
 	if (word == NULL)
 		return (NULL);
-	word = ft_strdup(word);
+	word = expand_word(word, get_parser_ctx(parser));
 	eat_token(parser);
 	return (word);
 }

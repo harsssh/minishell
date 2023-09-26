@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:54:38 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/22 18:26:15 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/26 13:25:23 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "token.h"
 #include "lexer.h"
 
-t_parser	*new_parser(char *input)
+t_parser	*new_parser(char *input, t_context *ctx)
 {
 	t_parser		*parser;
 	t_token_stream	*stream;
@@ -29,6 +29,7 @@ t_parser	*new_parser(char *input)
 		return (NULL);
 	}
 	parser->stream = stream;
+	parser->ctx = ctx;
 	eat_token(parser);
 	return (parser);
 }

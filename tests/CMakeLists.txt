@@ -55,3 +55,6 @@ gtest_discover_tests(test_lexer)
 
 add_executable(test_parser parser.cpp utils/ast_builder.cpp utils/compare_ast.cpp ${SRC})
 gtest_discover_tests(test_parser)
+
+add_executable(test_word_expansion word_expansion.cpp utils/context.cpp ${SRC})
+gtest_discover_tests(test_word_expansion)
