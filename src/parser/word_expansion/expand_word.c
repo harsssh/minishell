@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 13:05:26 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/27 00:09:25 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/27 03:44:09 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,9 @@
 
 char	*expand_word(char *word, t_context *ctx)
 {
-	char	*tmp;
-
 	if (word == NULL)
 		return (NULL);
-	tmp = word;
 	word = expand_parameter(word, ctx);
-	free(tmp);
 	if (word == NULL)
 		return (NULL);
 //	tmp = word;

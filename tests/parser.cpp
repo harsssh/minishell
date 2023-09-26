@@ -10,7 +10,7 @@ extern "C" {
 TEST(parser, normal)
 {
 	char *input = "ls";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("ls");
 
@@ -21,7 +21,7 @@ TEST(parser, normal)
 TEST(parser, pipe)
 {
 	char *input = "ls | ls | ls";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("ls")
@@ -37,7 +37,7 @@ TEST(parser, pipe)
 TEST(parser, redirect)
 {
 	char *input = "cat > file1 < file2 >> file3";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_OUT, "file1").addRedirect(REDIRECT_IN, "file2").addRedirect(REDIRECT_APPEND, "file3");
@@ -49,7 +49,7 @@ TEST(parser, redirect)
 TEST(parser, redirect2)
 {
 	char *input = "cat < file1 < file2 < file3";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_IN, "file1").addRedirect(REDIRECT_IN, "file2").addRedirect(REDIRECT_IN, "file3");
@@ -61,7 +61,7 @@ TEST(parser, redirect2)
 TEST(parser, redirect3)
 {
 	char *input = "cat > file1 > file2 > file3";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_OUT, "file1").addRedirect(REDIRECT_OUT, "file2").addRedirect(REDIRECT_OUT, "file3");
@@ -73,7 +73,7 @@ TEST(parser, redirect3)
 TEST(parser, redirect4)
 {
 	char *input = "cat >> file1 >> file2 >> file3";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_APPEND, "file1").addRedirect(REDIRECT_APPEND, "file2").addRedirect(REDIRECT_APPEND, "file3");
@@ -85,7 +85,7 @@ TEST(parser, redirect4)
 TEST(parser, and_or)
 {
 	char *input = "./cmd1 && cmd2 || /bin/cmd3";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_COMMAND).addArgument("./cmd1")
@@ -101,7 +101,7 @@ TEST(parser, and_or)
 TEST(parser, pipe_and_pipe)
 {
 	char *input = "cmd1 | cmd2 && cmd3 | cmd4";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_AND)
 		.moveToLeft(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -120,7 +120,7 @@ TEST(parser, pipe_and_pipe)
 TEST(parser, pipe_and_or)
 {
 	char *input = "cmd1 | cmd2 && cmd3 || cmd4";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_PIPE)
@@ -140,7 +140,7 @@ TEST(parser, pipe_and_or)
 TEST(parser, redirect_before_and)
 {
 	char *input = "cmd1 > file1 && cmd2";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_AND)
 		.moveToLeft(N_COMMAND).addArgument("cmd1").addRedirect(REDIRECT_OUT, "file1")
 		.moveToRoot()
@@ -153,7 +153,7 @@ TEST(parser, redirect_before_and)
 TEST(parser, redirect_before_or)
 {
 	char *input = "cmd1 > file1 || cmd2";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_COMMAND).addArgument("cmd1").addRedirect(REDIRECT_OUT, "file1")
 		.moveToRoot()
@@ -166,7 +166,7 @@ TEST(parser, redirect_before_or)
 TEST(parser, redirect_before_pipe)
 {
 	char *input = "cmd1 > file1 | cmd2";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1").addRedirect(REDIRECT_OUT, "file1")
 		.moveToRoot()
@@ -179,7 +179,7 @@ TEST(parser, redirect_before_pipe)
 TEST(parser, pipe_and_or_with_redirect)
 {
 	char *input = "cmd1 | cmd2 > file1 && cmd3 || cmd4";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_PIPE)
@@ -199,7 +199,7 @@ TEST(parser, pipe_and_or_with_redirect)
 TEST(parser, go_crazy)
 {
 	char *input = "ls | cat > file1 < file2 >> file3 && cmd2 < file4 > file5 || /bin/cmd3 < file6 > file7";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_PIPE)
@@ -219,7 +219,7 @@ TEST(parser, go_crazy)
 TEST(parser, only_redirect)
 {
 	char *input = "> a";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addRedirect(REDIRECT_OUT, "a");
 
@@ -230,7 +230,7 @@ TEST(parser, only_redirect)
 TEST(parser, empty)
 {
 	char *input = "";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND);
 
 	EXPECT_NE(result, nullptr);
@@ -240,7 +240,7 @@ TEST(parser, empty)
 TEST(parser, empty2)
 {
 	char *input = "  ";
-	auto result = parse(input);
+	auto result = parse(input, NULL);
 	auto expected = ASTBuilder(N_COMMAND);
 
 	EXPECT_NE(result, nullptr);
