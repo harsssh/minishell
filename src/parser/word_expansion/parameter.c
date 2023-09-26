@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 13:40:17 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/27 00:57:56 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/27 01:15:16 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "variables.h"
 #include <stdlib.h>
+#include "word_expansion_internal.h"
 
 static char	*take_first_param_value(t_context *ctx, char *s, char **endptr)
 {
@@ -60,28 +61,36 @@ static char	*join_word_param_rest(char *word, size_t word_len,
 	return (result);
 }
 
-char	*expand_parameter(char *word, t_context *ctx)
+static char	*expand_parameter_helper(char *word, t_context *ctx, size_t i)
 {
-	size_t		i;
 	char		*param_value;
 	char		*rest;
 	char		*result;
 
+	param_value = take_first_param_value(ctx, word + i + 1, &rest);
+	if (param_value == NULL)
+		return (NULL);
+	rest = expand_parameter(rest, ctx);
+	if (rest == NULL)
+		return (NULL);
+	result = join_word_param_rest(word, i, param_value, rest);
+	free(rest);
+	return (result);
+}
+
+char	*expand_parameter(char *word, t_context *ctx)
+{
+	size_t		i;
+	bool		is_quoted;
+
 	i = 0;
+	is_quoted = false;
 	while (word[i] != '\0')
 	{
-		if (word[i] == '$')
-		{
-			param_value = take_first_param_value(ctx, word + i + 1, &rest);
-			if (param_value == NULL)
-				return (NULL);
-			rest = expand_parameter(rest, ctx);
-			if (rest == NULL)
-				return (NULL);
-			result = join_word_param_rest(word, i, param_value, rest);
-			free(rest);
-			return (result);
-		}
+		if (word[i] == '\'')
+			is_quoted = !is_quoted;
+		if (word[i] == '$' && !is_quoted)
+			return (expand_parameter_helper(word, ctx, i));
 		i++;
 	}
 	return (ft_strdup(word));
