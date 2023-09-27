@@ -117,7 +117,7 @@ TEST(parameter, with_multiple_double_quotes)
 	EXPECT_STREQ(expected, result);
 }
 
-TEST(paramteter, with_single_quote) {
+TEST(parameter, with_single_quote) {
 	char *input = "'$hello'";
 	char *expected = "'$hello'";
 	t_context *ctx = Context({{"hello", "world"}}).getCtx();
@@ -139,6 +139,24 @@ TEST(parameter, with_multiple_quotes) {
 	char *input = "-- '$hello from' \"ecole $world\" --";
 	char *expected = "-- '$hello from' \"ecole 42\" --";
 	t_context *ctx = Context({{"hello", "greeting"}, {"world", "42"}}).getCtx();
+	char *result = expand_parameter(input, ctx);
+
+	EXPECT_STREQ(expected, result);
+}
+
+TEST(parameter, single_in_double) {
+	char *input = "\"'$hello'\"";
+	char *expected = "\"'world'\"";
+	t_context *ctx = Context({{"hello", "world"}}).getCtx();
+	char *result = expand_parameter(input, ctx);
+
+	EXPECT_STREQ(expected, result);
+}
+
+TEST(parameter, double_in_single) {
+	char *input = "'\"$hello\"'";
+	char *expected = "'\"$hello\"'";
+	t_context *ctx = Context({{"hello", "world"}}).getCtx();
 	char *result = expand_parameter(input, ctx);
 
 	EXPECT_STREQ(expected, result);

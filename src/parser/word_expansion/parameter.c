@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 13:40:17 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/27 01:15:16 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/27 10:45:05 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,17 @@ static char	*expand_parameter_helper(char *word, t_context *ctx, size_t i)
 char	*expand_parameter(char *word, t_context *ctx)
 {
 	size_t		i;
-	bool		is_quoted;
+	char		quote;
 
 	i = 0;
-	is_quoted = false;
+	quote = '\0';
 	while (word[i] != '\0')
 	{
-		if (word[i] == '\'')
-			is_quoted = !is_quoted;
-		if (word[i] == '$' && !is_quoted)
+		if (word[i] == quote)
+			quote = '\0';
+		else if ((word[i] == '\'' || word[i] == '\"') && quote == '\0')
+			quote = word[i];
+		if (word[i] == '$' && quote != '\'')
 			return (expand_parameter_helper(word, ctx, i));
 		i++;
 	}
