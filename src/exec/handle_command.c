@@ -83,10 +83,14 @@ static int	execute_builtin(t_context *ctx, t_pipeline_info *info,
 	return (EXIT_SUCCESS);
 }
 
+// If `argv` is NULL, it indicates a situation like "> file",
+// which means there is no command to execute, so we return EXIT_SUCCESS.
 int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
 	t_builtin_func	func;
 
+	if (ast->argv == NULL)
+		return (EXIT_SUCCESS);
 	func = get_builtin_func((char *)ast->argv->head->data);
 	if (func != NULL && !is_in_pipeline(info))
 		return (execute_builtin(ctx, info, ast, func));
