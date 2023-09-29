@@ -62,8 +62,8 @@ static char	*find_command_path(t_context *ctx, const char *file)
 
 int	internal_execvp(t_context *ctx, t_list *arg_list)
 {
-	char	**argv;
 	char	*cmd_path;
+	char	**argv;
 	char	**envp;
 
 	argv = list_to_string_array(arg_list, NULL);
@@ -78,5 +78,9 @@ int	internal_execvp(t_context *ctx, t_list *arg_list)
 		free(cmd_path);
 		return (-1);
 	}
-	return (execve(cmd_path, argv, envp));
+	execve(cmd_path, argv, envp);
+	free(cmd_path);
+	destroy_string_array(argv);
+	destroy_string_array(envp);
+	return (-1);
 }
