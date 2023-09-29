@@ -12,7 +12,7 @@ Context::Context() {
 	ctx.last_exit_status = 0;
 }
 
-Context::Context(vector<pair<const char *, const char *>> vars) {
+Context::Context(initializer_list<pair<const char *, const char *>> vars) {
 	*this = Context();
 	for (auto [name, value] : vars) {
 		t_variable *var = variable_create(name, value);
