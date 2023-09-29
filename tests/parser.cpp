@@ -246,3 +246,134 @@ TEST(parser, empty2)
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(expected == result);
 }
+
+/* 異常系 */
+TEST(parser_negative, no_command)
+{
+	char *input = "|";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, no_command2)
+{
+	char *input = ">";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, no_command3)
+{
+	char *input = "&&";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, incomplete)
+{
+	char *input = "cmd |";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, incomplete2)
+{
+	char *input = "cmd >";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, incomplete3)
+{
+	char *input = "cmd &&";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+// 特殊なトークンが連続する
+TEST(parser_negative, consecutive_special_token)
+{
+	char *input = "cmd1 && | cmd2";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, consecutive_special_token2)
+{
+	char *input = "cmd1 && && cmd2";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, consecutive_special_token3)
+{
+	char *input = "cmd1 && > file";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, unknown_token)
+{
+	char *input = "cmd1 &&& cmd2";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, unknown_token2)
+{
+	char *input = "cmd >>> file";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+// here-string
+TEST(parser_negative, not_supported)
+{
+	char *input = "cmd <<< string";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, not_supported2)
+{
+	char *input = "cmd1 |& cmd2";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, not_supported3)
+{
+	char *input = "cmd <> file";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, not_supported4)
+{
+	char *input = "cmd >| file";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, not_supported5)
+{
+	char *input = "cmd &> file";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
