@@ -8,11 +8,11 @@ extern "C" {
 }
 
 class Context {
-	t_context ctx;
+	t_context ctx{};
 
 	public:
 		Context();
-		Context(vector<pair<const char *, const char *>> vars);
-		Context(int exit_status);
+		explicit Context(vector<pair<const char *, const char *>> vars);
+		explicit Context(int exit_status);
 		t_context *getCtx();
 };
