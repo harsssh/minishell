@@ -15,9 +15,9 @@
 
 # include "context.h"
 # include "ft_list.h"
-# include <string.h>
 # include "errno.h"
 # include <stdbool.h>
+# include <string.h>
 
 // fs.c
 bool	is_existing_directory(const char *path);

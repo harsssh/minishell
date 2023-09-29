@@ -15,13 +15,13 @@
 #include "variables.h"
 #include <stdlib.h>
 
-int	builtins_unset(t_context *ctx, const char **argv)
+int	builtins_unset(t_context *ctx, const char **args)
 {
-	argv = ignore_options(argv);
-	while (*argv != NULL)
+	args = ignore_options(args);
+	while (*args != NULL)
 	{
-		unsetvar(ctx, *argv);
-		++argv;
+		unsetvar(ctx, *args);
+		++args;
 	}
 	return (EXIT_SUCCESS);
 }

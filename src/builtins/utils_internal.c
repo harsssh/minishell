@@ -17,20 +17,20 @@
 #include <string.h>
 #include <unistd.h>
 
-const char	**ignore_options(const char **argv)
+const char	**ignore_options(const char **args)
 {
 	int	c;
 
 	init_get_next_option();
-	while (*argv)
+	while (*args)
 	{
-		c = get_next_option(*argv, "");
+		c = get_next_option(*args, "");
 		if (c == END_OF_OPTIONS)
 			break ;
 		if (c == END_OF_ARG)
-			++argv;
+			++args;
 	}
-	return (argv);
+	return (args);
 }
 
 void	sync_working_directory(t_context *ctx, char *for_whom)

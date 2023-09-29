@@ -33,7 +33,7 @@ typedef enum e_get_opt_status
 
 void				init_get_next_option(void);
 t_get_opt_status	get_next_option(const char *arg, const char *optstring);
-const char			**ignore_options(const char **argv);
+const char			**ignore_options(const char **args);
 char				*get_working_directory(t_context *ctx, char *for_whom);
 void				sync_working_directory(t_context *ctx, char *for_whom);
 
