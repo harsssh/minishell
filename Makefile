@@ -5,10 +5,10 @@ BUILD_DIR:=build
 
 LIBFT:=libft/libft.a
 
-CFLAGS:=-Wall -Wextra -Werror -Ilibft/include -Iinclude -Isrc
+CFLAGS:=-Wall -Wextra -Werror -Ilibft/include -Iinclude -Isrc -I$(shell brew --prefix readline)/include
 RELEASE_FLAGS:=-O3
 DEBUG_FLAGS:=-g -O0 -fsanitize=address
-LDFLAGS:=-lreadline
+LDFLAGS:=-L$(shell brew --prefix readline)/lib -lreadline
 DEPFLAGS=-MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.d
 
 SRC:=$(shell find $(SRC_DIR) -name '*.c')
