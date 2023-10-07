@@ -13,6 +13,7 @@
 #include "ast.h"
 #include "parser_internal.h"
 #include "fcntl.h"
+#include <stdio.h>
 #include <readline/readline.h>
 #include <unistd.h>
 
