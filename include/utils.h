@@ -14,8 +14,10 @@
 # define UTILS_H
 
 # include "context.h"
-# include <stdbool.h>
 # include "ft_list.h"
+# include "errno.h"
+# include <stdbool.h>
+# include <string.h>
 
 // fs.c
 bool	is_existing_directory(const char *path);
@@ -28,6 +30,7 @@ char	**list_to_string_array(t_list *list, char *(*f)(void *data));
 // memory.c
 void	destroy_string_array(char **array);
 
+// error.c
 void	perror_verbose(t_context *ctx, const char *cmd,
 			const char *description);
 void	print_error_verbose(t_context *ctx, const char *cmd,
