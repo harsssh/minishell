@@ -1,7 +1,7 @@
 -Ilibft/include
+-Ireadline/include
 -Iinclude
 -Isrc
--lreadline
 -Wall
 -Wextra
 -Werror
