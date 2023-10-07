@@ -27,4 +27,4 @@ add_executable(minishell ${SRC})
 
 add_dependencies(minishell gnu_readline)
 target_include_directories(minishell PRIVATE src include ${CMAKE_BINARY_DIR}/readline/include)
-target_link_libraries(minishell ft termcap ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a)
+target_link_libraries(minishell ft ncurses ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a)
