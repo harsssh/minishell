@@ -52,3 +52,9 @@ gtest_discover_tests(test_join_path)
 
 add_executable(test_canonicalize_absolute_path canonicalize_absolute_path.cpp $<TARGET_OBJECTS:src_obj>)
 gtest_discover_tests(test_canonicalize_absolute_path)
+
+add_executable(test_execute_ast execute_ast.cpp utils/ast_builder.cpp $<TARGET_OBJECTS:src_obj>)
+gtest_discover_tests(test_execute_ast)
+
+add_executable(test_get_environ get_environ.cpp $<TARGET_OBJECTS:src_obj>)
+gtest_discover_tests(test_get_environ)

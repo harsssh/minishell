@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/13 23:44:31 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/09/21 20:38:12 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 # define AST_H
 
 # include "libft.h"
+# include "context.h"
 
 /**
  * @brief Enumeration of AST node types
- * 
+ *
  * - N_COMMAND: Regular command node
  * - N_AND: Logical AND operator node (&&)
  * - N_OR: Logical OR operator node (||)
@@ -33,7 +34,7 @@ typedef enum e_ast_node_type
 
 /**
  * @brief Structure representing nodes in an Abstract Syntax Tree (AST)
- * 
+ *
  * - type: The type of the AST node (e.g., N_COMMAND for a regular command)
  * - left: Pointer to the left child node in the AST
  * - right: Pointer to the right child node in the AST
@@ -51,7 +52,7 @@ typedef struct s_ast_node
 
 /**
  * @brief Enumeration of redirection types
- * 
+ *
  * - REDIRECT_IN: Represents input redirection
  * - REDIRECT_OUT: Represents output redirection
  * - REDIRECT_APPEND: Represents append output redirection
@@ -67,7 +68,7 @@ typedef enum e_redirect_type
 
 /**
  * @brief Structure representing redirection information
- * 
+ *
  * - type: The type of redirection (e.g., REDIRECT_IN for input redirection)
  * - filename: The name of the file associated with the redirection
  */
@@ -76,5 +77,7 @@ typedef struct s_redirect
 	t_redirect_type	type;
 	char			*filename;
 }	t_redirect;
+
+int	execute_ast(t_context *ctx, t_ast_node *ast);
 
 #endif
