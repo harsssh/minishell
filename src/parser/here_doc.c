@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 20:08:43 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:22:28 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <unistd.h>
+#include "libft.h"
 
 static int	open_here_doc(t_redirect *redirect)
 {

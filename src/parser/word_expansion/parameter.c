@@ -6,11 +6,12 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 13:40:17 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/27 10:45:05 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/09 21:24:01 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "context.h"
+#include "ft_list.h"
 #include "libft.h"
 #include "variables.h"
 #include <stdlib.h>
@@ -41,59 +42,89 @@ static char	*take_first_param_value(t_context *ctx, char *s, char **endptr)
 	return ((char *)var->value);
 }
 
-static char	*join_word_param_rest(char *word, size_t word_len,
-									char *param, char *rest)
+static int	append_first_param(t_list *res, char **p,
+							t_context *ctx, char quote)
 {
-	char	*word_cpy;
-	char	*result;
-	char	*tmp;
+	char	*param_value;
+	char	*rest;
+	t_word	*word;
 
-	word_cpy = ft_substr(word, 0, word_len);
-	if (word_cpy == NULL)
-		return (NULL);
-	result = ft_strjoin(word_cpy, param);
-	free(word_cpy);
-	if (result == NULL)
-		return (NULL);
-	tmp = result;
-	result = ft_strjoin(result, rest);
-	free(tmp);
-	return (result);
-}
-
-static char	*expand_parameter_helper(char *word, t_context *ctx, size_t i)
-{
-	char		*param_value;
-	char		*rest;
-	char		*result;
-
-	param_value = take_first_param_value(ctx, word + i + 1, &rest);
+	(*p)++;
+	param_value = take_first_param_value(ctx, *p, &rest);
 	if (param_value == NULL)
-		return (NULL);
-	rest = expand_parameter(rest, ctx);
-	if (rest == NULL)
-		return (NULL);
-	result = join_word_param_rest(word, i, param_value, rest);
-	free(rest);
-	return (result);
+		return (EXIT_FAILURE);
+	*p = rest;
+	word = new_word(param_value, true, quote);
+	free(param_value);
+	if (word == NULL || ft_list_push_back(res, word))
+	{
+		destroy_word(word);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
-char	*expand_parameter(char *word, t_context *ctx)
+static int	append_scanned_word(t_list *res, char *word, char *p, char quote)
 {
-	size_t		i;
-	char		quote;
+	char	*content;
+	t_word	*scanned_word;
 
-	i = 0;
-	quote = '\0';
-	while (word[i] != '\0')
+	content = ft_substr(word, 0, p - word);
+	if (content == NULL)
+		return (EXIT_FAILURE);
+	scanned_word = new_word(content, false, quote);
+	free(content);
+	if (scanned_word == NULL)
+		return (EXIT_FAILURE);
+	if (ft_list_push_back(res, scanned_word) == NULL)
 	{
-		if (word[i] == quote)
-			quote = '\0';
-		else if ((word[i] == '\'' || word[i] == '\"') && quote == '\0')
-			quote = word[i];
-		if (word[i] == '$' && quote != '\'')
-			return (expand_parameter_helper(word, ctx, i));
-		i++;
+		destroy_word(scanned_word);
+		return (EXIT_FAILURE);
 	}
-	return (ft_strdup(word));
+	return (EXIT_SUCCESS);
+}
+
+static int	expand_parameter_helper(char *word, t_context *ctx, t_list *res)
+{
+	char	*p;
+	char	quote;
+
+	p = word;
+	quote = '\0';
+	while (*p != '\0')
+	{
+		if (*p == quote)
+			quote = '\0';
+		else if ((*p == '\'' || *p == '\"') && quote == '\0')
+			quote = *p;
+		if (*p == '$' && quote != '\'' && (ft_isalpha(p[1]) || p[1] == '_'))
+		{
+			if (append_scanned_word(res, word, p, quote))
+				return (EXIT_FAILURE);
+			if (append_first_param(res, &p, ctx, quote))
+				return (EXIT_FAILURE);
+			word = p;
+			continue ;
+		}
+		p++;
+	}
+	return (EXIT_SUCCESS);
+}
+
+// Returns t_list<t_word *>
+t_list	*expand_parameter(char *word, t_context *ctx)
+{
+	t_list	*res;
+
+	if (word == NULL || ctx == NULL)
+		return (NULL);
+	res = ft_list_create();
+	if (res == NULL)
+		return (NULL);
+	if (expand_parameter_helper(word, ctx, res))
+	{
+		ft_list_destroy(res, destroy_word);
+		return (NULL);
+	}
+	return (res);
 }

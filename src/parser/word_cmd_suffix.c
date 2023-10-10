@@ -6,25 +6,27 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 21:50:31 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/27 03:32:44 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:23:16 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+#include "ft_list.h"
 #include "parser_internal.h"
 #include "token.h"
 #include <stdlib.h>
 
 char	*parse_word(t_parser *parser)
 {
+	t_token	*token;
 	char	*word;
 
 	if (!peek_token(parser, TK_WORD))
 		return (NULL);
-	word = get_token_literal(get_cur_token(parser));
-	if (word == NULL)
+	token = get_cur_token(parser);
+	word = get_token_literal(token);
+	if (token == NULL || word == NULL)
 		return (NULL);
-	word = expand_word(word, get_parser_ctx(parser));
 	eat_token(parser);
 	return (word);
 }
@@ -46,7 +48,7 @@ static int	parse_cmd_suffix_helper_redreict(t_parser *parser, t_ast_node *node)
 static int	parse_cmd_suffix_helper(t_parser *parser,
 								t_ast_node *node, bool *flag)
 {
-	char		*word;
+	char	*word;
 
 	if (peek_redirect(parser))
 	{

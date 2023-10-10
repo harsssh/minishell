@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 14:28:53 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/09 22:22:01 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ int			add_node_redirect(t_ast_node *node, t_redirect *redirect);
 void		set_node_redirects(t_ast_node *node, t_list *redirects);
 void		set_redirect_filename(t_redirect *redirect, char *filename);
 void		set_node_argv(t_ast_node *node, t_list *argv);
+int			append_node_argv(t_ast_node *node, t_list *words);
 
 #endif

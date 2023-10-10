@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:37:25 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 18:58:22 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/05 20:48:29 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*literal;
+	bool			has_dollar;
 }	t_token;
 
 t_token_type	get_token_type(t_token *token);
@@ -40,6 +41,7 @@ t_token			*new_token(t_token_type type, char *input, size_t token_len);
 void			destroy_token(t_token *token);
 char			*get_token_literal(t_token *token);
 t_token			*clone_token(t_token *token);
+bool			has_dollar(t_token *token);
 
 typedef t_list	t_token_stream;
 
