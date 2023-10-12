@@ -3,6 +3,7 @@ project(minishell C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Werror")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no_compact_unwind")
 
 enable_testing()
 
@@ -13,6 +14,7 @@ add_subdirectory(tests)
 include(ExternalProject)
 ExternalProject_Add(
         gnu_readline
+        BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a
         PREFIX ${CMAKE_BINARY_DIR}/readline
         SOURCE_DIR ${CMAKE_SOURCE_DIR}/readline
         CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/readline/configure
