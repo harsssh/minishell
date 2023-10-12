@@ -169,6 +169,26 @@ TEST_F(TestbuiltinsExport, ExportNameWithValue) {
 	);
 }
 
+// export NAME+=value
+TEST_F(TestbuiltinsExport, ExportNamePlusEqualWithValue) {
+	// capture
+	testing::internal::CaptureStdout();
+	auto status = run_export("NAME+=value");
+	EXPECT_EQ(status, EXIT_SUCCESS);
+	// attributeを確認
+	auto var = getvar(&ctx, "NAME");
+	EXPECT_TRUE(var->attributes & VAR_ATTR_EXPORTED);
+	EXPECT_FALSE(var->attributes & VAR_ATTR_NO_VALUE);
+
+	status = run_export(nullptr);
+	EXPECT_EQ(status, EXIT_SUCCESS);
+	EXPECT_EQ(testing::internal::GetCapturedStdout(),
+			  "declare -x NAME=\"namevalue\"\n" +
+			  DECLARED_EXPORTED +
+			  DECLARED_EXPORTED_NO_VALUE
+	);
+}
+
 // export EXPORTED+=value
 TEST_F(TestbuiltinsExport, ExportPlusEqualWithValue) {
 	// capture
