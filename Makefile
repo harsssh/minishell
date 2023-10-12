@@ -37,7 +37,7 @@ all: $(NAME)
 debug: CFLAGS+=$(DEBUG_FLAGS)
 debug: $(NAME)
 
-$(NAME): $(OBJ) | $(LIBFT) $(LIBREADLINE)
+$(NAME): $(LIBFT) $(LIBREADLINE) $(OBJ)
 	$(CC) $(CFLAGS) $(CFLAGS_LINKER) $(INCLUDES) $(LDFLAGS) $(LDLIBS) -o $@ $^
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
