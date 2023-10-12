@@ -37,7 +37,7 @@ all: $(NAME)
 debug: CFLAGS+=$(DEBUG_FLAGS)
 debug: $(NAME)
 
-$(NAME): $(OBJ) | $(LIBFT) $(LIBREADLINE)
+$(NAME): $(LIBFT) $(LIBREADLINE) $(OBJ)
 	$(CC) $(CFLAGS) $(CFLAGS_LINKER) $(INCLUDES) $(LDFLAGS) $(LDLIBS) -o $@ $^
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
@@ -57,16 +57,16 @@ $(LIBREADLINE):
 # NOTE: Specifying SHELL to ensure compatibility across different environments.
 .PHONY: clean
 clean:
-	@make -C libft clean
-	@make -C readline clean SHELL=/bin/bash
-	$(RM) $(OBJ) $(DEP)
+	-@make -C libft clean
+	-@make -C readline clean SHELL=/bin/bash
+	-$(RM) $(OBJ) $(DEP)
 
 # NOTE: Specifying SHELL to ensure compatibility across different environments.
 .PHONY: fclean
 fclean: clean
-	@make -C libft fclean
-	@make -C readline uninstall SHELL=/bin/bash
-	$(RM) $(NAME)
+	-@make -C libft fclean
+	-@make -C readline uninstall SHELL=/bin/bash
+	-$(RM) $(NAME)
 
 .PHONY: re
 re: fclean all
