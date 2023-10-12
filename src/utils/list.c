@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_list.h"
 #include "utils.h"
+#include "libft.h"
 #include <stdlib.h>
 
 char	**list_to_string_array(t_list *list, char *(*f)(void *data))
@@ -30,7 +30,7 @@ char	**list_to_string_array(t_list *list, char *(*f)(void *data))
 		if (f != NULL)
 			*cur = f(node->data);
 		else
-			*cur = (char *)node->data;
+			*cur = ft_strdup((char *)node->data);
 		if (*cur == NULL)
 		{
 			destroy_string_array(array);
