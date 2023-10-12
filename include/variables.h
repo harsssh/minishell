@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 04:32:03 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/23 04:46:42 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/13 04:44:28 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ t_variable					*getvar(t_context *ctx, const char *name);
 int							setvar(t_context *ctx, const char *name,
 								const char *value, int overwrite);
 int							unsetvar(t_context *ctx, const char *name);
-int							exportvar(t_context *ctx, const char *name, const char *value);
+int							exportvar(t_context *ctx, const char *name,
+								const char *value);
 
 char						**get_environ(t_context *ctx);
 t_assignment_parse_status	parse_variable_assignment(
