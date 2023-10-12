@@ -57,16 +57,16 @@ $(LIBREADLINE):
 # NOTE: Specifying SHELL to ensure compatibility across different environments.
 .PHONY: clean
 clean:
-	@make -C libft clean
-	@make -C readline clean SHELL=/bin/bash
-	$(RM) $(OBJ) $(DEP)
+	-@make -C libft clean
+	-@make -C readline clean SHELL=/bin/bash
+	-$(RM) $(OBJ) $(DEP)
 
 # NOTE: Specifying SHELL to ensure compatibility across different environments.
 .PHONY: fclean
 fclean: clean
-	@make -C libft fclean
-	@make -C readline uninstall SHELL=/bin/bash
-	$(RM) $(NAME)
+	-@make -C libft fclean
+	-@make -C readline uninstall SHELL=/bin/bash
+	-$(RM) $(NAME)
 
 .PHONY: re
 re: fclean all
