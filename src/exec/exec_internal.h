@@ -19,6 +19,10 @@
 
 # define ERR_PIPE "pipe error"
 # define ERR_AMBIGUOUS_REDIRECT "ambiguous redirect"
+# define ERR_CMD_NOT_FOUND	"command not found"
+
+# define EXIT_OTHER_ERR		126
+# define EXIT_CMD_NOT_FOUND 127
 
 typedef struct s_pipeline_info
 {
