@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:07:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/22 14:46:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/13 15:37:12 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ static char	*find_command_path(t_context *ctx, const char *file)
 	return (cmd_path);
 }
 
+/**
+* Note: If the command is not in the PATH, errno is set to ENOENT.
+* The caller can't identify this as "command not found."
+* On such an error, the function prints an error message and exits.
+*/
 int	internal_execvp(t_context *ctx, t_list *arg_list)
 {
 	char	*cmd_path;
@@ -71,7 +76,10 @@ int	internal_execvp(t_context *ctx, t_list *arg_list)
 		return (-1);
 	cmd_path = find_command_path(ctx, argv[0]);
 	if (cmd_path == NULL)
-		return (-1);
+	{
+		print_simple_error(ctx, argv[0], ERR_CMD_NOT_FOUND);
+		exit(EXIT_CMD_NOT_FOUND);
+	}
 	envp = get_environ(ctx);
 	if (envp == NULL)
 	{

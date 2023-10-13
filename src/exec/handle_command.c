@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 04:37:33 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/13 15:22:36 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,26 @@ static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 	return (ret);
 }
 
+/**
+ * Note: If a directory is passed, `execve` fails with ENOENT (usually).
+ * Make sure to specifically check for EISDIR to accurately handle the case.
+ */
+static int	execvp_with_error(t_context *ctx, t_list *argv_list)
+{
+	char	*command;
+
+	errno = 0;
+	internal_execvp(ctx, argv_list);
+	command = (char *)argv_list->head->data;
+	if (is_existing_directory(command))
+		print_simple_error(ctx, command, strerror(EISDIR));
+	else
+		print_simple_error(ctx, command, strerror(errno));
+	if (errno == ENOENT)
+		return (EXIT_CMD_NOT_FOUND);
+	return (EXIT_OTHER_ERR);
+}
+
 static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
@@ -55,9 +75,7 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 			exit(EXIT_FAILURE);
 		if (func != NULL)
 			exit(call_builtin_func(ctx, func, ast->argv));
-		else
-			internal_execvp(ctx, ast->argv);
-		exit(EXIT_FAILURE);
+		exit(execvp_with_error(ctx, ast->argv));
 	}
 	info->last_command_pid = pid;
 	if (!is_in_pipeline(info))
