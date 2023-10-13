@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:11:17 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 04:37:46 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/13 20:04:47 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static void	pop_back_and_close(t_list *fd_close_list)
+static void	pop_and_close(t_list *fd_close_list)
 {
-	pid_t	*pid_ptr;
+	int	*fd_ptr;
 
-	pid_ptr = ft_list_pop_back(fd_close_list);
-	close(*pid_ptr);
-	free(pid_ptr);
+	fd_ptr = ft_list_pop_back(fd_close_list);
+	if (fd_ptr == NULL)
+		return ;
+	close(*fd_ptr);
+	free(fd_ptr);
 }
 
-static int	execute_left(t_context *ctx, t_pipeline_info *info, t_ast_node *ast,
-		const int *fd_pipe)
+static int	execute_left(t_context *ctx, t_pipeline_info *info,
+	t_ast_node *ast, const int *fd_pipe)
 {
 	int	saved_fd_out;
 	int	ret;
@@ -54,6 +56,7 @@ static int	execute_right(t_context *ctx, t_pipeline_info *info,
 int	handle_pipeline(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
 	int	fd_pipe[2];
+	int	result;
 
 	if (pipe(fd_pipe) == -1)
 	{
@@ -61,12 +64,15 @@ int	handle_pipeline(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 		return (EXIT_FAILURE);
 	}
 	push_fd_close_list(info, fd_pipe[0]);
+	result = execute_right(ctx, info, ast, fd_pipe);
+	pop_and_close(info->fd_close_list);
+	pop_and_close(info->fd_close_list);
+	if (result == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	push_fd_close_list(info, fd_pipe[1]);
-	if (execute_left(ctx, info, ast, fd_pipe) == EXIT_FAILURE)
+	result = execute_left(ctx, info, ast, fd_pipe);
+	pop_and_close(info->fd_close_list);
+	if (result == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	pop_back_and_close(info->fd_close_list);
-	if (execute_right(ctx, info, ast, fd_pipe) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	pop_back_and_close(info->fd_close_list);
 	return (EXIT_SUCCESS);
 }
