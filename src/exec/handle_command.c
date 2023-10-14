@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/13 15:22:36 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/14 22:16:25 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ static int	execvp_with_error(t_context *ctx, t_list *argv_list)
 	return (EXIT_OTHER_ERR);
 }
 
+// If `argv` is NULL, it indicates a situation like "> file",
+// which means there is no command to execute, so we exit with EXIT_SUCCESS.
 static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
@@ -75,6 +77,8 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 			exit(EXIT_FAILURE);
 		if (func != NULL)
 			exit(call_builtin_func(ctx, func, ast->argv));
+		if (ast->argv == NULL)
+			exit(EXIT_SUCCESS);
 		exit(execvp_with_error(ctx, ast->argv));
 	}
 	info->last_command_pid = pid;
@@ -101,15 +105,14 @@ static int	execute_builtin(t_context *ctx, t_pipeline_info *info,
 	return (EXIT_SUCCESS);
 }
 
-// If `argv` is NULL, it indicates a situation like "> file",
-// which means there is no command to execute, so we return EXIT_SUCCESS.
 int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
 	t_builtin_func	func;
 
-	if (ast->argv == NULL)
-		return (EXIT_SUCCESS);
-	func = get_builtin_func((char *)ast->argv->head->data);
+	if (ast->argv != NULL)
+		func = get_builtin_func((char *)ast->argv->head->data);
+	else
+		func = NULL;
 	if (func != NULL && !is_in_pipeline(info))
 		return (execute_builtin(ctx, info, ast, func));
 	else
