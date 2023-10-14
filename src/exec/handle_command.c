@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/13 15:22:36 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/14 17:34:07 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 			exit(call_builtin_func(ctx, func, ast->argv));
 		exit(execvp_with_error(ctx, ast->argv));
 	}
-	info->last_command_pid = pid;
+	if (info->fd_out == STDOUT_FILENO)
+		info->last_command_pid = pid;
 	if (!is_in_pipeline(info))
 		wait_children_and_set_exit_status(ctx, pid);
 	return (EXIT_SUCCESS);

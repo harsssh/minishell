@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:21 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 04:36:32 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/14 13:02:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ typedef struct s_pipeline_info
 	pid_t		last_command_pid;
 	t_list		*fd_close_list;
 }				t_pipeline_info;
-
-// pipeline_info.c
-t_pipeline_info	*new_pipeline_info(void);
-void			destroy_pipeline_info(t_pipeline_info *info);
-void			push_fd_close_list(t_pipeline_info *info, int fd);
 
 int				handle_command(t_context *ctx, t_pipeline_info *info,
 					t_ast_node *ast);
@@ -62,5 +57,11 @@ void			wait_children_and_set_exit_status(t_context *ctx,
 // configure_io.c
 int				configure_io(t_context *ctx, t_pipeline_info *info,
 					t_list *redirect_list);
+
+// pipeline_info.c
+t_pipeline_info	*new_pipeline_info(void);
+void			destroy_pipeline_info(t_pipeline_info *info);
+void			push_fd_close_list(t_list *fd_close_list, int fd);
+int				pop_fd_close_list(t_list *fd_close_list);
 
 #endif
