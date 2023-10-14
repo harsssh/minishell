@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:07:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/13 15:37:12 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/14 22:54:47 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	internal_execvp(t_context *ctx, t_list *arg_list)
 	if (argv == NULL)
 		return (-1);
 	cmd_path = find_command_path(ctx, argv[0]);
-	if (cmd_path == NULL)
+	if (cmd_path == NULL || is_existing_directory(cmd_path))
 	{
 		print_simple_error(ctx, argv[0], ERR_CMD_NOT_FOUND);
 		exit(EXIT_CMD_NOT_FOUND);
