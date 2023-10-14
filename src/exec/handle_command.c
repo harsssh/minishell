@@ -81,7 +81,8 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 			exit(EXIT_SUCCESS);
 		exit(execvp_with_error(ctx, ast->argv));
 	}
-	info->last_command_pid = pid;
+	if (info->fd_out == STDOUT_FILENO)
+		info->last_command_pid = pid;
 	if (!is_in_pipeline(info))
 		wait_children_and_set_exit_status(ctx, pid);
 	return (EXIT_SUCCESS);
