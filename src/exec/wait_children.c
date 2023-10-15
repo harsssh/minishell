@@ -14,8 +14,8 @@
 #include "libft.h"
 #include <errno.h>
 #include <stdlib.h>
-#include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 
 // NOTE: bash does not display the message for SIGINT
 static void	report_signal_termination(int sig)
@@ -26,7 +26,10 @@ static void	report_signal_termination(int sig)
 		write(STDERR_FILENO, "\n", 1);
 	else
 	{
-		message = lookup_termination_message(sig);
+		if (sig <= 0 || sig >= NSIG)
+			message = "Unknown signal";
+		else
+			message = sys_siglist[sig];
 		ft_dprintf(STDERR_FILENO, "%s: %d\n", message, sig);
 	}
 }

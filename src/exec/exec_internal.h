@@ -64,7 +64,4 @@ void			destroy_pipeline_info(t_pipeline_info *info);
 void			push_fd_close_list(t_list *fd_close_list, int fd);
 int				pop_fd_close_list(t_list *fd_close_list);
 
-// lookup_message.c
-const char		*lookup_termination_message(int sig);
-
 #endif
