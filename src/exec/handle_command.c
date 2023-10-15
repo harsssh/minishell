@@ -16,6 +16,7 @@
 #include "exec_internal.h"
 #include "ft_list.h"
 #include "utils.h"
+#include "sig.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,6 +74,7 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 	}
 	if (pid == 0)
 	{
+		set_child_exec_sig_handlers();
 		if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
 		if (func != NULL)
@@ -81,6 +83,7 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 			exit(EXIT_SUCCESS);
 		exit(execvp_with_error(ctx, ast->argv));
 	}
+	set_shell_exec_sig_handlers();
 	if (info->fd_out == STDOUT_FILENO)
 		info->last_command_pid = pid;
 	if (!is_in_pipeline(info))

@@ -27,6 +27,11 @@ jobs:
       - name: Initialize submodules
         run: git submodule update --init
 
+      # HACK
+      - name: Replace sys_siglist with strsignal
+        run: |
+          find . -type f -name "*.c" | xargs sed -i 's/sys_siglist\[\(.*\)\]/strsignal(\1)/g'
+
       - name: Configure CMake
         run: cmake -B build
 
