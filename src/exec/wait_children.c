@@ -19,6 +19,7 @@
 #include <sys/wait.h>
 #include <string.h>
 
+// TODO: `sys_siglist` is deprecated from glibc 2.32, use `strsignal` instead
 // NOTE: bash does not display the message for SIGINT
 static void	report_signal_termination(int sig)
 {
