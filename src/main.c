@@ -19,7 +19,7 @@
 #include <sys/signal.h>
 #include <unistd.h>
 #include "context.h"
-#include "signal.h"
+#include "sig.h"
 
 #define PROMPT "minishell$ "
 

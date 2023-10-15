@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "signal.h"
+#include "sig.h"
+#include "signal_internal.h"
 
 // Sets the handlers for the shell process during input.
 void	set_shell_input_sig_handlers(void)

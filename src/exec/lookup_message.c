@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
+#include <sig.h>
 
 static void	set_lookup_table_entry(const char **table);
 static void	set_lookup_table_entry2(const char **table);

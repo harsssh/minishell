@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig_handler.c                                      :+:      :+:    :+:   */
+/*   sig.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/15 19:15:54 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/15 19:15:55 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/10/15 19:14:41 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/10/15 21:46:47 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sig.h"
+#ifndef SIG_H
+# define SIG_H
 
-volatile sig_atomic_t	g_sig;
+# include <signal.h>
 
-void	set_sig_global_variable(int sig)
-{
-	g_sig = sig;
-}
+extern volatile sig_atomic_t	g_sig;
+
+void	set_shell_input_sig_handlers(void);
+void	set_shell_exec_sig_handlers(void);
+void	set_child_exec_sig_handlers(void);
+
+#endif

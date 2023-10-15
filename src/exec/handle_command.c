@@ -16,7 +16,7 @@
 #include "exec_internal.h"
 #include "ft_list.h"
 #include "utils.h"
-#include "signal.h"
+#include "sig.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
