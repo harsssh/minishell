@@ -14,12 +14,14 @@
 #include "ast.h"
 #include "context.h"
 #include "sig.h"
+#include "variables.h"
 #include <stdio.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <sys/signal.h>
+#include <unistd.h>
 
 #define PROMPT "minishell$ "
 
@@ -45,13 +47,25 @@ static void	init_loop(t_context *ctx)
 	}
 }
 
-int	main(void)
+static void	init_shell(t_context *ctx, const char *cmd_name)
+{
+	ft_memset(ctx, 0, sizeof(t_context));
+	ctx->shell_name = ft_basename(cmd_name);
+	ctx->variables = ft_list_create();
+	ctx->is_login = (cmd_name[0] == '-');
+	ctx->is_interactive = (isatty(STDIN_FILENO) && isatty(STDERR_FILENO));
+	exportvar(ctx, "PATH", "/bin:/usr/bin");
+	rl_outstream = stderr;
+	rl_event_hook = rl_hook_func;
+}
+
+int	main(int argc, char **argv)
 {
 	char		*line;
 	t_context	ctx;
 
-	rl_outstream = stderr;
-	rl_event_hook = rl_hook_func;
+	(void)argc;
+	init_shell(&ctx, argv[0]);
 	while (true)
 	{
 		init_loop(&ctx);

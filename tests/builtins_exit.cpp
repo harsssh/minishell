@@ -9,7 +9,10 @@ protected:
 	t_context ctx{};
 
 	void SetUp() override {
-		ctx = (t_context) {.shell_name = "minishell", .last_exit_status = 0};
+		ctx = (t_context) {
+			.shell_name = "minishell",
+			.is_interactive = true
+		};
 	}
 };
 
