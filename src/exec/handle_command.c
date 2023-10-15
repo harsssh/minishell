@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/14 22:16:25 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/16 02:02:08 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "context.h"
 #include "exec_internal.h"
 #include "ft_list.h"
-#include "utils.h"
 #include "sig.h"
+#include "utils.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,24 +39,21 @@ static int	call_builtin_func(t_context *ctx, t_builtin_func func,
 	return (ret);
 }
 
-/**
- * Note: If a directory is passed, `execve` fails with ENOENT (usually).
- * Make sure to specifically check for EISDIR to accurately handle the case.
- */
-static int	execvp_with_error(t_context *ctx, t_list *argv_list)
+// This function never returns.
+static void	child_routine(t_context *ctx, t_pipeline_info *info,
+		t_ast_node *ast, t_builtin_func func)
 {
-	char	*command;
-
-	errno = 0;
-	internal_execvp(ctx, argv_list);
-	command = (char *)argv_list->head->data;
-	if (is_existing_directory(command))
-		print_simple_error(ctx, command, strerror(EISDIR));
-	else
-		print_simple_error(ctx, command, strerror(errno));
-	if (errno == ENOENT)
-		return (EXIT_CMD_NOT_FOUND);
-	return (EXIT_OTHER_ERR);
+	set_child_exec_sig_handlers();
+	ctx->is_login = false;
+	ctx->is_interactive = false;
+	if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
+		exit(EXIT_FAILURE);
+	if (func != NULL)
+		exit(call_builtin_func(ctx, func, ast->argv));
+	if (ast->argv == NULL)
+		exit(EXIT_SUCCESS);
+	internal_execvp(ctx, ast->argv);
+	exit(EXIT_FAILURE);
 }
 
 // If `argv` is NULL, it indicates a situation like "> file",
@@ -73,18 +70,7 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		return (EXIT_FAILURE);
 	}
 	if (pid == 0)
-	{
-		ctx->is_login = false;
-		ctx->is_interactive = false;
-		set_child_exec_sig_handlers();
-		if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
-			exit(EXIT_FAILURE);
-		if (func != NULL)
-			exit(call_builtin_func(ctx, func, ast->argv));
-		if (ast->argv == NULL)
-			exit(EXIT_SUCCESS);
-		exit(execvp_with_error(ctx, ast->argv));
-	}
+		child_routine(ctx, info, ast, func);
 	set_shell_exec_sig_handlers();
 	if (info->fd_out == STDOUT_FILENO)
 		info->last_command_pid = pid;
