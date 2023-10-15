@@ -52,7 +52,7 @@ int				wait_children(pid_t last_command_pid);
 // utils_internal.c
 bool			is_in_pipeline(t_pipeline_info *info);
 void			wait_children_and_set_exit_status(t_context *ctx,
-					pid_t last_command_pid);
+					pid_t target_pid);
 
 // configure_io.c
 int				configure_io(t_context *ctx, t_pipeline_info *info,

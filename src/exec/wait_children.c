@@ -27,9 +27,8 @@ static int	get_exit_status(int stat)
 }
 
 // NOTE: bash also loops infinitely if wait fails
-// return value: exit status of the specified process
-// if the specified process is not found, return -1
-int	wait_children(int last_command_pid)
+// returns exit status of the specified process, or -1 if not found
+int	wait_children(pid_t target_pid)
 {
 	int		stat;
 	int		exit_status;
@@ -40,7 +39,7 @@ int	wait_children(int last_command_pid)
 	waited_pid = wait3(&stat, WNOHANG, NULL);
 	while (errno != ECHILD)
 	{
-		if (waited_pid == last_command_pid)
+		if (waited_pid == target_pid)
 			exit_status = get_exit_status(stat);
 		waited_pid = wait3(&stat, WNOHANG, NULL);
 	}
