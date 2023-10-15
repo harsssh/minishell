@@ -32,25 +32,3 @@ const char	**ignore_options(const char **args)
 	}
 	return (args);
 }
-
-void	sync_working_directory(t_context *ctx, char *for_whom)
-{
-	free(ctx->cwd);
-	ctx->cwd = getcwd(NULL, 0);
-	if (ctx->cwd == NULL)
-		ft_dprintf(STDERR_FILENO,
-			"%s: getcwd: cannot access parent directories: %s\n",
-			for_whom, strerror(errno));
-}
-
-// This function sets `ctx->cwd` and returns its copy
-char	*get_working_directory(t_context *ctx, char *for_whom)
-{
-	if (ctx->cwd == NULL)
-	{
-		sync_working_directory(ctx, for_whom);
-		if (ctx->cwd == NULL)
-			return (NULL);
-	}
-	return (ft_strdup(ctx->cwd));
-}
