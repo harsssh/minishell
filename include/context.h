@@ -14,6 +14,7 @@
 # define CONTEXT_H
 
 # include "ft_list.h"
+# include <stdbool.h>
 
 typedef struct s_context
 {
@@ -21,6 +22,8 @@ typedef struct s_context
 	t_list		*variables;
 	int			last_exit_status;
 	char		*cwd;
+	bool		is_interactive;
+	bool		is_login;
 }				t_context;
 
 #endif

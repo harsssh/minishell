@@ -43,6 +43,12 @@ int	builtins_exit(t_context *ctx, const char **args)
 {
 	if (*args && ft_strcmp(*args, "--") == 0)
 		++args;
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (ctx->is_interactive)
+	{
+		if (ctx->is_login)
+			ft_putendl_fd("logout", STDERR_FILENO);
+		else
+			ft_putendl_fd("exit", STDERR_FILENO);
+	}
 	return (get_status_or_exit(ctx, args));
 }

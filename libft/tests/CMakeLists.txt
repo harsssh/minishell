@@ -11,3 +11,6 @@ link_libraries(ft GTest::gtest GTest::gtest_main)
 
 add_executable(test_list list.cpp)
 gtest_discover_tests(test_list)
+
+add_executable(test_basename basename.cpp)
+gtest_discover_tests(test_basename)

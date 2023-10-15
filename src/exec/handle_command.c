@@ -74,6 +74,8 @@ static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 	}
 	if (pid == 0)
 	{
+		ctx->is_login = false;
+		ctx->is_interactive = false;
 		set_child_exec_sig_handlers();
 		if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
 			exit(EXIT_FAILURE);
