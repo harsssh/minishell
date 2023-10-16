@@ -13,24 +13,8 @@
 #include "builtins.h"
 #include "builtins/builtins_internal.h"
 #include "cd_internal.h"
-#include "variables.h"
+#include "utils.h"
 #include <stdlib.h>
-
-static int	bindpwd(t_context *ctx)
-{
-	char	*dirname;
-	int		result;
-
-	dirname = get_working_directory(ctx, "cd");
-	if (dirname == NULL)
-		return (EXIT_FAILURE);
-	if (setvar(ctx, "PWD", dirname, 1) == 0)
-		result = EXIT_SUCCESS;
-	else
-		result = EXIT_FAILURE;
-	free(dirname);
-	return (result);
-}
 
 int	builtins_cd(t_context *ctx, const char **args)
 {

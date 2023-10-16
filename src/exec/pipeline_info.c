@@ -6,11 +6,12 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:18 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 02:54:35 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/14 13:03:26 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec_internal.h"
+#include "ft_list.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -38,11 +39,24 @@ void	destroy_pipeline_info(t_pipeline_info *info)
 	free(info);
 }
 
-void	push_fd_close_list(t_pipeline_info *info, int fd)
+void	push_fd_close_list(t_list *fd_close_list, int fd)
 {
 	int	*fd_ptr;
 
 	fd_ptr = malloc(sizeof(int));
 	*fd_ptr = fd;
-	ft_list_push_back(info->fd_close_list, fd_ptr);
+	ft_list_push_back(fd_close_list, fd_ptr);
+}
+
+int	pop_fd_close_list(t_list *fd_close_list)
+{
+	int	*fd_ptr;
+	int	fd;
+
+	fd_ptr = ft_list_pop_back(fd_close_list);
+	if (fd_ptr == NULL)
+		return (-1);
+	fd = *fd_ptr;
+	free(fd_ptr);
+	return (fd);
 }

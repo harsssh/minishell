@@ -19,11 +19,11 @@ bool	is_in_pipeline(t_pipeline_info *info)
 }
 
 void	wait_children_and_set_exit_status(t_context *ctx,
-		pid_t last_command_pid)
+		pid_t target_pid)
 {
 	int	tmp;
 
-	tmp = wait_children(last_command_pid);
+	tmp = wait_children(target_pid);
 	if (tmp != -1)
 		ctx->last_exit_status = tmp;
 }

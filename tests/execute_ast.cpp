@@ -134,13 +134,13 @@ TEST_F(TestExecuteAST, or_if_true) {
 
 // /usr/bin/true && /usr/bin/false || /bin/echo ok
 TEST_F(TestExecuteAST, and_if_or_if) {
-	auto *ast = ASTBuilder(N_AND)
+	auto *ast = ASTBuilder(N_OR)
+			.moveToRight(N_COMMAND).addArgument("/bin/echo").addArgument("ok")
+			.moveToParent()
+			.moveToLeft(N_AND)
 			.moveToLeft(N_COMMAND).addArgument("/usr/bin/true")
 			.moveToParent()
-			.moveToRight(N_OR)
-			.moveToLeft(N_COMMAND).addArgument("/usr/bin/false")
-			.moveToParent()
-			.moveToRight(N_COMMAND).addArgument("/bin/echo").addArgument("ok")
+			.moveToRight(N_COMMAND).addArgument("/usr/bin/false")
 			.getAST();
 
 	testing::internal::CaptureStdout();
@@ -153,13 +153,13 @@ TEST_F(TestExecuteAST, and_if_or_if) {
 
 // /usr/bin/false || /usr/bin/true && /bin/echo ok
 TEST_F(TestExecuteAST, or_if_and_if) {
-	auto *ast = ASTBuilder(N_OR)
+	auto *ast = ASTBuilder(N_AND)
+			.moveToRight(N_COMMAND).addArgument("/bin/echo").addArgument("ok")
+			.moveToParent()
+			.moveToLeft(N_OR)
 			.moveToLeft(N_COMMAND).addArgument("/usr/bin/false")
 			.moveToParent()
-			.moveToRight(N_AND)
-			.moveToLeft(N_COMMAND).addArgument("/usr/bin/true")
-			.moveToParent()
-			.moveToRight(N_COMMAND).addArgument("/bin/echo").addArgument("ok")
+			.moveToRight(N_COMMAND).addArgument("/usr/bin/true")
 			.getAST();
 
 	testing::internal::CaptureStdout();
@@ -189,10 +189,10 @@ TEST_F(TestExecuteAST, pipe) {
 // /bin/echo hello | /bin/cat | /bin/cat
 TEST_F(TestExecuteAST, pipe_pipe) {
 	auto *ast = ASTBuilder(N_PIPE)
-			.moveToLeft(N_COMMAND).addArgument("/bin/echo").addArgument("hello")
+			.moveToRight(N_COMMAND).addArgument("/bin/cat")
 			.moveToParent()
-			.moveToRight(N_PIPE)
-			.moveToLeft(N_COMMAND).addArgument("/bin/cat")
+			.moveToLeft(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("/bin/echo").addArgument("hello")
 			.moveToParent()
 			.moveToRight(N_COMMAND).addArgument("/bin/cat")
 			.getAST();
@@ -226,13 +226,13 @@ TEST_F(TestExecuteAST, pipe_false) {
 // use only command name
 TEST_F(TestExecuteAST, echo_tr_rev_pipe) {
 	auto *ast = ASTBuilder(N_PIPE)
-			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello world")
-			.moveToParent()
-			.moveToRight(N_PIPE)
-			.moveToLeft(N_COMMAND).addArgument("tr").addArgument("o").addArgument("O")
-			.moveToParent()
-			.moveToRight(N_COMMAND).addArgument("rev")
-			.getAST();
+		.moveToRight(N_COMMAND).addArgument("rev")
+		.moveToParent()
+		.moveToLeft(N_PIPE)
+		.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello world")
+		.moveToParent()
+		.moveToRight(N_COMMAND).addArgument("tr").addArgument("o").addArgument("O")
+		.getAST();
 
 	testing::internal::CaptureStdout();
 	execute_ast(&ctx, ast);

@@ -10,46 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ast.h"
+#include "context.h"
+#include "sig.h"
+#include "variables.h"
 #include <stdio.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <sys/signal.h>
-#include <unistd.h>
 
 #define PROMPT "minishell$ "
 
-volatile sig_atomic_t	g_sig;
+void	init_shell(t_context *ctx, char **argv, char **envp);
+void	init_loop(t_context *ctx);
 
-void	sigint_handler(int sig)
+int	main(int argc, char **argv, char **envp)
 {
-	g_sig = sig;
-}
+	char		*line;
+	t_context	ctx;
 
-int	rl_hook_func(void)
-{
-	if (g_sig == SIGINT)
-	{
-		write(STDERR_FILENO, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_sig = 0;
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	main(void)
-{
-	char	*line;
-
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
-	rl_outstream = stderr;
-	rl_event_hook = rl_hook_func;
+	(void)argc;
+	init_shell(&ctx, argv, envp);
 	while (true)
 	{
+		init_loop(&ctx);
 		line = readline(PROMPT);
 		if (line == NULL)
 			exit(EXIT_SUCCESS);
