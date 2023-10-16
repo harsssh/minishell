@@ -19,15 +19,16 @@
 
 const char	**ignore_options(const char **args)
 {
-	int	c;
+	t_getopt_status	status;
+	char			c;
 
 	init_get_next_option();
 	while (*args)
 	{
-		c = get_next_option(*args, "");
-		if (c == END_OF_OPTIONS)
+		status = get_next_option(*args, "", &c);
+		if (status == OPT_END_OF_OPTIONS)
 			break ;
-		if (c == END_OF_ARG)
+		if (status == OPT_END_OF_ARG)
 			++args;
 	}
 	return (args);
