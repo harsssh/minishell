@@ -41,6 +41,8 @@ int	rl_hook_func(void)
 	return (EXIT_SUCCESS);
 }
 
+#include "ast.h"
+#include "parser.h"
 int	main(void)
 {
 	char	*line;
@@ -56,6 +58,8 @@ int	main(void)
 			exit(EXIT_SUCCESS);
 		if (*line != '\0')
 			add_history(line);
+		t_ast_node *ast = parse(line, NULL);
+		(void)ast;
 		free(line);
 	}
 }

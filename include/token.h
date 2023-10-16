@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:37:25 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/05 20:48:29 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/12 18:31:09 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ typedef enum e_token_type
 	TK_REDIRECT_OUT,
 	TK_REDIRECT_APPEND,
 	TK_REDIRECT_HERE_DOC,
-	TK_WORD
+	TK_WORD,
+	TK_LPAREN,
+	TK_RPAREN
 }	t_token_type;
 
 typedef struct s_token

@@ -270,3 +270,16 @@ TEST(lexer, empty2)
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result, {{TK_EOF, ""}}));
 }
+
+TEST(lexer, subshell)
+{
+	char *input = "(cmd)";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_LPAREN, "("},
+		{TK_WORD, "cmd"},
+		{TK_RPAREN, ")"},
+		{TK_EOF, ""}}));
+}

@@ -6,14 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/05 20:45:55 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/16 20:37:31 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_internal.h"
 #include "token.h"
 
-t_token	*tokenize_operators(t_lexer *lexer)
+static t_token	*tokenize_operators(t_lexer *lexer)
 {
 	if (consume_input(lexer, "&&"))
 		return (new_token(TK_AND, get_input_snapshot(lexer), 2));
@@ -29,6 +29,10 @@ t_token	*tokenize_operators(t_lexer *lexer)
 		return (new_token(TK_REDIRECT_APPEND, get_input_snapshot(lexer), 2));
 	else if (consume_input(lexer, ">"))
 		return (new_token(TK_REDIRECT_OUT, get_input_snapshot(lexer), 1));
+	else if (consume_input(lexer, "("))
+		return (new_token(TK_LPAREN, get_input_snapshot(lexer), 1));
+	else if (consume_input(lexer, ")"))
+		return (new_token(TK_RPAREN, get_input_snapshot(lexer), 1));
 	else
 	{
 		set_cur_token_type(lexer, TK_WORD);
@@ -37,7 +41,7 @@ t_token	*tokenize_operators(t_lexer *lexer)
 	}
 }
 
-void	get_next_token_helper(t_lexer *lexer)
+static void	get_next_token_helper(t_lexer *lexer)
 {
 	skip_whitespaces(lexer);
 	set_cur_token_type(lexer, TK_UNKNOWN);
@@ -45,7 +49,7 @@ void	get_next_token_helper(t_lexer *lexer)
 	reset_token_len(lexer);
 }
 
-void	tokenize_quotes(t_lexer *lexer)
+static void	tokenize_quotes(t_lexer *lexer)
 {
 	if (!is_quoted(lexer))
 	{
@@ -57,10 +61,11 @@ void	tokenize_quotes(t_lexer *lexer)
 	read_char(lexer);
 }
 
-int	is_startwith_operator(t_lexer *lexer)
+static int	is_startwith_operator(t_lexer *lexer)
 {
 	return (peek_input(lexer, "&&") || peek_input(lexer, "|")
-		|| peek_input(lexer, "<") || peek_input(lexer, ">"));
+		|| peek_input(lexer, "<") || peek_input(lexer, ">")
+		|| peek_input(lexer, "(") || peek_input(lexer, ")"));
 }
 
 t_token	*get_next_token(t_lexer *lexer)

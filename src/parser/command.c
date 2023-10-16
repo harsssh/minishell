@@ -5,41 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/19 17:10:38 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 19:27:47 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/10/12 18:39:02 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/10/16 20:58:24 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-#include "ft_list.h"
 #include "parser_internal.h"
-#include "token.h"
-#include <stdlib.h>
 
-// io_redirect+ ( 'WORD' cmd_suffix? )?
-static t_ast_node	*parse_simple_command_helper(t_parser *parser)
+static void	*parse_command_helper(t_ast_node *node1, t_ast_node *node2)
 {
-	t_list		*redirects;
-	t_ast_node	*node;
-
-	redirects = parse_redirects(parser);
-	if (redirects == NULL)
-		return (NULL);
-	if (peek_token(parser, TK_WORD))
-		node = parse_word_cmd_suffix(parser);
-	else
-		node = new_ast_node(N_COMMAND, NULL, NULL);
-	set_node_redirects(node, redirects);
-	return (node);
+	destroy_node(node1);
+	destroy_node(node2);
+	return (NULL);
 }
 
-t_ast_node	*parse_simple_command(t_parser *parser)
+t_ast_node	*parse_command(t_parser *parser)
 {
-	if (peek_redirect(parser))
-		return (parse_simple_command_helper(parser));
-	if (peek_token(parser, TK_WORD))
-		return (parse_word_cmd_suffix(parser));
-	if (peek_token(parser, TK_EOF))
-		return (new_ast_node(N_COMMAND, NULL, NULL));
-	return (NULL);
+	t_ast_node	*node;
+	t_ast_node	*lhs;
+
+	if (consume_token(parser, TK_LPAREN))
+	{
+		lhs = parse_and_or(parser);
+		if (lhs == NULL)
+			return (parse_command_helper(lhs, NULL));
+		node = new_ast_node(N_SUBSHELL, lhs, NULL);
+		if (node == NULL)
+			return (parse_command_helper(lhs, node));
+		if (!consume_token(parser, TK_RPAREN))
+			return (parse_command_helper(node, NULL));
+		if (peek_redirect(parser))
+		{
+			node->redirects = parse_redirects(parser);
+			if (node->redirects == NULL)
+			{
+				destroy_node(node);
+				return (NULL);
+			}
+		}
+		return (node);
+	}
+	return (parse_simple_command(parser));
 }

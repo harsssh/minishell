@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 21:50:31 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/10 17:23:16 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/12 19:21:33 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,14 @@ char	*parse_word(t_parser *parser)
 	word = get_token_literal(token);
 	if (token == NULL || word == NULL)
 		return (NULL);
+	word = ft_strdup(word);
+	if (word == NULL)
+		return (NULL);
 	eat_token(parser);
 	return (word);
 }
 
-static int	parse_cmd_suffix_helper_redreict(t_parser *parser, t_ast_node *node)
+static int	parse_cmd_suffix_helper_redirect(t_parser *parser, t_ast_node *node)
 {
 	t_redirect	*redirect;
 
@@ -53,7 +56,7 @@ static int	parse_cmd_suffix_helper(t_parser *parser,
 	if (peek_redirect(parser))
 	{
 		*flag = true;
-		if (parse_cmd_suffix_helper_redreict(parser, node))
+		if (parse_cmd_suffix_helper_redirect(parser, node))
 			return (EXIT_FAILURE);
 	}
 	else if (peek_token(parser, TK_WORD))
@@ -100,12 +103,15 @@ t_ast_node	*parse_word_cmd_suffix(t_parser *parser)
 	if (node == NULL)
 		return (NULL);
 	command_name = parse_word(parser);
-	if (command_name == NULL
-		|| add_node_argv(node, command_name)
-		|| ((peek_token(parser, TK_WORD) || peek_redirect(parser))
-			&& parse_cmd_suffix(parser, node)))
+	if (command_name == NULL || add_node_argv(node, command_name))
 	{
 		destroy_node(node);
+		free(command_name);
+		return (NULL);
+	}
+	if ((peek_token(parser, TK_WORD) || peek_redirect(parser))
+		&& parse_cmd_suffix(parser, node))
+	{
 		free(command_name);
 		return (NULL);
 	}

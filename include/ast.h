@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/09 22:22:01 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/16 21:12:29 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
  */
 typedef enum e_ast_node_type
 {
+	N_SUBSHELL,
 	N_COMMAND,
 	N_AND,
 	N_OR,
@@ -78,7 +79,7 @@ typedef struct s_redirect
 	char			*filename;
 }	t_redirect;
 
-int	execute_ast(t_context *ctx, t_ast_node *ast);
+int			execute_ast(t_context *ctx, t_ast_node *ast);
 
 t_ast_node	*new_ast_node(t_ast_node_type type,
 				t_ast_node *left, t_ast_node *right);
