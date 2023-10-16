@@ -1,10 +1,10 @@
+#include "compare_ast.hpp"
 #include "ast_builder.hpp"
 
 ASTBuilder::ASTBuilder(t_ast_node_type rootType) : ast(createNode(rootType)), current(ast) {}
 
 // 引数を現在のノードに追加
 ASTBuilder &ASTBuilder::addArgument(const char *arg) {
-	if (current->type != N_COMMAND) return *this; // Ensure we're adding arguments to command nodes only
 	t_list *list = (current->argv) ? current->argv : ft_list_create();
 	ft_list_push_back(list, strdup(arg));
 	current->argv = list;
@@ -13,7 +13,6 @@ ASTBuilder &ASTBuilder::addArgument(const char *arg) {
 
 // リダイレクトを現在のノードに追加
 ASTBuilder &ASTBuilder::addRedirect(t_redirect_type type, const char *filename) {
-	if (current->type != N_COMMAND) return *this; // Ensure we're adding redirects to command nodes only
 	auto *redirect = new t_redirect();
 	redirect->type = type;
 	redirect->filename = strdup(filename);
@@ -94,4 +93,9 @@ t_ast_node *ASTBuilder::createNode(t_ast_node_type type) {
 	memset(node, 0, sizeof(t_ast_node)); // Initialize all members to 0/NULL
 	node->type = type;
 	return node;
+}
+
+bool ASTBuilder::operator==(t_ast_node *node) const
+{
+	return compareASTNodes(ast, node);
 }

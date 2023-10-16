@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/21 20:38:12 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/16 21:12:29 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
  */
 typedef enum e_ast_node_type
 {
+	N_SUBSHELL,
 	N_COMMAND,
 	N_AND,
 	N_OR,
@@ -78,6 +79,20 @@ typedef struct s_redirect
 	char			*filename;
 }	t_redirect;
 
-int	execute_ast(t_context *ctx, t_ast_node *ast);
+int			execute_ast(t_context *ctx, t_ast_node *ast);
+
+t_ast_node	*new_ast_node(t_ast_node_type type,
+				t_ast_node *left, t_ast_node *right);
+t_redirect	*new_redirect(t_redirect_type type, char *filename);
+void		destroy_node(t_ast_node *node);
+void		destroy_redirect(t_redirect *redirect);
+t_list		*get_node_argv(t_ast_node *node);
+t_list		*get_node_redirects(t_ast_node *node);
+int			add_node_argv(t_ast_node *node, char *arg);
+int			add_node_redirect(t_ast_node *node, t_redirect *redirect);
+void		set_node_redirects(t_ast_node *node, t_list *redirects);
+void		set_redirect_filename(t_redirect *redirect, char *filename);
+void		set_node_argv(t_ast_node *node, t_list *argv);
+int			append_node_argv(t_ast_node *node, t_list *words);
 
 #endif

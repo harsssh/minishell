@@ -53,8 +53,14 @@ gtest_discover_tests(test_join_path)
 add_executable(test_canonicalize_absolute_path canonicalize_absolute_path.cpp $<TARGET_OBJECTS:src_obj>)
 gtest_discover_tests(test_canonicalize_absolute_path)
 
-add_executable(test_execute_ast execute_ast.cpp utils/ast_builder.cpp $<TARGET_OBJECTS:src_obj>)
+add_executable(test_execute_ast execute_ast.cpp utils/compare_ast.cpp utils/ast_builder.cpp $<TARGET_OBJECTS:src_obj>)
 gtest_discover_tests(test_execute_ast)
 
 add_executable(test_get_environ get_environ.cpp $<TARGET_OBJECTS:src_obj>)
 gtest_discover_tests(test_get_environ)
+
+add_executable(test_lexer lexer.cpp utils/compare_list.cpp $<TARGET_OBJECTS:src_obj>)
+gtest_discover_tests(test_lexer)
+
+add_executable(test_parser parser.cpp utils/ast_builder.cpp utils/compare_ast.cpp $<TARGET_OBJECTS:src_obj>)
+gtest_discover_tests(test_parser)
