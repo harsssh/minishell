@@ -6,12 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:28:27 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/16 22:28:40 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/16 22:45:39 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "context.h"
+#include <parser.h>
 #include "sig.h"
 #include "variables.h"
 #include <stdio.h>
@@ -29,6 +30,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_context	ctx;
+	t_ast_node	*ast;
 
 	(void)argc;
 	init_shell(&ctx, argv, envp);
@@ -39,7 +41,13 @@ int	main(int argc, char **argv, char **envp)
 		if (line == NULL)
 			exit(EXIT_SUCCESS);
 		if (*line != '\0')
+		{
 			add_history(line);
+			ast = parse(line, &ctx);
+			if (ast != NULL)
+				execute_ast(&ctx, ast);
+			destroy_node(ast);
+		}
 		free(line);
 	}
 }
