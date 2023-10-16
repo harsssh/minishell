@@ -6,30 +6,37 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 14:17:25 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/16 00:44:23 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:53:01 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "builtins_internal.h"
+#include "libft.h"
 #include <errno.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-static const char	**skip_options(const char **args, bool *newline)
+static const char	**load_options(const char **args, bool *newline)
 {
-	const char	*str;
+	t_getopt_status	status;
+	char			c;
 
 	*newline = true;
-	while (args && *args && **args == '-')
+	init_get_next_option();
+	while (*args)
 	{
-		str = *args;
-		while (*(++str) == 'n')
-			;
-		if ((*args)[1] == '\0' || *str != '\0')
+		status = get_next_option(*args, "n", &c);
+		while (status == OPT_SUCCESS)
+		{
+			if (c == 'n')
+				*newline = false;
+			status = get_next_option(NULL, "n", &c);
+		}
+		if (status == OPT_ILLEGAL)
+			*newline = true;
+		if (status != OPT_END_OF_ARG)
 			break ;
-		*newline = false;
 		++args;
 	}
 	return (args);
@@ -37,9 +44,9 @@ static const char	**skip_options(const char **args, bool *newline)
 
 static void	print_args(const char **args, bool newline)
 {
-	while (args && *args)
+	while (*args)
 	{
-		ft_putstr_fd((char *)*args, STDOUT_FILENO);
+		ft_putstr_fd((char *)(*args), STDOUT_FILENO);
 		++args;
 		if (*args)
 			ft_putchar_fd(' ', STDOUT_FILENO);
@@ -52,7 +59,7 @@ int	builtins_echo(t_context *ctx, const char **args)
 {
 	bool	newline;
 
-	args = skip_options(args, &newline);
+	args = load_options(args, &newline);
 	errno = 0;
 	print_args(args, newline);
 	if (errno)
