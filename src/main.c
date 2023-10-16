@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+
-	+#+        */
+/*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/11 10:03:58 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/30 15:49:25 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/10/16 22:28:27 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/10/16 22:28:40 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +40,6 @@ int	rl_hook_func(void)
 	return (EXIT_SUCCESS);
 }
 
-#include "ast.h"
-#include "parser.h"
 int	main(void)
 {
 	char	*line;
@@ -58,8 +55,6 @@ int	main(void)
 			exit(EXIT_SUCCESS);
 		if (*line != '\0')
 			add_history(line);
-		t_ast_node *ast = parse(line, NULL);
-		(void)ast;
 		free(line);
 	}
 }
