@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/10 17:22:28 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/16 23:01:42 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,15 @@
 
 static int	open_here_doc(t_redirect *redirect)
 {
-	int	fd;
+	char	*filename;
+	int		fd;
 
 	if (redirect == NULL)
 		return (-1);
-	set_redirect_filename(redirect, "/tmp/here-doc.minishell");
+	filename = ft_strdup("/tmp/here-doc.minishell");
+	if (filename == NULL)
+		return (-1);
+	set_redirect_filename(redirect, filename);
 	fd = open("/tmp/here-doc.minishell",
 			O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
 	if (fd == -1)
