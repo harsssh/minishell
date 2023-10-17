@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 02:57:58 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/16 02:58:15 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/17 18:21:20 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,11 @@ static void	init_context(t_context *ctx, char **argv, char **envp)
 void	init_shell(t_context *ctx, char **argv, char **envp)
 {
 	init_context(ctx, argv, envp);
-	rl_outstream = stderr;
-	rl_event_hook = rl_hook_func;
+	if (ctx->is_interactive)
+	{
+		rl_outstream = stderr;
+		rl_event_hook = rl_hook_func;
+	}
 }
 
 void	init_loop(t_context *ctx)
