@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:22 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 02:08:06 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/17 18:45:15 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,17 @@
 #include "exec_internal.h"
 #include <stdlib.h>
 
-typedef int	(*t_ast_handler)(t_context *, t_pipeline_info *, t_ast_node *);
-
-static t_ast_handler	get_ast_handler(t_ast_node_type type)
-{
-	if (type == N_COMMAND)
-		return (handle_command);
-	else if (type == N_AND || type == N_OR)
-		return (handle_and_or);
-	else if (type == N_PIPE)
-		return (handle_pipeline);
-	else
-		return (NULL);
-}
-
 int	execute_ast_impl(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
-	t_ast_handler	handler;
-
-	handler = get_ast_handler(ast->type);
-	if (handler == NULL)
-		return (EXIT_FAILURE);
-	return (handler(ctx, info, ast));
+	if (ast->type == N_COMMAND)
+		return (handle_command(ctx, info, ast));
+	else if (ast->type == N_AND || ast->type == N_OR)
+		return (handle_and_or(ctx, info, ast));
+	else if (ast->type == N_PIPE)
+		return (handle_pipeline(ctx, info, ast));
+	else if (ast->type == N_SUBSHELL)
+		return (handle_subshell(ctx, info, ast));
+	return (EXIT_FAILURE);
 }
 
 int	execute_ast(t_context *ctx, t_ast_node *ast)
