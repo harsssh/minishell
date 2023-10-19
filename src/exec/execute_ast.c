@@ -16,6 +16,8 @@
 
 int	execute_ast_impl(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
+	if (ast == NULL)
+		return (EXIT_SUCCESS);
 	if (ast->type == N_COMMAND)
 		return (handle_command(ctx, info, ast));
 	else if (ast->type == N_AND || ast->type == N_OR)
@@ -32,6 +34,8 @@ int	execute_ast(t_context *ctx, t_ast_node *ast)
 	t_pipeline_info	*info;
 	int				ret;
 
+	if (ast == NULL)
+		return (EXIT_SUCCESS);
 	info = new_pipeline_info();
 	if (info == NULL)
 		return (EXIT_FAILURE);
