@@ -31,6 +31,7 @@ typedef enum e_ast_node_type
 	N_AND,
 	N_OR,
 	N_PIPE,
+	N_SEMICOLON,
 }	t_ast_node_type;
 
 /**

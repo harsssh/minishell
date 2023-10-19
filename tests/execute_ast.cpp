@@ -378,6 +378,114 @@ TEST_F(TestExecuteAST, subshell_exit) {
 	ASSERT_EQ(ctx.last_exit_status, 42);
 }
 
+// echo hello; echo world
+TEST_F(TestExecuteAST, semicolon) {
+	auto *ast = ASTBuilder(N_SEMICOLON)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_SEMICOLON
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("world")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "hello\nworld\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// echo 1; echo 2; echo 3
+TEST_F(TestExecuteAST, semicolon_chain) {
+	auto *ast = ASTBuilder(N_SEMICOLON)
+			.moveToLeft(N_SEMICOLON)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("1")
+			.moveToParent() // N_SEMICOLON
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("2")
+			.moveToRoot() // N_SEMICOLON (root)
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("3")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "1\n2\n3\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// and, semicolon
+// echo hello && echo world; echo ok
+TEST_F(TestExecuteAST, and_semicolon) {
+	auto *ast = ASTBuilder(N_SEMICOLON)
+			.moveToLeft(N_AND)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_AND
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("world")
+			.moveToRoot()
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("ok")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "hello\nworld\nok\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// pipe, semicolon
+// echo hello | cat; echo ok
+TEST_F(TestExecuteAST, pipe_semicolon) {
+	auto *ast = ASTBuilder(N_SEMICOLON)
+			.moveToLeft(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_PIPE
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.moveToRoot() // N_SEMICOLON
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("ok")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "hello\nok\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// subshell, semicolon
+// (echo hello && echo world); echo ok
+TEST_F(TestExecuteAST, subshell_semicolon) {
+	auto *ast = ASTBuilder(N_SEMICOLON)
+			.moveToLeft(N_SUBSHELL)
+			.moveToLeft(N_AND)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_AND
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("world")
+			.moveToRoot() // N_SEMICOLON
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("ok")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "hello\nworld\nok\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// semicolon in subshell
+// (echo hello; echo world)
+TEST_F(TestExecuteAST, semicolon_in_subshell) {
+	auto *ast = ASTBuilder(N_SUBSHELL)
+			.moveToLeft(N_SEMICOLON)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_SEMICOLON
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("world")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "hello\nworld\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
 // TODO: other built-in commands
 // TODO: redirect
 // TODO: check error message
