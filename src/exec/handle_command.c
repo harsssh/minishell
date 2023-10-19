@@ -88,7 +88,11 @@ static int	execute_builtin(t_context *ctx, t_pipeline_info *info,
 	saved_stdin_fd = dup(STDIN_FILENO);
 	saved_stdout_fd = dup(STDOUT_FILENO);
 	if (configure_io(ctx, info, ast->redirects) == EXIT_FAILURE)
+	{
+		close(saved_stdin_fd);
+		close(saved_stdout_fd);
 		return (EXIT_FAILURE);
+	}
 	ctx->last_exit_status = call_builtin_func(ctx, func, ast->argv);
 	dup2(saved_stdin_fd, STDIN_FILENO);
 	dup2(saved_stdout_fd, STDOUT_FILENO);

@@ -39,6 +39,7 @@ static t_proc_state	handle_double_dot(t_proc_state s)
 	if (s.check_existence && !is_existing_directory(s.result))
 	{
 		free(s.result);
+		s.cur = NULL;
 		return (s);
 	}
 	prev_slash = ft_strrchr(s.result, '/');
