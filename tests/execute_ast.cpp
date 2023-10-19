@@ -290,6 +290,94 @@ TEST_F(TestExecuteAST, pipe_or_pipe) {
 	ASSERT_EQ(ctx.last_exit_status, 0);
 }
 
+// (echo hello)
+TEST_F(TestExecuteAST, subshell_single_command) {
+	auto *ast = ASTBuilder(N_SUBSHELL)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "hello\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// (echo hello && echo world) | cat
+TEST_F(TestExecuteAST, subshell_and_pipe) {
+	auto *ast = ASTBuilder(N_PIPE)
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.moveToParent() // N_PIPE
+			.moveToLeft(N_SUBSHELL)
+			.moveToLeft(N_AND)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_AND
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("world")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "hello\nworld\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+
+// (echo hello | tr a-z A-Z) | cat
+TEST_F(TestExecuteAST, subshell_pipe_inside) {
+	auto *ast = ASTBuilder(N_PIPE)
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.moveToParent() // N_PIPE
+			.moveToLeft(N_SUBSHELL)
+			.moveToLeft(N_PIPE)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_PIPE
+			.moveToRight(N_COMMAND).addArgument("tr").addArgument("a-z").addArgument("A-Z")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+
+	ASSERT_EQ(output, "HELLO\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// ((echo hello && echo world) | tr a-z A-Z) | cat
+TEST_F(TestExecuteAST, subshell_and_pipe_inside) {
+	auto *ast = ASTBuilder(N_PIPE)
+			.moveToRight(N_COMMAND).addArgument("cat")
+			.moveToParent() // N_PIPE
+			.moveToLeft(N_SUBSHELL)
+			.moveToLeft(N_PIPE)
+			.moveToRight(N_COMMAND).addArgument("tr").addArgument("a-z").addArgument("A-Z")
+			.moveToParent() // N_PIPE
+			.moveToLeft(N_SUBSHELL)
+			.moveToLeft(N_AND)
+			.moveToLeft(N_COMMAND).addArgument("echo").addArgument("hello")
+			.moveToParent() // N_AND
+			.moveToRight(N_COMMAND).addArgument("echo").addArgument("world")
+			.getAST();
+
+	testing::internal::CaptureStdout();
+	execute_ast(&ctx, ast);
+	auto output = testing::internal::GetCapturedStdout();
+	ASSERT_EQ(output, "HELLO\nWORLD\n");
+	ASSERT_EQ(ctx.last_exit_status, 0);
+}
+
+// (exit 42)
+TEST_F(TestExecuteAST, subshell_exit) {
+	auto *ast = ASTBuilder(N_SUBSHELL)
+			.moveToLeft(N_COMMAND).addArgument("exit").addArgument("42")
+			.getAST();
+
+	execute_ast(&ctx, ast);
+	ASSERT_EQ(ctx.last_exit_status, 42);
+}
+
 // TODO: other built-in commands
 // TODO: redirect
 // TODO: check error message
