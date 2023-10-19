@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 18:35:21 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/16 02:02:59 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/17 18:45:36 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int				handle_command(t_context *ctx, t_pipeline_info *info,
 int				handle_and_or(t_context *ctx, t_pipeline_info *info,
 					t_ast_node *ast);
 int				handle_pipeline(t_context *ctx, t_pipeline_info *info,
+					t_ast_node *ast);
+int				handle_subshell(t_context *ctx, t_pipeline_info *info,
 					t_ast_node *ast);
 
 // execvp.c
