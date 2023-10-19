@@ -33,12 +33,11 @@ static t_token	*tokenize_operators(t_lexer *lexer)
 		return (new_token(TK_LPAREN, get_input_snapshot(lexer), 1));
 	else if (consume_input(lexer, ")"))
 		return (new_token(TK_RPAREN, get_input_snapshot(lexer), 1));
-	else
-	{
-		set_cur_token_type(lexer, TK_WORD);
-		read_char(lexer);
-		return (NULL);
-	}
+	else if (consume_input(lexer, ";"))
+		return (new_token(TK_SEMICOLON, get_input_snapshot(lexer), 1));
+	set_cur_token_type(lexer, TK_WORD);
+	read_char(lexer);
+	return (NULL);
 }
 
 static void	get_next_token_helper(t_lexer *lexer)
@@ -65,7 +64,8 @@ static int	is_startwith_operator(t_lexer *lexer)
 {
 	return (peek_input(lexer, "&&") || peek_input(lexer, "|")
 		|| peek_input(lexer, "<") || peek_input(lexer, ">")
-		|| peek_input(lexer, "(") || peek_input(lexer, ")"));
+		|| peek_input(lexer, "(") || peek_input(lexer, ")")
+		|| peek_input(lexer, ";"));
 }
 
 t_token	*get_next_token(t_lexer *lexer)
