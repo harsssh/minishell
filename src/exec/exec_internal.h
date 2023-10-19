@@ -63,7 +63,7 @@ int				configure_io(t_context *ctx, t_pipeline_info *info,
 // pipeline_info.c
 t_pipeline_info	*new_pipeline_info(void);
 void			destroy_pipeline_info(t_pipeline_info *info);
-void			push_fd_close_list(t_list *fd_close_list, int fd);
+int				push_fd_close_list(t_list *fd_close_list, int fd);
 int				pop_fd_close_list(t_list *fd_close_list);
 
 #endif

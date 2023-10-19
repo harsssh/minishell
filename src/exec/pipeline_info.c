@@ -39,13 +39,16 @@ void	destroy_pipeline_info(t_pipeline_info *info)
 	free(info);
 }
 
-void	push_fd_close_list(t_list *fd_close_list, int fd)
+int	push_fd_close_list(t_list *fd_close_list, int fd)
 {
 	int	*fd_ptr;
 
 	fd_ptr = malloc(sizeof(int));
+	if (fd_ptr == NULL)
+		return (-1);
 	*fd_ptr = fd;
 	ft_list_push_back(fd_close_list, fd_ptr);
+	return (fd);
 }
 
 int	pop_fd_close_list(t_list *fd_close_list)
