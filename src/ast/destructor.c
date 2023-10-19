@@ -30,4 +30,5 @@ void	destroy_node(t_ast_node *node)
 	destroy_node(node->right);
 	ft_list_destroy(node->argv, free);
 	ft_list_destroy(node->redirects, (void (*)(void *data))destroy_redirect);
+	free(node);
 }
