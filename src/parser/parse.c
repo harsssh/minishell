@@ -14,7 +14,6 @@
 #include "parser_internal.h"
 #include "ast.h"
 #include "token.h"
-#include "lexer.h"
 
 t_ast_node	*parse(const char *input, t_context *ctx)
 {
@@ -29,7 +28,7 @@ t_ast_node	*parse(const char *input, t_context *ctx)
 	free(trimmed_input);
 	if (parser == NULL)
 		return (NULL);
-	result = parse_and_or(parser);
+	result = parse_complete_command(parser);
 	if (!is_eof(parser))
 	{
 		destroy_parser(parser);
