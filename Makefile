@@ -17,7 +17,7 @@ DEBUG_FLAGS := -g -O0 -fsanitize=address
 
 INCLUDES := -Iinclude -Isrc -Ilibft/include -Ireadline/include
 
-LDFLAGS := -Llibft -Lreadline/lib -Wl,-no_compact_unwind
+LDFLAGS := -Llibft -Lreadline/lib
 # Add linker flags for macOS to avoid 'could not create compact unwind' warnings
 ifeq ($(shell uname -s),Darwin)
 	LDFLAGS += -Wl,-no_compact_unwind
