@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 19:16:15 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 23:55:08 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/19 02:29:00 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,19 @@ bool compareTokenStream(t_list *got, vector<pair<t_token_type, const char *>> ex
 		if (top->type != expect_type)
 			return false;
 		if (strcmp(top->literal, expect_literal) != 0)
+			return false;
+	}
+	return true;
+}
+
+bool compareStrList(t_list *got, vector<const char *> expect)
+{
+	if (got->size != expect.size())
+		return false;
+	for (auto expect_literal : expect)
+	{
+		auto top = (char *)ft_list_pop_front(got);
+		if (strcmp(top, expect_literal) != 0)
 			return false;
 	}
 	return true;

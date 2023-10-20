@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 07:21:03 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/22 14:07:48 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/16 23:48:04 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,7 @@ void	ft_list_clear(t_list *list, void (*del)(void *));
 
 void	ft_list_iter(t_list *list, void (*f)(void *data));
 void	ft_list_iter_enumerate(t_list *list, void (*f)(size_t i, void *data));
+
+t_list	*ft_list_append(t_list *l1, t_list *l2);
 
 #endif

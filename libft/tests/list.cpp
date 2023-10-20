@@ -326,3 +326,91 @@ TEST(ft_list_iter_enumerate, normal) {
 	ASSERT_TRUE(*(int *) list->tail->prev->data == 143);
 	ASSERT_TRUE(*(int *) list->tail->prev->prev->data == 42);
 }
+
+// append
+TEST(ft_list_append, normal) {
+	int data1[3] = {42, 43, 44};
+	int data2[3] = {45, 46, 47};
+
+	t_list *list1;
+	t_list *list2;
+
+	list1 = ft_list_create();
+	list2 = ft_list_create();
+	for (int &i: data1)
+		ft_list_push_back(list1, &i);
+	for (int &i: data2)
+		ft_list_push_back(list2, &i);
+	ft_list_append(list1, list2);
+	ASSERT_TRUE(list1->head != nullptr);
+	ASSERT_TRUE(list1->tail != nullptr);
+	ASSERT_TRUE(list1->size == 6);
+	ASSERT_TRUE(*(int *) list1->head->data == 42);
+	ASSERT_TRUE(*(int *) list1->head->next->data == 43);
+	ASSERT_TRUE(*(int *) list1->head->next->next->data == 44);
+	ASSERT_TRUE(*(int *) list1->head->next->next->next->data == 45);
+	ASSERT_TRUE(*(int *) list1->head->next->next->next->next->data == 46);
+	ASSERT_TRUE(*(int *) list1->head->next->next->next->next->next->data == 47);
+	ASSERT_TRUE(*(int *) list1->tail->data == 47);
+	ASSERT_TRUE(*(int *) list1->tail->prev->data == 46);
+	ASSERT_TRUE(*(int *) list1->tail->prev->prev->data == 45);
+	ASSERT_TRUE(*(int *) list1->tail->prev->prev->prev->data == 44);
+	ASSERT_TRUE(*(int *) list1->tail->prev->prev->prev->prev->data == 43);
+	ASSERT_TRUE(*(int *) list1->tail->prev->prev->prev->prev->prev->data == 42);
+}
+
+TEST(ft_list_append, normal_empty) {
+	int data1[3] = {42, 43, 44};
+
+	t_list *list1;
+	t_list *list2;
+
+	list1 = ft_list_create();
+	list2 = ft_list_create();
+	for (int &i: data1)
+		ft_list_push_back(list1, &i);
+	ft_list_append(list1, list2);
+	ASSERT_TRUE(list1->head != nullptr);
+	ASSERT_TRUE(list1->tail != nullptr);
+	ASSERT_TRUE(list1->size == 3);
+	ASSERT_TRUE(*(int *) list1->head->data == 42);
+	ASSERT_TRUE(*(int *) list1->head->next->data == 43);
+	ASSERT_TRUE(*(int *) list1->head->next->next->data == 44);
+	ASSERT_TRUE(*(int *) list1->tail->data == 44);
+	ASSERT_TRUE(*(int *) list1->tail->prev->data == 43);
+	ASSERT_TRUE(*(int *) list1->tail->prev->prev->data == 42);
+}
+
+TEST(ft_list_append, empty_normal) {
+	int data2[3] = {45, 46, 47};
+
+	t_list *list1;
+	t_list *list2;
+
+	list1 = ft_list_create();
+	list2 = ft_list_create();
+	for (int &i: data2)
+		ft_list_push_back(list2, &i);
+	ft_list_append(list1, list2);
+	ASSERT_TRUE(list1->head != nullptr);
+	ASSERT_TRUE(list1->tail != nullptr);
+	ASSERT_TRUE(list1->size == 3);
+	ASSERT_TRUE(*(int *) list1->head->data == 45);
+	ASSERT_TRUE(*(int *) list1->head->next->data == 46);
+	ASSERT_TRUE(*(int *) list1->head->next->next->data == 47);
+	ASSERT_TRUE(*(int *) list1->tail->data == 47);
+	ASSERT_TRUE(*(int *) list1->tail->prev->data == 46);
+	ASSERT_TRUE(*(int *) list1->tail->prev->prev->data == 45);
+}
+
+TEST(ft_list_append, empty_empty) {
+	t_list *list1;
+	t_list *list2;
+
+	list1 = ft_list_create();
+	list2 = ft_list_create();
+	ft_list_append(list1, list2);
+	ASSERT_TRUE(list1->head == nullptr);
+	ASSERT_TRUE(list1->tail == nullptr);
+	ASSERT_TRUE(list1->size == 0);
+}
