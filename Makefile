@@ -10,23 +10,26 @@ LIBREADLINE := readline/lib/libreadline.a
 
 CFLAGS := -Wall -Wextra -Werror
 
-# Flags for building in release mode (optimizations enabled)
+# Flags for release build (optimizations enabled)
 RELEASE_FLAGS := -O3
-# Flags for building in debug mode (no optimizations, with sanitizer)
+# Flags for debug build (no optimizations, with sanitizer)
 DEBUG_FLAGS := -g -O0 -fsanitize=address
 
 INCLUDES := -Iinclude -Isrc -Ilibft/include -Ireadline/include
 
-# `-no_compact_unwind` flag prevents 'could not create compact unwind' warnings
 LDFLAGS := -Llibft -Lreadline/lib -Wl,-no_compact_unwind
+# Add linker flags for macOS to avoid 'could not create compact unwind' warnings
+ifeq ($(shell uname -s),Darwin)
+	LDFLAGS += -Wl,-no_compact_unwind
+endif
 LDLIBS := -lft -lreadline -lncurses
 
-# Flags to generate dependency files during compilation
+# Flags to generate dependency files
 DEPFLAGS = -MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.d
 
-SRC:=$(shell find $(SRC_DIR) -name '*.c')
-OBJ:=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC))
-DEP:=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.d,$(SRC))
+SRC := $(shell find $(SRC_DIR) -name '*.c')
+OBJ := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC))
+DEP := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.d,$(SRC))
 
 .PHONY: all
 all: CFLAGS+=$(RELEASE_FLAGS)
