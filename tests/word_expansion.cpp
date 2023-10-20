@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/20 13:54:51 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/29 18:49:58 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,6 @@ TEST(split_word, double_quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
  
-
 TEST(expand_word, normal)
 {
 	auto input = "$a";
