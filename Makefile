@@ -9,8 +9,6 @@ LIBFT := libft/libft.a
 LIBREADLINE := readline/lib/libreadline.a
 
 CFLAGS := -Wall -Wextra -Werror
-# Linker flag to prevent 'could not create compact unwind' warnings
-CFLAGS_LINKER := -Wl,-no_compact_unwind
 
 # Flags for building in release mode (optimizations enabled)
 RELEASE_FLAGS := -O3
@@ -19,8 +17,9 @@ DEBUG_FLAGS := -g -O0 -fsanitize=address
 
 INCLUDES := -Iinclude -Isrc -Ilibft/include -Ireadline/include
 
-LDFLAGS := -Llibft -Lreadline/lib
-LDLIBS := -lft -lreadline -ltermcap
+# `-no_compact_unwind` flag prevents 'could not create compact unwind' warnings
+LDFLAGS := -Llibft -Lreadline/lib -Wl,-no_compact_unwind
+LDLIBS := -lft -lreadline -lncurses
 
 # Flags to generate dependency files during compilation
 DEPFLAGS = -MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.d
@@ -38,7 +37,7 @@ debug: CFLAGS+=$(DEBUG_FLAGS)
 debug: $(NAME)
 
 $(NAME): $(LIBFT) $(LIBREADLINE) $(OBJ)
-	$(CC) $(CFLAGS) $(CFLAGS_LINKER) $(INCLUDES) $(LDFLAGS) $(LDLIBS) -o $@ $^
+	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
