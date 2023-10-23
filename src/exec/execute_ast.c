@@ -26,6 +26,8 @@ int	execute_ast_impl(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 		return (handle_pipeline(ctx, info, ast));
 	else if (ast->type == N_SUBSHELL)
 		return (handle_subshell(ctx, info, ast));
+	else if (ast->type == N_SEMICOLON)
+		return (handle_semicolon(ctx, info, ast));
 	return (EXIT_FAILURE);
 }
 

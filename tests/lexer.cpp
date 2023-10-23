@@ -283,3 +283,83 @@ TEST(lexer, subshell)
 		{TK_RPAREN, ")"},
 		{TK_EOF, ""}}));
 }
+
+// semicolon
+TEST(lexer, semicolon)
+{
+	char *input = "cmd1;cmd2;cmd3";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cmd1"},
+		{TK_SEMICOLON, ";"},
+		{TK_WORD, "cmd2"},
+		{TK_SEMICOLON, ";"},
+		{TK_WORD, "cmd3"},
+		{TK_EOF, ""}}));
+}
+
+// and, semicolon
+TEST(lexer, and_semicolon)
+{
+	char *input = "cmd1&&cmd2;cmd3";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cmd1"},
+		{TK_AND, "&&"},
+		{TK_WORD, "cmd2"},
+		{TK_SEMICOLON, ";"},
+		{TK_WORD, "cmd3"},
+		{TK_EOF, ""}}));
+}
+
+// pipe, semicolon
+TEST(lexer, pipe_semicolon)
+{
+	char *input = "cmd1|cmd2;cmd3";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "cmd1"},
+		{TK_PIPE, "|"},
+		{TK_WORD, "cmd2"},
+		{TK_SEMICOLON, ";"},
+		{TK_WORD, "cmd3"},
+		{TK_EOF, ""}}));
+}
+
+// subshell, semicolon
+TEST(lexer, subshell_semicolon)
+{
+	char *input = "(cmd1);cmd2";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_LPAREN, "("},
+		{TK_WORD, "cmd1"},
+		{TK_RPAREN, ")"},
+		{TK_SEMICOLON, ";"},
+		{TK_WORD, "cmd2"},
+		{TK_EOF, ""}}));
+}
+
+// semicolon in subshell
+TEST(lexer, semicolon_in_subshell)
+{
+	char *input = "(cmd1;cmd2)";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_LPAREN, "("},
+		{TK_WORD, "cmd1"},
+		{TK_SEMICOLON, ";"},
+		{TK_WORD, "cmd2"},
+		{TK_RPAREN, ")"},
+		{TK_EOF, ""}}));
+}

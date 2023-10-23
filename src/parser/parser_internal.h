@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:05:07 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/16 21:52:23 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/19 17:08:57 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,12 @@ t_ast_node		*parse_simple_command(t_parser *parser);
 t_ast_node		*parse_command(t_parser *parser);
 t_ast_node		*parse_pipeline(t_parser *parser);
 t_ast_node		*parse_and_or(t_parser *parser);
+t_ast_node		*parse_complete_command(t_parser *parser);
 t_redirect		*parse_here_doc(t_parser *parser);
 t_list			*expand_word(char *word, t_context *ctx, bool has_dollar,
 					bool is_expand);
 void			destroy_word(void *word);
 void			destroy_parser(t_parser *parser);
+void			*destroy_nodes_and_return_null(t_ast_node *n1, t_ast_node *n2);
 
 #endif

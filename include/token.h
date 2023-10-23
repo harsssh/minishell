@@ -28,7 +28,8 @@ typedef enum e_token_type
 	TK_REDIRECT_HERE_DOC,
 	TK_WORD,
 	TK_LPAREN,
-	TK_RPAREN
+	TK_RPAREN,
+	TK_SEMICOLON,
 }	t_token_type;
 
 typedef struct s_token

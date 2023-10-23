@@ -13,13 +13,6 @@
 #include "ast.h"
 #include "parser_internal.h"
 
-static void	*parse_command_helper(t_ast_node *node1, t_ast_node *node2)
-{
-	destroy_node(node1);
-	destroy_node(node2);
-	return (NULL);
-}
-
 t_ast_node	*parse_command(t_parser *parser)
 {
 	t_ast_node	*node;
@@ -27,14 +20,14 @@ t_ast_node	*parse_command(t_parser *parser)
 
 	if (consume_token(parser, TK_LPAREN))
 	{
-		lhs = parse_and_or(parser);
+		lhs = parse_complete_command(parser);
 		if (lhs == NULL)
-			return (parse_command_helper(lhs, NULL));
+			return (destroy_nodes_and_return_null(lhs, NULL));
 		node = new_ast_node(N_SUBSHELL, lhs, NULL);
 		if (node == NULL)
-			return (parse_command_helper(lhs, node));
+			return (destroy_nodes_and_return_null(lhs, node));
 		if (!consume_token(parser, TK_RPAREN))
-			return (parse_command_helper(node, NULL));
+			return (destroy_nodes_and_return_null(node, NULL));
 		if (peek_redirect(parser))
 		{
 			node->redirects = parse_redirects(parser);
