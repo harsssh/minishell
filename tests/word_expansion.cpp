@@ -6,6 +6,7 @@
 extern "C" {
 #include "word_expansion/word_expansion_internal.h"
 #include "context.h"
+#include "expansion.h"
 #include <fcntl.h>
 }
 

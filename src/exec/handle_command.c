@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/16 02:02:08 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/29 02:21:57 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "builtins.h"
 #include "context.h"
 #include "exec_internal.h"
+#include "expansion.h"
 #include "ft_list.h"
 #include "sig.h"
 #include "utils.h"
@@ -55,9 +56,6 @@ static void	child_routine(t_context *ctx, t_pipeline_info *info,
 	internal_execvp(ctx, ast->argv);
 	exit(EXIT_FAILURE);
 }
-
-// If `argv` is NULL, it indicates a situation like "> file",
-// which means there is no command to execute, so we exit with EXIT_SUCCESS.
 static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
@@ -101,14 +99,28 @@ static int	execute_builtin(t_context *ctx, t_pipeline_info *info,
 	return (EXIT_SUCCESS);
 }
 
+// When `argv` is NULL, it corresponds to scenarios like `> file`,
+// where there is no command to execute,
+// but redirection still needs to be handled
 int	handle_command(t_context *ctx, t_pipeline_info *info, t_ast_node *ast)
 {
 	t_builtin_func	func;
+	t_list			*expanded_argv;
 
+	if (ast->argv == NULL)
+		return (execute_command_in_child(ctx, info, ast, NULL));
+	expanded_argv = expand_word_list(ast->argv, ctx);
+	if (expanded_argv == NULL)
+		return (EXIT_FAILURE);
+	ft_list_destroy(ast->argv, free);
+	ast->argv = NULL;
+	if (expanded_argv->size > 0)
+		ast->argv = expanded_argv;
+	else
+		ft_list_destroy(expanded_argv, free);
+	func = NULL;
 	if (ast->argv != NULL)
 		func = get_builtin_func((char *)ast->argv->head->data);
-	else
-		func = NULL;
 	if (func != NULL && !is_in_pipeline(info))
 		return (execute_builtin(ctx, info, ast, func));
 	else
