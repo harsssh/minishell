@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 00:10:48 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/29 02:21:57 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/29 04:22:01 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	child_routine(t_context *ctx, t_pipeline_info *info,
 	internal_execvp(ctx, ast->argv);
 	exit(EXIT_FAILURE);
 }
+
 static int	execute_command_in_child(t_context *ctx, t_pipeline_info *info,
 		t_ast_node *ast, t_builtin_func func)
 {
