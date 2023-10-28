@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 17:41:51 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/16 21:12:29 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/28 15:28:23 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef enum e_redirect_type
 	REDIRECT_IN,
 	REDIRECT_OUT,
 	REDIRECT_APPEND,
-	REDIRECT_HERE_DOC
+	REDIRECT_HERE_DOC,
 }	t_redirect_type;
 
 /**

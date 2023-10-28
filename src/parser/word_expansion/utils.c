@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_word.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 23:57:53 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/20 13:48:47 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/10/20 13:48:14 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/10/20 13:48:48 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
-#include "context.h"
-#include "word_expansion_internal.h"
+#include <stdlib.h>
 
-// char * -> t_list<char *>
-t_list	*expand_word(const char *word, t_context *ctx)
+char	*join_char(char *str, const char **word)
 {
-	t_list	*res;
-	t_list	*tmp;
+	char	s[2];
+	char	*res;
 
-	res = expand_parameters(word, ctx);
-	if (res == NULL)
-		return (NULL);
-	tmp = res;
-	res = split_word(res);
-	ft_list_destroy(tmp, free);
-	if (res == NULL)
-		return (NULL);
-	tmp = res;
-	res = remove_quotes(res);
-	ft_list_destroy(tmp, free);
+	s[0] = **word;
+	s[1] = '\0';
+	res = ft_strjoin(str, s);
+	free(str);
+	(*word)++;
 	return (res);
 }
