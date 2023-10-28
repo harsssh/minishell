@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 00:03:47 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 18:49:24 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/11 16:47:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static char	*expand_paramters_helper(char *res, const char **word,
 	}
 	joined = ft_strjoin(res, param);
 	free(res);
+	free(param);
 	if (joined == NULL)
 	{
 		free(joined);

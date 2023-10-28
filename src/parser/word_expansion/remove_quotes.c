@@ -57,10 +57,10 @@ t_list	*remove_quotes(t_list *input)
 	{
 		tmp = ft_list_pop_front(input);
 		word = remove_quote(tmp);
+		free(tmp);
 		if (word == NULL || ft_list_push_back(res, word) == NULL)
 		{
 			free(word);
-			free(tmp);
 			ft_list_destroy(res, free);
 			return (NULL);
 		}
