@@ -204,7 +204,7 @@ TEST(split_word, double_quote)
 	auto input = "\"$a\"";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
-	vector<const char*> expected = {"  hello  world  "};
+	vector<const char*> expected = {"\"  hello  world  \""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
@@ -414,7 +414,7 @@ TEST(expand_word, single_double)
 {
 	auto input = "'\"$a\"'";
 	auto ctx = Context({}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_word(input, ctx);
 	auto expected = {"\"$a\""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -424,7 +424,7 @@ TEST(expand_word, double_single)
 {
 	auto input = "\"'$a'\"";
 	auto ctx = Context({{"a", "1"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_word(input, ctx);
 	auto expected = {"'1'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
