@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:22:22 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 11:00:36 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/30 03:30:45 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "word_expansion_internal.h"
+
+static void	destroy_dp(bool **dp, size_t height)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < height)
+		free(dp[i++]);
+	free(dp);
+}
 
 static bool	**calloc_2d_vector(size_t width, size_t height)
 {
@@ -29,12 +39,7 @@ static bool	**calloc_2d_vector(size_t width, size_t height)
 		vec[i] = ft_calloc(width, sizeof(bool));
 		if (vec[i] == NULL)
 		{
-			while (i > 0)
-			{
-				free(vec[i]);
-				i--;
-			}
-			free(vec);
+			destroy_dp(vec, height);
 			return (NULL);
 		}
 		i++;
@@ -67,10 +72,11 @@ static void	update_dp(t_match_table *table, char *text, char *pat)
 	}
 }
 
-bool	reg_is_match(char *text, char *pat, bool *is_failed)
+bool	reg_is_match(char *pat, char *text, bool *is_failed)
 {
 	t_match_table	table;
 	size_t			j;
+	bool			res;
 
 	table.text_len = ft_strlen(text);
 	table.pat_len = ft_strlen(pat);
@@ -88,5 +94,7 @@ bool	reg_is_match(char *text, char *pat, bool *is_failed)
 		j++;
 	}
 	update_dp(&table, text, pat);
-	return (table.dp[table.text_len][table.pat_len]);
+	res = table.dp[table.text_len][table.pat_len];
+	destroy_dp(table.dp, table.text_len + 1);
+	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 00:49:57 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 18:43:42 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/30 03:31:12 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static void	*destroy_and_return_null(char *s, t_list *l, DIR *d)
 	return (NULL);
 }
 
-static int	expand_filename_helper(char *filename, char *pat, t_list *res)
+static int	push_expanded_filename(char *filename, char *pat, t_list *res)
 {
 	bool	is_matching_failed;
 
-	if (reg_is_match(filename, pat, &is_matching_failed))
+	if (reg_is_match(pat, filename, &is_matching_failed))
 	{
 		filename = ft_strdup(filename);
 		if (filename == NULL || ft_list_push_back(res, filename) == NULL)
@@ -95,7 +95,7 @@ static t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
 	filename_node = cur_dir_filenames->head;
 	while (filename_node != NULL)
 	{
-		if (expand_filename_helper(filename_node->data, pat, res))
+		if (push_expanded_filename(filename_node->data, pat, res))
 			return (destroy_and_return_null(pat, res, NULL));
 		filename_node = filename_node->next;
 	}
