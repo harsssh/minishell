@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:57:53 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/20 13:48:47 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/29 01:00:16 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ t_list	*expand_word(const char *word, t_context *ctx)
 		return (NULL);
 	tmp = res;
 	res = split_word(res);
+	ft_list_destroy(tmp, free);
+	if (res == NULL)
+		return (NULL);
+	tmp = res;
+	res = expand_filenames(res, ctx->cwd);
 	ft_list_destroy(tmp, free);
 	if (res == NULL)
 		return (NULL);

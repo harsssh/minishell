@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 18:49:58 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/29 18:50:49 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,47 @@ TEST(split_word, double_quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
  
+TEST(expand_filename, forward)
+{
+	auto input = "*.cmake";
+	auto ctx = Context("../").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto expected = {"cmake_install.cmake", "CTestTestfile.cmake"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_filename, backward)
+{
+	auto input = ".git*";
+	auto ctx = Context("../../").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto expected = {".gitignore", ".gitmodules"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_filename, middle)
+{
+	auto input = "*Make*";
+	auto ctx = Context("../../").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto expected = {"CMakeLists.txt", "Makefile"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_filename, no_expansion)
+{
+	auto input = "*.cmake";
+	auto ctx = Context("../../").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto expected = {"*.cmake"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+>>>>>>> add filename exnpansion
 TEST(expand_word, normal)
 {
 	auto input = "$a";
