@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:28:27 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/30 01:44:27 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/30 01:52:51 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "context.h"
 #include "ft_stdio.h"
 #include "init.h"
+#include "utils.h"
 #include "parser.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -24,17 +25,6 @@
 
 #define PROMPT "minishell$ "
 #define ERR_INIT "minishell: initialization error: unable to initialize shell"
-
-static void	display_exit_message(t_context *ctx)
-{
-	if (ctx->is_interactive)
-	{
-		if (ctx->is_login)
-			ft_putendl_fd("logout", STDERR_FILENO);
-		else
-			ft_putendl_fd("exit", STDERR_FILENO);
-	}
-}
 
 static char	*read_command_line(t_context *ctx)
 {
@@ -64,9 +54,27 @@ static int	execute_command(t_context *ctx, const char *line)
 	return (ret);
 }
 
+static void	shell_loop(t_context *ctx)
+{
+	char	*line;
+
+	while (true)
+	{
+		init_loop(ctx);
+		line = read_command_line(ctx);
+		if (line == NULL)
+		{
+			write(STDERR_FILENO, "\n", 1);
+			return ;
+		}
+		if (*line != '\0')
+			execute_command(ctx, line);
+		free(line);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char		*line;
 	t_context	ctx;
 
 	(void)argc;
@@ -75,16 +83,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd(ERR_INIT, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	while (true)
-	{
-		init_loop(&ctx);
-		line = read_command_line(&ctx);
-		if (line == NULL)
-			break ;
-		if (*line != '\0')
-			execute_command(&ctx, line);
-		free(line);
-	}
+	shell_loop(&ctx);
 	display_exit_message(&ctx);
 	exit(ctx.last_exit_status);
 }
