@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 18:50:49 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/29 18:54:34 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,6 @@ TEST(expand_filename, no_expansion)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
->>>>>>> add filename exnpansion
 TEST(expand_word, normal)
 {
 	auto input = "$a";
