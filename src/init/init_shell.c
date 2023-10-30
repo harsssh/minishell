@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 01:03:34 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/30 01:26:02 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:55:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 #include <unistd.h>
 #include <readline/readline.h>
 
-#define DEFAULT_PATH "/usr/local/bin:/bin:/usr/bin:."
+#define DEFAULT_PATH		"/usr/local/bin:/bin:/usr/bin:."
+#define DEFAULT_SHELL_NAME	"minishell"
 
 static int	rl_hook_func(void)
 {
@@ -60,7 +61,10 @@ static int	destroy_and_return_failure(t_context *ctx)
 static int	init_context(t_context *ctx, char **argv, char **envp)
 {
 	ft_memset(ctx, 0, sizeof(t_context));
-	ctx->shell_name = ft_basename(*argv);
+	if (**argv == '\0' || ft_strcmp(*argv, "-") == 0)
+		ctx->shell_name = ft_strdup(DEFAULT_SHELL_NAME);
+	else
+		ctx->shell_name = ft_basename(*argv);
 	if (ctx->shell_name == NULL)
 		return (destroy_and_return_failure(ctx));
 	ctx->variables = ft_list_create();

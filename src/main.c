@@ -63,10 +63,7 @@ static void	shell_loop(t_context *ctx)
 		init_loop(ctx);
 		line = read_command_line(ctx);
 		if (line == NULL)
-		{
-			write(STDERR_FILENO, "\n", 1);
-			return ;
-		}
+			break ;
 		if (*line != '\0')
 			execute_command(ctx, line);
 		free(line);
