@@ -15,8 +15,8 @@
 #include "variables_internal.h"
 #include <stdlib.h>
 
-static t_assignment_parse_status	only_identifier(
-		t_parsed_variable_assignment *result,
+static t_parse_status	only_identifier(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
@@ -53,8 +53,8 @@ static int	extract_pair(const char *str, char **name, char **value)
 }
 
 // str != NULL
-static t_assignment_parse_status	parse_operation(
-		t_parsed_variable_assignment *result,
+static t_parse_status	parse_operation(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
@@ -67,19 +67,19 @@ static t_assignment_parse_status	parse_operation(
 	{
 		if (offset == str + 1)
 			return (ASSIGN_PARSE_INVALID_IDENTIFIER);
-		result->operation = OPERATION_APPEND;
+		result->operation = OP_APPEND;
 	}
 	else
-		result->operation = OPERATION_SET;
+		result->operation = OP_SET;
 	return (ASSIGN_PARSE_SUCCESS);
 }
 
-static t_assignment_parse_status	parse_pair(
-		t_parsed_variable_assignment *result,
+static t_parse_status	parse_pair(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
-	t_assignment_parse_status	status;
+	t_parse_status	status;
 
 	status = ASSIGN_PARSE_SUCCESS;
 	if (extract_pair(str, &result->name, &result->value) == -1)
@@ -98,12 +98,12 @@ static t_assignment_parse_status	parse_pair(
 	return (status);
 }
 
-t_assignment_parse_status	parse_variable_assignment(
-		t_parsed_variable_assignment *result,
+t_parse_status	parse_assignment(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
-	t_assignment_parse_status	status;
+	t_parse_status	status;
 
 	result->name = NULL;
 	result->value = NULL;
