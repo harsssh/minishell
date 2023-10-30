@@ -43,14 +43,14 @@ static int	extract_pair(const char *str, char **name, char **value)
 	value_start = assignment_pos + 1;
 	*name = ft_substr(str, 0, name_end - str);
 	if (*name == NULL)
-		return (-1);
+		return (EXIT_FAILURE);
 	*value = ft_strdup(value_start);
 	if (*value == NULL)
 	{
 		free(*name);
-		return (-1);
+		return (EXIT_FAILURE);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 // `str` must contain '='.
@@ -85,7 +85,7 @@ static t_parse_status	parse_pair(
 	t_parse_status	status;
 
 	status = ASSIGN_PARSE_SUCCESS;
-	if (extract_pair(str, &result->name, &result->value) == -1)
+	if (extract_pair(str, &result->name, &result->value) == EXIT_FAILURE)
 		return (ASSIGN_PARSE_INTERNAL_ERROR);
 	if (!is_valid_identifier(result->name))
 		status = ASSIGN_PARSE_INVALID_IDENTIFIER;
