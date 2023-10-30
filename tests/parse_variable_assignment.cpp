@@ -5,221 +5,221 @@ extern "C" {
 }
 
 // 普通のケース
-TEST(parse_variable_assignment, normal)
+TEST(parse_assignment, normal)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME=VALUE");
+	status = parse_assignment(&result, "NAME=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_SUCCESS);
 	EXPECT_STREQ(result.name, "NAME");
 	EXPECT_STREQ(result.value, "VALUE");
-	EXPECT_EQ(result.operation, OPERATION_SET);
+	EXPECT_EQ(result.operation, OP_SET);
 }
 
 // 加算代入
-TEST(parse_variable_assignment, append)
+TEST(parse_assignment, append)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME+=VALUE");
+	status = parse_assignment(&result, "NAME+=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_SUCCESS);
 	EXPECT_STREQ(result.name, "NAME");
 	EXPECT_STREQ(result.value, "VALUE");
-	EXPECT_EQ(result.operation, OPERATION_APPEND);
+	EXPECT_EQ(result.operation, OP_APPEND);
 }
 
 // 無効な演算子
-TEST(parse_variable_assignment, invalid_operator)
+TEST(parse_assignment, invalid_operator)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME-=VALUE");
+	status = parse_assignment(&result, "NAME-=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // valueなし
-TEST(parse_variable_assignment, no_value)
+TEST(parse_assignment, no_value)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME=");
+	status = parse_assignment(&result, "NAME=");
 	EXPECT_EQ(status, ASSIGN_PARSE_SUCCESS);
 	EXPECT_STREQ(result.name, "NAME");
 	EXPECT_STREQ(result.value, "");
-	EXPECT_EQ(result.operation, OPERATION_SET);
+	EXPECT_EQ(result.operation, OP_SET);
 }
 
 // valueなし, 加算代入
-TEST(parse_variable_assignment, no_value_append)
+TEST(parse_assignment, no_value_append)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME+=");
+	status = parse_assignment(&result, "NAME+=");
 	EXPECT_EQ(status, ASSIGN_PARSE_SUCCESS);
 	EXPECT_STREQ(result.name, "NAME");
 	EXPECT_STREQ(result.value, "");
-	EXPECT_EQ(result.operation, OPERATION_APPEND);
+	EXPECT_EQ(result.operation, OP_APPEND);
 }
 
 // nameだけ
-TEST(parse_variable_assignment, only_name)
+TEST(parse_assignment, only_name)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME");
+	status = parse_assignment(&result, "NAME");
 	EXPECT_EQ(status, ASSIGN_PARSE_ONLY_IDENTIFIER);
 	EXPECT_STREQ(result.name, "NAME");
 	EXPECT_STREQ(result.value, nullptr);
 }
 
 // =が2つ
-TEST(parse_variable_assignment, double_equal)
+TEST(parse_assignment, double_equal)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME=VALUE=VALUE");
+	status = parse_assignment(&result, "NAME=VALUE=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_SUCCESS);
 	EXPECT_STREQ(result.name, "NAME");
 	EXPECT_STREQ(result.value, "VALUE=VALUE");
 }
 
 // 空文字列
-TEST(parse_variable_assignment, empty)
+TEST(parse_assignment, empty)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "");
+	status = parse_assignment(&result, "");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // 最初が=
-TEST(parse_variable_assignment, equal_only)
+TEST(parse_assignment, equal_only)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "=VALUE");
+	status = parse_assignment(&result, "=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // 最初が+=
-TEST(parse_variable_assignment, append_only)
+TEST(parse_assignment, append_only)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "+=VALUE");
+	status = parse_assignment(&result, "+=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // =の前後にスペース
-TEST(parse_variable_assignment, space_around_equal)
+TEST(parse_assignment, space_around_equal)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME = VALUE");
+	status = parse_assignment(&result, "NAME = VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // +=の前後にスペース
-TEST(parse_variable_assignment, space_around_append)
+TEST(parse_assignment, space_around_append)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME += VALUE");
+	status = parse_assignment(&result, "NAME += VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // nameが数字から始まる
-TEST(parse_variable_assignment, number)
+TEST(parse_assignment, number)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "123NAME");
+	status = parse_assignment(&result, "123NAME");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // nameが数字から始まる, valueあり
-TEST(parse_variable_assignment, number_value)
+TEST(parse_assignment, number_value)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "123NAME=VALUE");
+	status = parse_assignment(&result, "123NAME=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // nameがスペースを含む
-TEST(parse_variable_assignment, space)
+TEST(parse_assignment, space)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME 1=VALUE");
+	status = parse_assignment(&result, "NAME 1=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // アンダースコア含む
-TEST(parse_variable_assignment, underscore)
+TEST(parse_assignment, underscore)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME_1=VALUE");
+	status = parse_assignment(&result, "NAME_1=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_SUCCESS);
 	EXPECT_STREQ(result.name, "NAME_1");
 	EXPECT_STREQ(result.value, "VALUE");
-	EXPECT_EQ(result.operation, OPERATION_SET);
+	EXPECT_EQ(result.operation, OP_SET);
 }
 
 // ハイフン含む
-TEST(parse_variable_assignment, hyphen)
+TEST(parse_assignment, hyphen)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "NAME-1=VALUE");
+	status = parse_assignment(&result, "NAME-1=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_INVALID_IDENTIFIER);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
 
 // nameがアンダースコア
-TEST(parse_variable_assignment, name_underscore)
+TEST(parse_assignment, name_underscore)
 {
-	t_assignment_parse_status status;
-	t_parsed_variable_assignment result;
+	t_parse_status status;
+	t_parsed_assignment result;
 
-	status = parse_variable_assignment(&result, "_=VALUE");
+	status = parse_assignment(&result, "_=VALUE");
 	EXPECT_EQ(status, ASSIGN_PARSE_IGNORE);
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);

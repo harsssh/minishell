@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:18:02 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/13 04:36:14 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:05:15 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 #include <stdlib.h>
 
 static int	handle_assignment(
-	t_context *ctx,
-	t_parsed_variable_assignment result)
+		t_context *ctx,
+		t_parsed_assignment result)
 {
 	t_variable	*var;
 	char		*new_value;
 
 	var = getvar(ctx, result.name);
-	if (var == NULL || result.operation == OPERATION_SET)
+	if (var == NULL || result.operation == OP_SET)
 		return (exportvar(ctx, result.name, result.value));
-	if (result.operation == OPERATION_APPEND)
+	if (result.operation == OP_APPEND)
 	{
 		new_value = ft_strjoin(var->value, result.value);
 		if (new_value == NULL)
@@ -37,10 +37,10 @@ static int	handle_assignment(
 }
 
 static int	process_parse_result(
-	t_context *ctx,
-	const char *arg,
-	t_assignment_parse_status status,
-	t_parsed_variable_assignment result)
+		t_context *ctx,
+		const char *arg,
+		t_parse_status status,
+		t_parsed_assignment result)
 {
 	if (status == ASSIGN_PARSE_IGNORE)
 		return (EXIT_SUCCESS);
@@ -56,11 +56,11 @@ static int	process_parse_result(
 
 int	export_each_arg(t_context *ctx, const char *arg)
 {
-	int								handler_status;
-	t_assignment_parse_status		parse_status;
-	t_parsed_variable_assignment	result;
+	int					handler_status;
+	t_parse_status		parse_status;
+	t_parsed_assignment	result;
 
-	parse_status = parse_variable_assignment(&result, arg);
+	parse_status = parse_assignment(&result, arg);
 	handler_status = process_parse_result(ctx, arg, parse_status, result);
 	free(result.name);
 	free(result.value);

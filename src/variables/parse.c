@@ -15,8 +15,8 @@
 #include "variables_internal.h"
 #include <stdlib.h>
 
-static t_assignment_parse_status	only_identifier(
-		t_parsed_variable_assignment *result,
+static t_parse_status	parse_only_identifier(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
@@ -28,61 +28,64 @@ static t_assignment_parse_status	only_identifier(
 	return (ASSIGN_PARSE_ONLY_IDENTIFIER);
 }
 
+// `str` must contain '='.
 static int	extract_pair(const char *str, char **name, char **value)
 {
-	char	*offset;
+	char	*assignment_pos;
 	char	*name_end;
 	char	*value_start;
 
-	offset = ft_strchr(str, '=');
-	if (offset[-1] == '+')
-		name_end = offset - 1;
+	assignment_pos = ft_strchr(str, '=');
+	if (assignment_pos != str && assignment_pos[-1] == '+')
+		name_end = assignment_pos - 1;
 	else
-		name_end = offset;
-	value_start = offset + 1;
+		name_end = assignment_pos;
+	value_start = assignment_pos + 1;
 	*name = ft_substr(str, 0, name_end - str);
 	if (*name == NULL)
-		return (-1);
+		return (EXIT_FAILURE);
 	*value = ft_strdup(value_start);
 	if (*value == NULL)
 	{
 		free(*name);
-		return (-1);
+		return (EXIT_FAILURE);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
-// str != NULL
-static t_assignment_parse_status	parse_operation(
-		t_parsed_variable_assignment *result,
+// `str` must contain '='.
+// If `str` starts with '=' or '+=', it should return an error.
+static t_parse_status	parse_operation(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
-	char	*offset;
+	char	*assignment_pos;
 
-	offset = ft_strchr(str, '=');
-	if (offset == NULL)
+	assignment_pos = ft_strchr(str, '=');
+	if (assignment_pos == NULL)
 		return (ASSIGN_PARSE_INTERNAL_ERROR);
-	if (offset[-1] == '+')
+	if (assignment_pos != str && assignment_pos[-1] == '+')
 	{
-		if (offset == str + 1)
-			return (ASSIGN_PARSE_INVALID_IDENTIFIER);
-		result->operation = OPERATION_APPEND;
+		--assignment_pos;
+		result->operation = OP_APPEND;
 	}
 	else
-		result->operation = OPERATION_SET;
+		result->operation = OP_SET;
+	if (assignment_pos == str)
+		return (ASSIGN_PARSE_INVALID_IDENTIFIER);
 	return (ASSIGN_PARSE_SUCCESS);
 }
 
-static t_assignment_parse_status	parse_pair(
-		t_parsed_variable_assignment *result,
+static t_parse_status	parse_pair(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
-	t_assignment_parse_status	status;
+	t_parse_status	status;
 
 	status = ASSIGN_PARSE_SUCCESS;
-	if (extract_pair(str, &result->name, &result->value) == -1)
+	if (extract_pair(str, &result->name, &result->value) == EXIT_FAILURE)
 		return (ASSIGN_PARSE_INTERNAL_ERROR);
 	if (!is_valid_identifier(result->name))
 		status = ASSIGN_PARSE_INVALID_IDENTIFIER;
@@ -98,17 +101,17 @@ static t_assignment_parse_status	parse_pair(
 	return (status);
 }
 
-t_assignment_parse_status	parse_variable_assignment(
-		t_parsed_variable_assignment *result,
+t_parse_status	parse_assignment(
+		t_parsed_assignment *result,
 		const char *str
 )
 {
-	t_assignment_parse_status	status;
+	t_parse_status	status;
 
 	result->name = NULL;
 	result->value = NULL;
 	if (ft_strchr(str, '=') == NULL)
-		return (only_identifier(result, str));
+		return (parse_only_identifier(result, str));
 	status = parse_operation(result, str);
 	if (status != ASSIGN_PARSE_SUCCESS)
 		return (status);
