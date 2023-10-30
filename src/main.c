@@ -6,36 +6,25 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 22:28:27 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/17 18:25:09 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/30 01:52:51 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "context.h"
 #include "ft_stdio.h"
+#include "init.h"
+#include "utils.h"
 #include "parser.h"
-#include <stdio.h>
-#include <readline/history.h>
-#include <readline/readline.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 #define PROMPT "minishell$ "
-
-void		init_shell(t_context *ctx, char **argv, char **envp);
-void		init_loop(t_context *ctx);
-
-static void	display_exit_message(t_context *ctx)
-{
-	if (ctx->is_interactive)
-	{
-		if (ctx->is_login)
-			ft_putendl_fd("logout", STDERR_FILENO);
-		else
-			ft_putendl_fd("exit", STDERR_FILENO);
-	}
-}
+#define ERR_INIT "minishell: initialization error: unable to initialize shell"
 
 static char	*read_command_line(t_context *ctx)
 {
@@ -52,29 +41,49 @@ static char	*read_command_line(t_context *ctx)
 	return (line);
 }
 
-int	main(int argc, char **argv, char **envp)
+static int	execute_command(t_context *ctx, const char *line)
 {
-	char		*line;
-	t_context	ctx;
 	t_ast_node	*ast;
+	int			ret;
 
-	(void)argc;
-	init_shell(&ctx, argv, envp);
+	ast = parse(line, ctx);
+	if (ast == NULL)
+		return (EXIT_FAILURE);
+	ret = execute_ast(ctx, ast);
+	destroy_node(ast);
+	return (ret);
+}
+
+static void	shell_loop(t_context *ctx)
+{
+	char	*line;
+
 	while (true)
 	{
-		init_loop(&ctx);
-		line = read_command_line(&ctx);
+		init_loop(ctx);
+		line = read_command_line(ctx);
 		if (line == NULL)
-			break ;
-		if (*line != '\0')
 		{
-			ast = parse(line, &ctx);
-			if (ast != NULL)
-				execute_ast(&ctx, ast);
-			destroy_node(ast);
+			write(STDERR_FILENO, "\n", 1);
+			return ;
 		}
+		if (*line != '\0')
+			execute_command(ctx, line);
 		free(line);
 	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_context	ctx;
+
+	(void)argc;
+	if (init_shell(&ctx, argv, envp) == EXIT_FAILURE)
+	{
+		ft_putendl_fd(ERR_INIT, STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	shell_loop(&ctx);
 	display_exit_message(&ctx);
 	exit(ctx.last_exit_status);
 }

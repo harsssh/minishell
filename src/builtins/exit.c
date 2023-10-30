@@ -6,13 +6,14 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 01:22:58 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/08/18 01:22:59 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/30 01:52:29 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "builtins_internal.h"
 #include "libft.h"
+#include "utils.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,17 +39,10 @@ static int	get_status_or_exit(t_context *ctx, const char **args)
 	return (ctx->last_exit_status & 0xFF);
 }
 
-// TODO: Assumes a non-login, interactive shell context
 int	builtins_exit(t_context *ctx, const char **args)
 {
 	if (*args && ft_strcmp(*args, "--") == 0)
 		++args;
-	if (ctx->is_interactive)
-	{
-		if (ctx->is_login)
-			ft_putendl_fd("logout", STDERR_FILENO);
-		else
-			ft_putendl_fd("exit", STDERR_FILENO);
-	}
+	display_exit_message(ctx);
 	return (get_status_or_exit(ctx, args));
 }

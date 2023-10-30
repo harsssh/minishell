@@ -13,23 +13,29 @@
 #include "variables.h"
 #include <stdlib.h>
 
-// TODO: error handling when `getvar` or `setvar` fails
-// if variable already exists and `name == NULL`, only set attributes,
-// otherwise set appropriate value and attributes
+// name==NULL				: do nothing
+// var==NULL, value=NULL	: create new variable with empty value
+// var==NULL, value!=NULL	: create new variable with value
+// var!=NULL, value=NULL	: do nothing
+// var!=NULL, value!=NULL	: update variable with value
 int	exportvar(t_context *ctx, const char *name, const char *value)
 {
 	t_variable	*var;
 
+	if (name == NULL)
+		return (EXIT_SUCCESS);
 	var = getvar(ctx, name);
 	if (var == NULL && value == NULL)
 	{
-		setvar(ctx, name, "", 1);
+		if (setvar(ctx, name, "", 1) == -1)
+			return (EXIT_FAILURE);
 		var = getvar(ctx, name);
 		var->attributes |= VAR_ATTR_NO_VALUE;
 	}
 	else if (value != NULL)
 	{
-		setvar(ctx, name, value, 1);
+		if (setvar(ctx, name, value, 1) == -1)
+			return (EXIT_FAILURE);
 		var = getvar(ctx, name);
 	}
 	var->attributes |= VAR_ATTR_EXPORTED;
