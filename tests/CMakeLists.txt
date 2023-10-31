@@ -17,7 +17,7 @@ foreach (TMP_PATH ${TMP})
     endif ()
 endforeach ()
 
-include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src ${DIR_LIST})
+include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src ${DIR_LIST} ${CMAKE_BINARY_DIR}/readline/include)
 link_libraries(ft GTest::gtest GTest::gtest_main ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a ncurses)
 
 # SRCをオブジェクトライブラリにする
