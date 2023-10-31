@@ -299,7 +299,7 @@ TEST_F(ExpandFilenameTest, quote3)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {"a.minish", "b.minish"};
 
-	ASSERT_TRUE(compareStrList(result, expected));
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
 TEST_F(ExpandFilenameTest, quote4)
@@ -309,7 +309,7 @@ TEST_F(ExpandFilenameTest, quote4)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {"a.minish", "b.minish"};
 
-	ASSERT_TRUE(compareStrList(result, expected));
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
 TEST_F(ExpandFilenameTest, quote5)
@@ -319,7 +319,7 @@ TEST_F(ExpandFilenameTest, quote5)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {".minish"};
 
-	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
+	ASSERT_TRUE(compareStrList(result, expected));
 }
 
 TEST(expand_word, normal)
