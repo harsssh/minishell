@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 19:16:15 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 10:45:35 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 11:33:50 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,39 @@ bool compareTokenStream(t_list *got, vector<pair<t_token_type, const char *>> ex
 	return true;
 }
 
-bool compareStrList(t_list *got, vector<const char *> expect)
+::testing::AssertionResult compareStrList(t_list *got, vector<const char *> expects)
 {
-	if (got->size != expect.size())
-		return false;
+	if (got->size != expects.size())
+		return ::testing::AssertionFailure() << "expected size: " << expects.size() << ", got: " << got->size;
 	got = ft_list_copy(got, (void *(*)(void *))strdup, free);
-	for (auto expect_literal : expect)
+	for (auto expect : expects)
 	{
-		auto top = (char *)ft_list_pop_front(got);
-		if (strcmp(top, expect_literal) != 0)
-			return false;
+		auto filename = (char *)ft_list_pop_front(got);
+		if (strcmp(filename, expect) != 0)
+			return ::testing::AssertionFailure() << "expected: " << expect << ", got: " << filename;
 	}
-	return true;
+	return ::testing::AssertionSuccess();
 }
 
-void assertStrList(t_list *got, vector<const char *> expect)
+::testing::AssertionResult compareStrList(t_list *got, vector<const char *> expects, bool strictOrder)
 {
-	ASSERT_EQ(got->size, expect.size());
+	if (strictOrder)
+		return compareStrList(got, expects);
+	if (got->size != expects.size())
+		return ::testing::AssertionFailure() << "expected size: " << expects.size() << ", got: " << got->size;
 	got = ft_list_copy(got, (void *(*)(void *))strdup, free);
-	for (auto expect_literal : expect)
+	while (got->size > 0)
 	{
-		auto top = (char *)ft_list_pop_front(got);
-		ASSERT_STREQ(top, expect_literal);
+		auto filename = (char *)ft_list_pop_front(got);
+		bool found = false;
+		for (auto expect : expects) {
+			if (strcmp(filename, expect) == 0) {
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			return ::testing::AssertionFailure() << "not found: " << filename;
 	}
+	return ::testing::AssertionSuccess();
 }

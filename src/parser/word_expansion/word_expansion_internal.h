@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:58:11 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/30 03:28:01 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 11:35:41 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*expand_first_param(const char **word, t_context *ctx);
 t_list	*split_word(t_list *list);
 char	*join_char(char *str, const char **word);
 t_list	*remove_quotes(t_list *input);
-t_list	*expand_filenames(t_list *input, char *cwd);
+t_list	*expand_filenames(t_list *input);
 bool	reg_is_match(char *pat, char *text, bool *is_failed);
 
 #endif

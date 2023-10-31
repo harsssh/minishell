@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 00:49:57 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 10:31:18 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 11:35:19 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,17 @@ static int	push_expanded_filename(char *filename, char *pat, t_list *res)
 }
 
 // TODO: handle errors from readdir and closedir
-static t_list	*get_cur_dir_filenames(char *cwd)
+static t_list	*get_cur_dir_filenames(void)
 {
 	DIR				*d;
 	t_list			*res;
 	struct dirent	*dir;
 	char			*filename;
 
-	if (cwd == NULL)
-		return (NULL);
 	res = ft_list_create();
 	if (res == NULL)
 		return (NULL);
-	d = opendir(cwd);
+	d = opendir(".");
 	if (d == NULL)
 		return (destroy_and_return_null(NULL, res, NULL));
 	dir = readdir(d);
@@ -105,7 +103,7 @@ static t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
 
 // t_list<char *> -> t_list<char *>
 // TODO: match all possible patterns,
-t_list	*expand_filenames(t_list *input, char *cwd)
+t_list	*expand_filenames(t_list *input)
 {
 	t_list	*res;
 	char	*pat;
@@ -115,7 +113,7 @@ t_list	*expand_filenames(t_list *input, char *cwd)
 	res = ft_list_create();
 	if (res == NULL)
 		return (res);
-	cur_dir_filenames = get_cur_dir_filenames(cwd);
+	cur_dir_filenames = get_cur_dir_filenames();
 	if (cur_dir_filenames == NULL)
 		return (destroy_and_return_null(NULL, res, NULL));
 	while (input->size != 0)

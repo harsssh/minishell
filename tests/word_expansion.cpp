@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   word_expansion.cpp                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 10:44:59 by smatsuo          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <filesystem>
 #include <gtest/gtest.h>
 #include "utils/context.hpp"
@@ -24,13 +12,13 @@ extern "C" {
 class ExpandFilenameTest : public testing::Test {
 protected:
 	std::vector<std::string> filenames = {".minish", "a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
-	std::string test_files_dir = "/tmp/minishell/";
+	const char *test_files_dir = "/tmp/minishell/";
+	char *old_cwd = getcwd(NULL, 0);
 
 	virtual void SetUp() {
-		mkdir(test_files_dir.c_str(), 0777);
+		chdir(test_files_dir);
+		mkdir(test_files_dir, 0777);
 		for (auto &filename : filenames) {
-			filename = test_files_dir + filename;
-
 			creat(filename.c_str(), 0777);
 		}
 	}
@@ -39,7 +27,8 @@ protected:
 		for (auto &filename : filenames) {
 			std::remove(filename.c_str());
 		}
-		rmdir(test_files_dir.c_str());
+		rmdir(test_files_dir);
+		chdir(old_cwd);
 	}
 };
 
@@ -237,40 +226,40 @@ TEST_F(ExpandFilenameTest, forward)
 {
 	auto input = "*.minish";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {"a.minish", "b.minish"};
 
-	assertStrList(result, expected);
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
 TEST_F(ExpandFilenameTest, backward)
 {
 	auto input = ".mini*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {".minish"};
 
-	assertStrList(result, expected);
+	ASSERT_TRUE(compareStrList(result, expected));
 }
 
 TEST_F(ExpandFilenameTest, middle)
 {
 	auto input = "*minishe*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {"a.minishe", "minishell"};
 
-	assertStrList(result, expected);
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
 TEST_F(ExpandFilenameTest, no_expansion)
 {
 	auto input = "*.no";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
 	auto expected = {"*.no"};
 
-	assertStrList(result, expected);
+	ASSERT_TRUE(compareStrList(result, expected));
 }
 
 TEST(expand_word, normal)
