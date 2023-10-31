@@ -262,6 +262,16 @@ TEST_F(ExpandFilenameTest, no_expansion)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
+TEST_F(ExpandFilenameTest, no_expansion2)
+{
+	auto input = "*.minishell";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"*.minishell"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
 TEST(expand_word, normal)
 {
 	auto input = "$a";
