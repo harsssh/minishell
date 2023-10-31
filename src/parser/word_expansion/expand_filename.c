@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 11:45:58 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 11:58:01 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 16:44:49 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	push_expanded_filename(char *filename, char *pat, t_list *res)
 {
 	bool	is_matching_failed;
 
-	if (reg_is_match(pat, filename, &is_matching_failed))
+	if (reg_is_match(filename, pat, &is_matching_failed))
 	{
 		filename = ft_strdup(filename);
 		if (filename == NULL || ft_list_push_back(res, filename) == NULL)
