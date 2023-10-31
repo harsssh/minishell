@@ -6,13 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 19:16:15 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 09:50:02 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 10:37:50 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <utility>
 #include <cstring>
+#include <cstdlib>
 
 using namespace std;
 

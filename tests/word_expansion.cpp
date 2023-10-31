@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 10:28:19 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 10:37:33 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <gtest/gtest.h>
 #include "utils/context.hpp"
 #include "utils/compare_list.hpp"
-#include <cstdlib>
 
 extern "C" {
 #include "word_expansion/word_expansion_internal.h"
