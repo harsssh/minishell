@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:22:22 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 09:33:50 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 14:10:58 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,28 +47,48 @@ static bool	**calloc_2d_vector(size_t width, size_t height)
 	return (vec);
 }
 
-static bool	update_dp(t_match_table *table, char *text, char *pat)
+static bool	new_dp_value(t_match_table *table, char pat_char, char text_char,
+						char *quote)
 {
 	size_t	i;
 	size_t	j;
 	bool	**dp;
 
 	dp = table->dp;
-	i = 1;
-	while (i <= table->text_len)
+	i = table->i;
+	j = table->j;
+	if ((pat_char == '"' || pat_char == '\'')
+		&& (*quote == '\0' || *quote == pat_char))
 	{
-		j = 1;
-		while (j <= table->pat_len)
+		if (*quote == '\0')
+			*quote = pat_char;
+		else if (*quote == pat_char)
+			*quote = '\0';
+		return (dp[i][j - 1]);
+	}
+	if (text_char == pat_char)
+		return (dp[i - 1][j - 1]);
+	else if (*quote == '\0' && pat_char == '*')
+		return (dp[i][j - 1] || dp[i - 1][j]);
+	return (false);
+}
+
+static bool	update_dp(t_match_table *table, char *text, char *pat)
+{
+	char	quote;
+
+	table->i = 1;
+	while (table->i <= table->text_len)
+	{
+		table->j = 1;
+		quote = '\0';
+		while (table->j <= table->pat_len)
 		{
-			if (text[i - 1] == pat[j - 1])
-				dp[i][j] = dp[i - 1][j - 1];
-			else if (pat[j - 1] == '*')
-				dp[i][j] = (dp[i][j - 1] || dp[i - 1][j]);
-			else
-				dp[i][j] = false;
-			j++;
+			table->dp[table->i][table->j] = new_dp_value(table,
+					pat[table->j - 1], text[table->i - 1], &quote);
+			table->j++;
 		}
-		i++;
+		table->i++;
 	}
 	return (table->dp[table->text_len][table->pat_len]);
 }

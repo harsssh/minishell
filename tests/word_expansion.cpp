@@ -272,6 +272,56 @@ TEST_F(ExpandFilenameTest, no_expansion2)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
+TEST_F(ExpandFilenameTest, quote)
+{
+	auto input = "'*.minish'";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"'*.minish'"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST_F(ExpandFilenameTest, quote2)
+{
+	auto input = "\"*.minish\"";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"\"*.minish\""};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST_F(ExpandFilenameTest, quote3)
+{
+	auto input = "*'.minish'";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"a.minish", "b.minish"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST_F(ExpandFilenameTest, quote4)
+{
+	auto input = "*\".minish\"";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"a.minish", "b.minish"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST_F(ExpandFilenameTest, quote5)
+{
+	auto input = ".mini*";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {".minish"};
+
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
+}
+
 TEST(expand_word, normal)
 {
 	auto input = "$a";

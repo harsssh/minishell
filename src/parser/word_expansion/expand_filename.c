@@ -5,16 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 00:49:57 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 11:35:19 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/10/31 11:45:58 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/10/31 11:58:01 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_list.h"
-#include "libft.h"
 #include <stdlib.h>
 #include "word_expansion_internal.h"
-#include <dirent.h>
 
 static void	*destroy_and_return_null(char *s, t_list *l, DIR *d)
 {
@@ -47,7 +44,7 @@ static int	push_expanded_filename(char *filename, char *pat, t_list *res)
 }
 
 // TODO: handle errors from readdir and closedir
-static t_list	*get_cur_dir_filenames(void)
+t_list	*get_cur_dir_filenames(void)
 {
 	DIR				*d;
 	t_list			*res;
@@ -72,7 +69,7 @@ static t_list	*get_cur_dir_filenames(void)
 	return (res);
 }
 
-static t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
+t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
 {
 	t_list	*res;
 	t_node	*filename_node;
@@ -98,36 +95,5 @@ static t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
 	}
 	if (res->size == 0 && ft_list_push_back(res, pat) == NULL)
 		return (destroy_and_return_null(pat, res, NULL));
-	return (res);
-}
-
-// t_list<char *> -> t_list<char *>
-// TODO: match all possible patterns,
-t_list	*expand_filenames(t_list *input)
-{
-	t_list	*res;
-	char	*pat;
-	t_list	*expanded;
-	t_list	*cur_dir_filenames;
-
-	res = ft_list_create();
-	if (res == NULL)
-		return (res);
-	cur_dir_filenames = get_cur_dir_filenames();
-	if (cur_dir_filenames == NULL)
-		return (destroy_and_return_null(NULL, res, NULL));
-	while (input->size != 0)
-	{
-		pat = ft_list_pop_front(input);
-		expanded = expand_filename(pat, cur_dir_filenames);
-		if (expanded == NULL)
-		{
-			ft_list_destroy(cur_dir_filenames, free);
-			return (destroy_and_return_null(pat, res, NULL));
-		}
-		ft_list_append(res, expanded);
-		free(pat);
-	}
-	ft_list_destroy(cur_dir_filenames, free);
 	return (res);
 }
