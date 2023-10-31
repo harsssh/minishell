@@ -322,6 +322,16 @@ TEST_F(ExpandFilenameTest, quote5)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
+TEST_F(ExpandFilenameTest, quote6)
+{
+	auto input = "\"\"*";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
+
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
+}
+
 TEST(expand_word, normal)
 {
 	auto input = "$a";

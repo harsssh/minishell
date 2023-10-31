@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:22:22 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 16:44:14 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 17:16:28 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static bool	new_dp_value(t_match_table *table, char pat_char, char text_char,
 			*quote = pat_char;
 		else if (*quote == pat_char)
 			*quote = '\0';
-		return (dp[i][j - 1]);
+		return (j == 1 || dp[i][j - 1]);
 	}
 	if (text_char == pat_char)
 		return (dp[i - 1][j - 1]);
