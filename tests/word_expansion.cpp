@@ -6,18 +6,40 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 18:54:34 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/30 04:14:16 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <gtest/gtest.h>
 #include "utils/context.hpp"
 #include "utils/compare_list.hpp"
+#include <fcntl.h>
 
 extern "C" {
 #include "word_expansion/word_expansion_internal.h"
 #include "context.h"
 }
+
+class ExpandFilenameTest : public testing::Test {
+protected:
+	std::vector<std::string> filenames = {".minish", "a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
+	std::string test_files_dir = "/tmp/";
+
+	virtual void SetUp() {
+		for (auto &filename : filenames) {
+			filename = test_files_dir + filename;
+
+			// source: https://qiita.com/hirocueki/items/f5288b9fc757b10addb6
+			creat(filename.c_str(), 0);
+		}
+	}
+
+	virtual void TearDown() {
+		for (auto &filename : filenames) {
+			std::remove(filename.c_str());
+		}
+	}
+};
 
 TEST(expand_parameters, normal)
 {
@@ -209,42 +231,42 @@ TEST(split_word, double_quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
  
-TEST(expand_filename, forward)
+TEST_F(ExpandFilenameTest, forward)
 {
-	auto input = "*.cmake";
-	auto ctx = Context("../").getCtx();
+	auto input = "*.minish";
+	auto ctx = Context("/tmp").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
-	auto expected = {"cmake_install.cmake", "CTestTestfile.cmake"};
+	auto expected = {"a.minish", "b.minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_filename, backward)
+TEST_F(ExpandFilenameTest, backward)
 {
-	auto input = ".git*";
-	auto ctx = Context("../../").getCtx();
+	auto input = ".mini*";
+	auto ctx = Context("/tmp").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
-	auto expected = {".gitignore", ".gitmodules"};
+	auto expected = {".minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_filename, middle)
+TEST_F(ExpandFilenameTest, middle)
 {
-	auto input = "*Make*";
-	auto ctx = Context("../../").getCtx();
+	auto input = "*minishe*";
+	auto ctx = Context("/tmp").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
-	auto expected = {"CMakeLists.txt", "Makefile"};
+	auto expected = {"a.minishe", "minishell"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_filename, no_expansion)
+TEST_F(ExpandFilenameTest, no_expansion)
 {
-	auto input = "*.cmake";
-	auto ctx = Context("../../").getCtx();
+	auto input = "*.no";
+	auto ctx = Context("/tmp").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
-	auto expected = {"*.cmake"};
+	auto expected = {"*.no"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }

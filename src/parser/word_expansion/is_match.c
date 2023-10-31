@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:22:22 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/30 03:30:45 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 09:33:50 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static bool	**calloc_2d_vector(size_t width, size_t height)
 	return (vec);
 }
 
-static void	update_dp(t_match_table *table, char *text, char *pat)
+static bool	update_dp(t_match_table *table, char *text, char *pat)
 {
 	size_t	i;
 	size_t	j;
@@ -70,6 +70,7 @@ static void	update_dp(t_match_table *table, char *text, char *pat)
 		}
 		i++;
 	}
+	return (table->dp[table->text_len][table->pat_len]);
 }
 
 bool	reg_is_match(char *pat, char *text, bool *is_failed)
@@ -78,6 +79,8 @@ bool	reg_is_match(char *pat, char *text, bool *is_failed)
 	size_t			j;
 	bool			res;
 
+	if (text[0] == '.' && pat[0] != '.')
+		return (false);
 	table.text_len = ft_strlen(text);
 	table.pat_len = ft_strlen(pat);
 	table.dp = calloc_2d_vector(table.pat_len + 1, table.text_len + 1);
@@ -93,8 +96,7 @@ bool	reg_is_match(char *pat, char *text, bool *is_failed)
 		table.dp[0][j] = (pat[j - 1] == '*' && table.dp[0][j - 1]);
 		j++;
 	}
-	update_dp(&table, text, pat);
-	res = table.dp[table.text_len][table.pat_len];
+	res = update_dp(&table, text, pat);
 	destroy_dp(table.dp, table.text_len + 1);
 	return (res);
 }

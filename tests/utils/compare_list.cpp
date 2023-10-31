@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 19:16:15 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/19 02:29:00 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 09:50:02 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ bool compareStrList(t_list *got, vector<const char *> expect)
 {
 	if (got->size != expect.size())
 		return false;
+	got = ft_list_copy(got, (void *(*)(void *))strdup, free);
 	for (auto expect_literal : expect)
 	{
 		auto top = (char *)ft_list_pop_front(got);

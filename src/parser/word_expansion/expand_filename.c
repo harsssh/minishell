@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 00:49:57 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/30 03:31:12 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 09:46:28 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,9 @@ static t_list	*get_cur_dir_filenames(char *cwd)
 	dir = readdir(d);
 	while (dir != NULL)
 	{
-		if (dir->d_type == DT_REG)
-		{
-			filename = ft_strdup(dir->d_name);
-			if (filename == NULL || ft_list_push_back(res, filename) == NULL)
-				return (destroy_and_return_null(filename, res, d));
-		}
+		filename = ft_strdup(dir->d_name);
+		if (filename == NULL || ft_list_push_back(res, filename) == NULL)
+			return (destroy_and_return_null(filename, res, d));
 		dir = readdir(d);
 	}
 	closedir(d);
