@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:44:54 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 10:37:33 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 10:44:59 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ TEST_F(ExpandFilenameTest, forward)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
 	auto expected = {"a.minish", "b.minish"};
 
-	ASSERT_TRUE(compareStrList(result, expected));
+	assertStrList(result, expected);
 }
 
 TEST_F(ExpandFilenameTest, backward)
@@ -250,7 +250,7 @@ TEST_F(ExpandFilenameTest, backward)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
 	auto expected = {".minish"};
 
-	ASSERT_TRUE(compareStrList(result, expected));
+	assertStrList(result, expected);
 }
 
 TEST_F(ExpandFilenameTest, middle)
@@ -260,7 +260,7 @@ TEST_F(ExpandFilenameTest, middle)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
 	auto expected = {"a.minishe", "minishell"};
 
-	ASSERT_TRUE(compareStrList(result, expected));
+	assertStrList(result, expected);
 }
 
 TEST_F(ExpandFilenameTest, no_expansion)
@@ -270,7 +270,7 @@ TEST_F(ExpandFilenameTest, no_expansion)
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)), ctx->cwd);
 	auto expected = {"*.no"};
 
-	ASSERT_TRUE(compareStrList(result, expected));
+	assertStrList(result, expected);
 }
 
 TEST(expand_word, normal)
