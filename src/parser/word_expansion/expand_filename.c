@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 00:49:57 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 09:46:28 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/31 10:31:18 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static t_list	*get_cur_dir_filenames(char *cwd)
 	struct dirent	*dir;
 	char			*filename;
 
+	if (cwd == NULL)
+		return (NULL);
 	res = ft_list_create();
 	if (res == NULL)
 		return (NULL);

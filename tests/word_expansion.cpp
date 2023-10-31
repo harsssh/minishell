@@ -25,7 +25,7 @@ extern "C" {
 class ExpandFilenameTest : public testing::Test {
 protected:
 	std::vector<std::string> filenames = {".minish", "a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
-	std::string test_files_dir = "/tmp/minishell_test/";
+	std::string test_files_dir = "/tmp/minishell/";
 
 	virtual void SetUp() {
 		mkdir(test_files_dir.c_str(), 0777);
