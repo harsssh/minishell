@@ -13,17 +13,17 @@ class ExpandFilenameTest : public testing::Test {
 protected:
 	std::vector<std::string> filenames = {".minish", "a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
 	const char *test_files_dir = "/tmp/minishell/";
-	char *old_cwd = getcwd(NULL, 0);
+	char *old_cwd = getcwd(nullptr, 0);
 
-	virtual void SetUp() {
-		chdir(test_files_dir);
+	void SetUp() override {
 		mkdir(test_files_dir, 0777);
+		chdir(test_files_dir);
 		for (auto &filename: filenames) {
 			creat(filename.c_str(), 0777);
 		}
 	}
 
-	virtual void TearDown() {
+	void TearDown() override {
 		for (auto &filename: filenames) {
 			std::remove(filename.c_str());
 		}
