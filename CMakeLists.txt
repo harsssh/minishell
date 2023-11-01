@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.14)
 project(minishell C)
 
 set(CMAKE_C_STANDARD 17)
-set(CMAKE_C_FLAGS "-Wall -Wextra -Werror")
+set(CMAKE_C_FLAGS "-Wall -Wextra")
 
 enable_testing()
 
@@ -12,15 +12,15 @@ add_subdirectory(tests)
 # build readline
 include(ExternalProject)
 ExternalProject_Add(
-        gnu_readline
-        BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a
-        PREFIX ${CMAKE_BINARY_DIR}/readline
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/readline
-        CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/readline/configure
-        -q --prefix=${CMAKE_BINARY_DIR}/readline --enable-shared=no
-        BUILD_COMMAND make
-        BUILD_IN_SOURCE 1
-        INSTALL_COMMAND make install
+    gnu_readline
+    BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a
+    PREFIX ${CMAKE_BINARY_DIR}/readline
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/readline
+    CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/readline/configure
+    -q --prefix=${CMAKE_BINARY_DIR}/readline --enable-shared=no
+    BUILD_COMMAND make
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND make install
 )
 
 file(GLOB_RECURSE SRC src/*.c)

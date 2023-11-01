@@ -1,9 +1,16 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.14)
 project(minishell_test)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(GTest CONFIG REQUIRED)
+# Google Test v1.14.0
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        f8d7d77c06936315286eb55f8de22cd23c188571
+)
+FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 # src/main.c 以外のファイル
@@ -18,7 +25,7 @@ foreach (TMP_PATH ${TMP})
 endforeach ()
 
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src ${DIR_LIST} ${CMAKE_BINARY_DIR}/readline/include)
-link_libraries(ft GTest::gtest GTest::gtest_main ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a ncurses)
+link_libraries(ft gtest gtest_main ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a ncurses)
 
 # SRCをオブジェクトライブラリにする
 add_library(src_obj OBJECT ${SRC})
