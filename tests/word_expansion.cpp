@@ -313,6 +313,25 @@ TEST_F(ExpandFilenameTest, quote6) {
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
+// use `expand_word` to remove quotes
+TEST_F(ExpandFilenameTest, quote_no_match) {
+	auto input = "\"*\"";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"*"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST_F(ExpandFilenameTest, quote_no_match2) {
+	auto input = "x\"*\"x";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"x*x"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
 TEST(expand_word, normal) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "hello"}}).getCtx();
