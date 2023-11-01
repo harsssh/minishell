@@ -18,13 +18,13 @@ protected:
 	virtual void SetUp() {
 		chdir(test_files_dir);
 		mkdir(test_files_dir, 0777);
-		for (auto &filename : filenames) {
+		for (auto &filename: filenames) {
 			creat(filename.c_str(), 0777);
 		}
 	}
 
 	virtual void TearDown() {
-		for (auto &filename : filenames) {
+		for (auto &filename: filenames) {
 			std::remove(filename.c_str());
 		}
 		rmdir(test_files_dir);
@@ -32,8 +32,7 @@ protected:
 	}
 };
 
-TEST(expand_parameters, normal)
-{
+TEST(expand_parameters, normal) {
 	auto input = "'hello '$USER' 42'";
 	auto ctx = Context({{"USER", "root"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -42,8 +41,7 @@ TEST(expand_parameters, normal)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, no_param)
-{
+TEST(expand_parameters, no_param) {
 	auto input = "'hello world'";
 	auto ctx = Context({{"USER", "root"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -52,8 +50,7 @@ TEST(expand_parameters, no_param)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, expand_in_double_quotes)
-{
+TEST(expand_parameters, expand_in_double_quotes) {
 	auto input = "\"hello $USER 42\"";
 	auto ctx = Context({{"USER", "root"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -62,48 +59,48 @@ TEST(expand_parameters, expand_in_double_quotes)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, multiple)
-{
+TEST(expand_parameters, multiple) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "1"}, {"b", "2"}, {"c", "3"}}).getCtx();
+	auto ctx = Context({{"a", "1"},
+						{"b", "2"},
+						{"c", "3"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
 	auto expected = {"123"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, undefined)
-{
+TEST(expand_parameters, undefined) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "1"}, {"c", "3"}}).getCtx();
+	auto ctx = Context({{"a", "1"},
+						{"c", "3"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
 	auto expected = {"13"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, undefined2)
-{
+TEST(expand_parameters, undefined2) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "1"}, {"b", "2"}}).getCtx();
+	auto ctx = Context({{"a", "1"},
+						{"b", "2"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
 	auto expected = {"12"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, undefined3)
-{
+TEST(expand_parameters, undefined3) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"b", "2"}, {"c", "3"}}).getCtx();
+	auto ctx = Context({{"b", "2"},
+						{"c", "3"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
 	auto expected = {"23"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, undefined4)
-{
+TEST(expand_parameters, undefined4) {
 	auto input = "$a$b$c";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -112,8 +109,7 @@ TEST(expand_parameters, undefined4)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, empty)
-{
+TEST(expand_parameters, empty) {
 	auto input = "";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -122,8 +118,7 @@ TEST(expand_parameters, empty)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, empty2)
-{
+TEST(expand_parameters, empty2) {
 	auto input = "$a";
 	auto ctx = Context({{"a", ""}}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -132,8 +127,7 @@ TEST(expand_parameters, empty2)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, single_quote)
-{
+TEST(expand_parameters, single_quote) {
 	auto input = "'$a'";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -142,8 +136,7 @@ TEST(expand_parameters, single_quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, single_double)
-{
+TEST(expand_parameters, single_double) {
 	auto input = "'\"$a\"'";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -151,9 +144,8 @@ TEST(expand_parameters, single_double)
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
- 
-TEST(expand_parameters, double_single)
-{
+
+TEST(expand_parameters, double_single) {
 	auto input = "\"'$a'\"";
 	auto ctx = Context({{"a", "1"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
@@ -162,8 +154,7 @@ TEST(expand_parameters, double_single)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(split_word, normal)
-{
+TEST(split_word, normal) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
@@ -172,58 +163,58 @@ TEST(split_word, normal)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(split_word, multiple)
-{
+TEST(split_word, multiple) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "  hello  "}, {"b", "  world  "}, {"c", "  42  "}}).getCtx();
+	auto ctx = Context({{"a", "  hello  "},
+						{"b", "  world  "},
+						{"c", "  42  "}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
 	auto expected = {"hello", "world", "42"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(split_word, empty)
-{
+TEST(split_word, empty) {
 	auto input = "$a";
 	auto ctx = Context({{"a", ""}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
-	vector<const char*> expected = {};
+	vector<const char *> expected = {};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(split_word, empty2)
-{
+TEST(split_word, empty2) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", ""}, {"b", ""}, {"c", ""}}).getCtx();
+	auto ctx = Context({{"a", ""},
+						{"b", ""},
+						{"c", ""}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
-	vector<const char*> expected = {};
+	vector<const char *> expected = {};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(split_word, mixed_empty)
-{
+TEST(split_word, mixed_empty) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "hello"}, {"b", "  "}, {"c", "world"}}).getCtx();
+	auto ctx = Context({{"a", "hello"},
+						{"b", "  "},
+						{"c", "world"}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
-	vector<const char*> expected = {"hello", "world"};
+	vector<const char *> expected = {"hello", "world"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(split_word, double_quote)
-{
+TEST(split_word, double_quote) {
 	auto input = "\"$a\"";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
-	vector<const char*> expected = {"\"  hello  world  \""};
+	vector<const char *> expected = {"\"  hello  world  \""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
- 
-TEST_F(ExpandFilenameTest, forward)
-{
+
+TEST_F(ExpandFilenameTest, forward) {
 	auto input = "*.minish";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -232,8 +223,7 @@ TEST_F(ExpandFilenameTest, forward)
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
-TEST_F(ExpandFilenameTest, backward)
-{
+TEST_F(ExpandFilenameTest, backward) {
 	auto input = ".mini*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -242,8 +232,7 @@ TEST_F(ExpandFilenameTest, backward)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST_F(ExpandFilenameTest, middle)
-{
+TEST_F(ExpandFilenameTest, middle) {
 	auto input = "*minishe*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -252,8 +241,7 @@ TEST_F(ExpandFilenameTest, middle)
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
-TEST_F(ExpandFilenameTest, no_expansion)
-{
+TEST_F(ExpandFilenameTest, no_expansion) {
 	auto input = "*.no";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -262,8 +250,7 @@ TEST_F(ExpandFilenameTest, no_expansion)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST_F(ExpandFilenameTest, no_expansion2)
-{
+TEST_F(ExpandFilenameTest, no_expansion2) {
 	auto input = "*.minishell";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -272,8 +259,7 @@ TEST_F(ExpandFilenameTest, no_expansion2)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST_F(ExpandFilenameTest, quote)
-{
+TEST_F(ExpandFilenameTest, quote) {
 	auto input = "'*.minish'";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -282,8 +268,7 @@ TEST_F(ExpandFilenameTest, quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST_F(ExpandFilenameTest, quote2)
-{
+TEST_F(ExpandFilenameTest, quote2) {
 	auto input = "\"*.minish\"";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -292,8 +277,7 @@ TEST_F(ExpandFilenameTest, quote2)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST_F(ExpandFilenameTest, quote3)
-{
+TEST_F(ExpandFilenameTest, quote3) {
 	auto input = "*'.minish'";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -302,8 +286,7 @@ TEST_F(ExpandFilenameTest, quote3)
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
-TEST_F(ExpandFilenameTest, quote4)
-{
+TEST_F(ExpandFilenameTest, quote4) {
 	auto input = "*\".minish\"";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -312,8 +295,7 @@ TEST_F(ExpandFilenameTest, quote4)
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
-TEST_F(ExpandFilenameTest, quote5)
-{
+TEST_F(ExpandFilenameTest, quote5) {
 	auto input = ".mini*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -322,8 +304,7 @@ TEST_F(ExpandFilenameTest, quote5)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST_F(ExpandFilenameTest, quote6)
-{
+TEST_F(ExpandFilenameTest, quote6) {
 	auto input = "\"\"*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
@@ -332,8 +313,7 @@ TEST_F(ExpandFilenameTest, quote6)
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
-TEST(expand_word, normal)
-{
+TEST(expand_word, normal) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "hello"}}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -342,18 +322,18 @@ TEST(expand_word, normal)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, multiple)
-{
+TEST(expand_word, multiple) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "hello"}, {"b", "world"}, {"c", "42"}}).getCtx();
+	auto ctx = Context({{"a", "hello"},
+						{"b", "world"},
+						{"c", "42"}}).getCtx();
 	auto result = expand_word(input, ctx);
 	auto expected = {"helloworld42"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, empty)
-{
+TEST(expand_word, empty) {
 	auto input = "$a";
 	auto ctx = Context({{"a", ""}}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -362,28 +342,29 @@ TEST(expand_word, empty)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, empty2)
-{
+TEST(expand_word, empty2) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", ""}, {"b", ""}, {"c", ""}}).getCtx();
+	auto ctx = Context({{"a", ""},
+						{"b", ""},
+						{"c", ""}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, mixed_empty)
-{
+TEST(expand_word, mixed_empty) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "hello"}, {"b", ""}, {"c", "world"}}).getCtx();
+	auto ctx = Context({{"a", "hello"},
+						{"b", ""},
+						{"c", "world"}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"helloworld"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined)
-{
+TEST(expand_word, undefined) {
 	auto input = "$a";
 	auto ctx = Context({{"b", "hello"}}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -392,38 +373,37 @@ TEST(expand_word, undefined)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined2)
-{
+TEST(expand_word, undefined2) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "hello"}, {"c", "world"}}).getCtx();
+	auto ctx = Context({{"a", "hello"},
+						{"c", "world"}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"helloworld"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined3)
-{
+TEST(expand_word, undefined3) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "hello"}, {"b", "world"}}).getCtx();
+	auto ctx = Context({{"a", "hello"},
+						{"b", "world"}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"helloworld"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined4)
-{
+TEST(expand_word, undefined4) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"b", "hello"}, {"c", "world"}}).getCtx();
+	auto ctx = Context({{"b", "hello"},
+						{"c", "world"}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"helloworld"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined5)
-{
+TEST(expand_word, undefined5) {
 	auto input = "$a$b$c";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -432,28 +412,29 @@ TEST(expand_word, undefined5)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined6)
-{
+TEST(expand_word, undefined6) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", ""}, {"b", ""}, {"c", ""}}).getCtx();
+	auto ctx = Context({{"a", ""},
+						{"b", ""},
+						{"c", ""}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, undefined7)
-{
+TEST(expand_word, undefined7) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "hello"}, {"b", ""}, {"c", "world"}}).getCtx();
+	auto ctx = Context({{"a", "hello"},
+						{"b", ""},
+						{"c", "world"}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"helloworld"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, space)
-{
+TEST(expand_word, space) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "  hello  "}}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -462,58 +443,62 @@ TEST(expand_word, space)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, space2)
-{
+TEST(expand_word, space2) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "  hello  "}, {"b", "  world  "}, {"c", "  42  "}}).getCtx();
+	auto ctx = Context({{"a", "  hello  "},
+						{"b", "  world  "},
+						{"c", "  42  "}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"hello", "world", "42"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, space3)
-{
+TEST(expand_word, space3) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "  hello  "}, {"b", "  "}, {"c", "  world  "}}).getCtx();
+	auto ctx = Context({{"a", "  hello  "},
+						{"b", "  "},
+						{"c", "  world  "}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"hello", "world"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, space4)
-{
+TEST(expand_word, space4) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "  "}, {"b", "  world  "}, {"c", "  42  "}}).getCtx();
+	auto ctx = Context({{"a", "  "},
+						{"b", "  world  "},
+						{"c", "  42  "}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"world", "42"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, space5)
-{
+TEST(expand_word, space5) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "  hello  "}, {"b", "  "}, {"c", "  "}}).getCtx();
+	auto ctx = Context({{"a", "  hello  "},
+						{"b", "  "},
+						{"c", "  "}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"hello"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, space6)
-{
+TEST(expand_word, space6) {
 	auto input = "$a$b$c";
-	auto ctx = Context({{"a", "  "}, {"b", "  "}, {"c", "  42  "}}).getCtx();
+	auto ctx = Context({{"a", "  "},
+						{"b", "  "},
+						{"c", "  42  "}}).getCtx();
 	auto result = expand_word(input, ctx);
 	vector<const char *> expected = {"42"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, single_quote)
-{
+TEST(expand_word, single_quote) {
 	auto input = "'$a'";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -522,8 +507,7 @@ TEST(expand_word, single_quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, double_quote)
-{
+TEST(expand_word, double_quote) {
 	auto input = "\"$a\"";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -532,8 +516,7 @@ TEST(expand_word, double_quote)
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_word, single_double)
-{
+TEST(expand_word, single_double) {
 	auto input = "'\"$a\"'";
 	auto ctx = Context({}).getCtx();
 	auto result = expand_word(input, ctx);
@@ -541,9 +524,8 @@ TEST(expand_word, single_double)
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
- 
-TEST(expand_word, double_single)
-{
+
+TEST(expand_word, double_single) {
 	auto input = "\"'$a'\"";
 	auto ctx = Context({{"a", "1"}}).getCtx();
 	auto result = expand_word(input, ctx);
