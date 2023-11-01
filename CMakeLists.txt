@@ -12,15 +12,15 @@ add_subdirectory(tests)
 # build readline
 include(ExternalProject)
 ExternalProject_Add(
-        gnu_readline
-        BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a
-        PREFIX ${CMAKE_BINARY_DIR}/readline
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/readline
-        CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/readline/configure
-        -q --prefix=${CMAKE_BINARY_DIR}/readline --enable-shared=no
-        BUILD_COMMAND make
-        BUILD_IN_SOURCE 1
-        INSTALL_COMMAND make install
+    gnu_readline
+    BUILD_BYPRODUCTS ${CMAKE_BINARY_DIR}/readline/lib/libreadline.a
+    PREFIX ${CMAKE_BINARY_DIR}/readline
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/readline
+    CONFIGURE_COMMAND ${CMAKE_SOURCE_DIR}/readline/configure
+    -q --prefix=${CMAKE_BINARY_DIR}/readline --enable-shared=no
+    BUILD_COMMAND make
+    BUILD_IN_SOURCE 1
+    INSTALL_COMMAND make install
 )
 
 file(GLOB_RECURSE SRC src/*.c)
