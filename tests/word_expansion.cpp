@@ -429,3 +429,12 @@ TEST(expand_word, double_single)
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
+
+TEST(expand_word, exit_status) {
+	auto input = "$?";
+	auto ctx = Context(42).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"42"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
