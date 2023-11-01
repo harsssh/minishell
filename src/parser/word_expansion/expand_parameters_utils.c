@@ -20,7 +20,7 @@ static char	*get_param_name(char **word)
 	char	*res;
 
 	(*word)++;
-	if (ft_strcmp(*word, "?") == 0)
+	if (ft_strncmp(*word, "?", 1) == 0)
 	{
 		(*word)++;
 		return (ft_strdup("?"));

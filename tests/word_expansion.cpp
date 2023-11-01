@@ -438,3 +438,12 @@ TEST(expand_word, exit_status) {
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
+
+TEST(expand_word, exit_status_many) {
+	auto input = "$?$?$?";
+	auto ctx = Context(42).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"424242"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
