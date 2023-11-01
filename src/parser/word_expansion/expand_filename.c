@@ -26,6 +26,7 @@ static int	push_expanded_filename(char *filename, char *pat, t_list *res)
 {
 	bool	is_matching_failed;
 
+	is_matching_failed = false;
 	if (reg_is_match(filename, pat, &is_matching_failed))
 	{
 		filename = ft_strdup(filename);
