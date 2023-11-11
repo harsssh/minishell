@@ -6,11 +6,12 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:26:39 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/25 04:57:11 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/10/29 02:25:04 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec_internal.h"
+#include "expansion.h"
 #include "utils.h"
 #include <fcntl.h>
 #include <stdlib.h>
@@ -23,15 +24,35 @@ static void	close_iter_fn(void *data)
 	close(*fd_ptr);
 }
 
+static char	*get_filename(t_context *ctx, t_redirect *redirect)
+{
+	t_list	*expanded_filename;
+	char	*filename;
+
+	expanded_filename = expand_word(redirect->filename, ctx);
+	if (expanded_filename == NULL)
+		return (NULL);
+	if (expanded_filename->size != 1)
+	{
+		print_simple_error(ctx, redirect->filename, ERR_AMBIGUOUS_REDIRECT);
+		ft_list_destroy(expanded_filename, free);
+		return (NULL);
+	}
+	filename = ft_strdup((char *)expanded_filename->head->data);
+	ft_list_destroy(expanded_filename, free);
+	return (filename);
+}
+
 static int	open_for_redirect(t_context *ctx, t_redirect *redirect)
 {
-	int	fd;
+	int		fd;
+	char	*filename;
 
-	if (redirect->filename == NULL)
-	{
-		print_simple_error(ctx, ERR_AMBIGUOUS_REDIRECT, strerror(errno));
+	filename = get_filename(ctx, redirect);
+	if (filename == NULL)
 		return (-1);
-	}
+	free(redirect->filename);
+	redirect->filename = filename;
 	if (redirect->type == REDIRECT_IN || redirect->type == REDIRECT_HERE_DOC)
 		fd = open(redirect->filename, O_RDONLY);
 	else if (redirect->type == REDIRECT_OUT)

@@ -6,13 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:15:00 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/20 12:22:11 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/10/29 04:21:04 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "ft_list.h"
 #include "libft.h"
+#include <stdlib.h>
 
 static void	read_quote(char **input, char *quote)
 {
@@ -51,9 +51,10 @@ static char	*get_next_word(char **input)
 	return (str);
 }
 
-static void	*destroy_and_return_null(t_list *l)
+static void	*destroy_and_return_null(t_list *l, char *w)
 {
 	ft_list_destroy(l, free);
+	free(w);
 	return (NULL);
 }
 
@@ -71,13 +72,13 @@ t_list	*split_word(t_list *list)
 	{
 		word = get_next_word(&p);
 		if (word == NULL)
-			return (destroy_and_return_null(res));
+			return (destroy_and_return_null(res, word));
 		if (*word == '\0')
 		{
 			free(word);
 			return (res);
 		}
 		if (ft_list_push_back(res, word) == NULL)
-			return (destroy_and_return_null(res));
+			return (destroy_and_return_null(res, word));
 	}
 }

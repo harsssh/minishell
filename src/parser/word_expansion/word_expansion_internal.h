@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:58:11 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 16:44:34 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/11 16:43:04 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_match_table
 	size_t	j;
 }	t_match_table;
 
-t_list	*expand_word(const char *word, t_context *ctx);
 t_list	*expand_parameters(const char *word, t_context *ctx);
 char	*expand_first_param(const char **word, t_context *ctx);
 t_list	*split_word(t_list *list);
