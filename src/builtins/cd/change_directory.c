@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 17:20:07 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/11/13 17:07:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/13 17:17:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	change_directory(t_context *ctx, const char *newdir)
 	bool	is_canon_success;
 
 	is_canon_success = get_absolute_destination_path(ctx, newdir, &path);
+	if (path == NULL)
+		return (-1);
 	ret = chdir(path);
 	if (ret == 0)
 	{
