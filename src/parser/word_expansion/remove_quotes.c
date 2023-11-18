@@ -6,13 +6,15 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 12:16:28 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/18 21:53:56 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/19 03:01:20 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 #include "word_expansion_internal.h"
+
+#define BACK_SLASH '\\'
 
 static void	read_quote(const char **s, char *quote)
 {
@@ -30,13 +32,15 @@ static char	*remove_quote(const char *s)
 
 	quote = '\0';
 	res = ft_strdup("");
+	if (res == NULL)
+		return (NULL);
 	while (*s != '\0')
 	{
 		if ((*s == '\'' || *s == '"') && (quote == '\0' || quote == *s))
 			read_quote(&s, &quote);
 		else
 		{
-			if (*s == '\\')
+			if (*s == BACK_SLASH)
 				s++;
 			res = join_char(res, &s);
 			if (res == NULL)

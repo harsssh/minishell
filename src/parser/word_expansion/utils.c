@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 13:48:14 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/18 18:25:36 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/19 03:02:40 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*escape_string(const char *str)
 	char		*tmp;
 
 	res = ft_strdup("");
+	if (res == NULL)
+		return (NULL);
 	while (*str != '\0')
 	{
 		if (*str == '\'' || *str == '"')
