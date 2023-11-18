@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 00:03:47 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/11 16:47:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/18 18:12:19 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	update_quote(char *quote, char c)
 }
 
 static char	*expand_paramters_helper(char *res, const char **word,
-									t_context *ctx)
+								t_context *ctx)
 {
 	char	*param;
 	char	*joined;

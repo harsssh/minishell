@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 12:16:28 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 12:07:27 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/18 21:53:56 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static char	*remove_quote(const char *s)
 			read_quote(&s, &quote);
 		else
 		{
+			if (*s == '\\')
+				s++;
 			res = join_char(res, &s);
 			if (res == NULL)
 				return (NULL);

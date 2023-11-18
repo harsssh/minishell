@@ -6,18 +6,19 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 02:07:14 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/19 18:17:23 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/18 18:30:11 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 #include "variables.h"
+#include "word_expansion_internal.h"
 
-static char	*get_param_name(char **word)
+static char	*get_param_name(const char **word)
 {
-	char	*p;
-	char	*res;
+	const char	*p;
+	char		*res;
 
 	(*word)++;
 	if (ft_strncmp(*word, "?", 1) == 0)
@@ -50,12 +51,12 @@ static char	*get_value(char *param_name, t_context *ctx)
 		if (var == NULL)
 			res = ft_strdup("");
 		else
-			res = ft_strdup(var->value);
+			res = escape_string(var->value);
 	}
 	return (res);
 }
 
-char	*expand_first_param(char **word, t_context *ctx)
+char	*expand_first_param(const char **word, t_context *ctx)
 {
 	char		*param_name;
 	char		*res;

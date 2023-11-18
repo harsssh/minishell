@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:58:11 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/11 16:43:04 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/18 18:27:26 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define WORD_EXPANSION_INTERNAL_H
 
 # include "context.h"
+# include "ft_list.h"
 # include "libft.h"
 # include <dirent.h>
 
@@ -26,14 +27,15 @@ typedef struct s_match_table
 	size_t	j;
 }	t_match_table;
 
-t_list	*expand_parameters(const char *word, t_context *ctx);
-char	*expand_first_param(const char **word, t_context *ctx);
-t_list	*split_word(t_list *list);
-char	*join_char(char *str, const char **word);
-t_list	*remove_quotes(t_list *input);
-t_list	*expand_filenames(t_list *input);
-bool	reg_is_match(char *text, char *pat, bool *is_failed);
-t_list	*expand_filename(char *pat, t_list *cur_dir_filenames);
-t_list	*get_cur_dir_filenames(void);
+t_list				*expand_parameters(const char *word, t_context *ctx);
+char				*expand_first_param(const char **word, t_context *ctx);
+t_list				*split_word(t_list *list);
+char				*join_char(char *str, const char **word);
+t_list				*remove_quotes(t_list *input);
+t_list				*expand_filenames(t_list *input);
+bool				reg_is_match(char *text, char *pat, bool *is_failed);
+t_list				*expand_filename(char *pat, t_list *cur_dir_filenames);
+t_list				*get_cur_dir_filenames(void);
+char				*escape_string(const char *str);
 
 #endif

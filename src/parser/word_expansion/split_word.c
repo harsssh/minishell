@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:15:00 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 04:21:04 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/18 18:52:49 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 
 static void	read_quote(char **input, char *quote)
 {
-	if (*quote == '\0')
+	if (**input == '\\')
+		(*input)++;
+	else if (*quote == '\0')
 		*quote = **input;
 	else if (**input == *quote)
 		*quote = '\0';
@@ -35,7 +37,7 @@ static char	*get_next_word(char **input)
 	p = *input;
 	while (*p != '\0')
 	{
-		if (*p == '\'' || *p == '"')
+		if (*p == '\\' || *p == '\'' || *p == '"')
 			read_quote(&p, &quote);
 		else if (quote != '\0')
 			p++;

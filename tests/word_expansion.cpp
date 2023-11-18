@@ -12,7 +12,7 @@ extern "C" {
 
 class ExpandFilenameTest : public testing::Test {
 protected:
-	std::vector<std::string> filenames = {".minish", "a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
+	std::vector<std::string> filenames = {".minish", "a.minish", "b.minish", "minishell", "a.txt", "a.minishe", "'.quote", "\".quote"};
 	const char *test_files_dir = "/tmp/minishell/";
 	char *old_cwd = getcwd(nullptr, 0);
 
@@ -155,6 +155,33 @@ TEST(expand_parameters, double_single) {
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
+TEST(expand_parameters, expanded_single_quote) {
+	auto input = "$a";
+	auto ctx = Context({{"a", "'1'"}}).getCtx();
+	auto result = expand_parameters(input, ctx);
+	auto expected = {"\\'1\\'"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_parameters, expanded_mixed_quotes) {
+	auto input = "$a";
+	auto ctx = Context({{"a", "\"'1'\""}}).getCtx();
+	auto result = expand_parameters(input, ctx);
+	auto expected = {"\\\"\\'1\\'\\\""};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_parameters, expanded_double_quote) {
+	auto input = "$a";
+	auto ctx = Context({{"a", "\"1\""}}).getCtx();
+	auto result = expand_parameters(input, ctx);
+	auto expected = {"\\\"1\\\""};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
 TEST(split_word, normal) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
@@ -211,6 +238,24 @@ TEST(split_word, double_quote) {
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
 	auto result = split_word(expand_parameters(input, ctx));
 	vector<const char *> expected = {"\"  hello  world  \""};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(split_word, expanded_quote) {
+	auto input = "$a";
+	auto ctx = Context({{"a", "'hello  world'"}}).getCtx();
+	auto result = split_word(expand_parameters(input, ctx));
+	vector<const char *> expected = {"\\'hello", "world\\'"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(split_word, single_quote_with_variable) {
+	auto input = "'$a'";
+	auto ctx = Context({}).getCtx();
+	auto result = split_word(expand_parameters(input, ctx));
+	vector<const char *> expected = {"'$a'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
 }
@@ -309,7 +354,7 @@ TEST_F(ExpandFilenameTest, quote6) {
 	auto input = "\"\"*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
 	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
-	auto expected = {"a.minish", "b.minish", "minishell", "a.txt", "a.minishe"};
+	auto expected = {"a.minish", "b.minish", "minishell", "a.txt", "a.minishe", "\\'.quote", "\\\".quote"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
@@ -331,6 +376,15 @@ TEST_F(ExpandFilenameTest, quote_no_match2) {
 	auto expected = {"x*x"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST_F(ExpandFilenameTest, quote_in_file) {
+	auto input = "*.quote";
+	auto *ctx = Context("/tmp/minishell").getCtx();
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto expected = {"\\'.quote", "\\\".quote"};
+
+	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
 }
 
 TEST(expand_word, normal) {
