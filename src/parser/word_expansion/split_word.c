@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:15:00 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/18 18:52:49 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/19 03:05:44 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-static void	read_quote(char **input, char *quote)
+static void	eat_escape_and_quote(char **input, char *quote)
 {
 	if (**input == '\\')
 		(*input)++;
@@ -38,7 +38,7 @@ static char	*get_next_word(char **input)
 	while (*p != '\0')
 	{
 		if (*p == '\\' || *p == '\'' || *p == '"')
-			read_quote(&p, &quote);
+			eat_escape_and_quote(&p, &quote);
 		else if (quote != '\0')
 			p++;
 		else if (ft_strchr(" \t\n", *p) != NULL)
