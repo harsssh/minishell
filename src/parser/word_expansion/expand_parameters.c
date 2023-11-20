@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 00:03:47 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/18 18:12:19 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/20 21:35:23 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static void	*destroy_and_return_null(t_list *list, char *s)
 	return (NULL);
 }
 
-static void	update_quote(char *quote, char c)
+static void	update_quote(char *quote, const char **word)
 {
 	if (*quote == '\0')
-		*quote = c;
-	else if (*quote == c)
+		*quote = **word;
+	else if (*quote == **word)
 		*quote = '\0';
 }
 
@@ -74,7 +74,7 @@ t_list	*expand_parameters(const char *word, t_context *ctx)
 			continue ;
 		}
 		else if (*word == '\'' || *word == '"')
-			update_quote(&quote, *word);
+			update_quote(&quote, &word);
 		res = join_char(res, &word);
 		if (res == NULL)
 			return (NULL);

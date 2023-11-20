@@ -182,6 +182,14 @@ TEST(expand_parameters, expanded_double_quote) {
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
+TEST(expand_parameters, missing_escape_char) {
+	auto input = "\\";
+	auto ctx = Context({}).getCtx();
+	auto result = expand_parameters(input, ctx);
+
+	EXPECT_EQ(result, nullptr);
+}
+
 TEST(split_word, normal) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();

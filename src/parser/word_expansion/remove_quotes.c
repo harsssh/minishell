@@ -6,15 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 12:16:28 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/19 03:01:20 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/19 03:10:30 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 #include "word_expansion_internal.h"
-
-#define BACK_SLASH '\\'
 
 static void	read_quote(const char **s, char *quote)
 {

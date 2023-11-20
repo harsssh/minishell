@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 11:08:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/05 20:48:23 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/20 20:04:43 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define LEXER_INTERNAL_H
 
 # include "token.h"
+# include <stdbool.h>
+
+# define BACK_SLASH '\\'
 
 typedef struct s_lexer
 {
@@ -21,6 +24,7 @@ typedef struct s_lexer
 	char			*input_snapshot;
 	size_t			cur_token_len;
 	char			quote_char;
+	bool			do_escape_next_char;
 	t_token_type	cur_type;
 }	t_lexer;
 

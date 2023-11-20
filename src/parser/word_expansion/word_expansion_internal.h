@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:58:11 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/18 18:27:26 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/19 03:10:29 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "ft_list.h"
 # include "libft.h"
 # include <dirent.h>
+
+# define BACK_SLASH '\\'
 
 typedef struct s_match_table
 {
