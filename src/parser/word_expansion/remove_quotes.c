@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 12:16:28 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/19 03:10:30 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/30 00:03:08 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ static char	*remove_quote(const char *s)
 			read_quote(&s, &quote);
 		else
 		{
-			if (*s == BACK_SLASH)
-				s++;
-			res = join_char(res, &s);
+			if (quote == '\'' || (*s == BACK_SLASH && s[1] != '\0'
+					&& ((quote == '\0' && ft_strchr("\\'\"$", s[1]))
+						|| (quote == '\"' && ft_strchr("\\\"$", s[1]))) && s++))
+				res = join_char(res, &s);
+			else
+				res = join_char_or_back_slash_char(res, &s);
 			if (res == NULL)
 				return (NULL);
 		}

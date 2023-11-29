@@ -182,12 +182,13 @@ TEST(expand_parameters, expanded_double_quote) {
 	ASSERT_TRUE(compareStrList(result, expected));
 }
 
-TEST(expand_parameters, missing_escape_char) {
-	auto input = "\\";
-	auto ctx = Context({}).getCtx();
+TEST(expand_parameters, expanded_back_slash) {
+	auto input = "$a";
+	auto ctx = Context({{"a", "\\"}}).getCtx();
 	auto result = expand_parameters(input, ctx);
+	auto expected = {"\\\\"};
 
-	EXPECT_EQ(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
 }
 
 TEST(split_word, normal) {
@@ -631,5 +632,120 @@ TEST(expand_word, exit_status_many) {
 	auto result = expand_word(input, ctx);
 	auto expected = {"424242"};
 
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, back_slash_in_single_quote)
+{
+	auto input = "'\\'";
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\"};
+
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_double_quote_in_single_quotes) {
+	auto input = "'\\\"'";
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\\""};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_backslash_in_single_quotes) {
+	auto input = "'\\\\'";
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\\\"};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_single_quote_in_double_quotes) {
+	auto input = "\"\\'\""; // "\'"
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\'"};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_double_quote_in_double_quotes) {
+	auto input = "\"\\\"\""; // "\""
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\""};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_backslash_in_double_quotes) {
+	auto input = "\"\\\\\""; // "\\"
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\"};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_single_quote)
+{
+	auto input = "\\'"; // \'
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"'"};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_double_quote)
+{
+	auto input = "\\\""; // \"
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\""};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, escape_dollar)
+{
+	auto input = "\\$"; // \$
+	auto ctx = Context({}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"$"};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, expanded_back_slash)
+{
+	auto input = "$a";
+	auto ctx = Context({{"a", "\\"}}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\"};
+
+	ASSERT_NE(result, nullptr);
+	ASSERT_TRUE(compareStrList(result, expected));
+}
+
+TEST(expand_word, expanded_back_slash_in_quote)
+{
+	auto input = "\"$a\"";
+	auto ctx = Context({{"a", "\\"}}).getCtx();
+	auto result = expand_word(input, ctx);
+	auto expected = {"\\"};
+
+	ASSERT_NE(result, nullptr);
 	ASSERT_TRUE(compareStrList(result, expected));
 }

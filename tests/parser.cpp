@@ -554,6 +554,26 @@ TEST(parser, tail_semicolon)
 	ASSERT_TRUE(expected == result);
 }
 
+TEST(parser, escape_single_quote)
+{
+	auto input = "\\'";
+	auto result = parse(input, nullptr);
+	auto expected = ASTBuilder(N_COMMAND).addArgument("\\'");
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(expected == result);
+}
+
+TEST(parser, escape_double_quote)
+{
+	auto input = "\\\"";
+	auto result = parse(input, nullptr);
+	auto expected = ASTBuilder(N_COMMAND).addArgument("\\\"");
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(expected == result);
+}
+
 /* 異常系 */
 TEST(parser_negative, no_command)
 {
@@ -680,6 +700,14 @@ TEST(parser_negative, incomplete_subshell)
 TEST(parser_negative, incomplete_subshell2)
 {
 	auto input = "cmd1)";
+	auto result = parse(input, nullptr);
+
+	EXPECT_EQ(result, nullptr);
+}
+
+TEST(parser_negative, incomplete_escape)
+{
+	auto input = "\\";
 	auto result = parse(input, nullptr);
 
 	EXPECT_EQ(result, nullptr);

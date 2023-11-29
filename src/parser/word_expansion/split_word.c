@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:15:00 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/19 03:06:33 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/29 23:39:07 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static void	eat_escape_and_quote(char **input, char *quote)
 		*quote = **input;
 	else if (**input == *quote)
 		*quote = '\0';
-	(*input)++;
+	if (**input != '\0')
+		(*input)++;
 }
 
 static char	*get_next_word(char **input)

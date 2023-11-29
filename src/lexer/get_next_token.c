@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/20 20:10:01 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/29 23:42:35 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ static void	get_next_token_helper(t_lexer *lexer)
 
 static void	tokenize_quote_and_escape(t_lexer *lexer)
 {
+	if (get_cur_char(lexer) == BACK_SLASH)
+	{
+		set_cur_token_type(lexer, TK_WORD);
+		read_char(lexer);
+		if (get_quote_char(lexer) != '\'' && *get_input(lexer) != '\0')
+			read_char(lexer);
+		return ;
+	}
 	if (!is_quoted(lexer))
 	{
 		set_quote_char(lexer, get_cur_char(lexer));
