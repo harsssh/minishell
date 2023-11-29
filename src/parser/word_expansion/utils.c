@@ -13,6 +13,8 @@
 #include "lexer/lexer_internal.h"
 #include "libft.h"
 #include "word_expansion_internal.h"
+#include "characters.h"
+#include "utils.h"
 #include <stdlib.h>
 
 char	*join_char_or_back_slash_char(char *str, const char **word)
@@ -20,9 +22,9 @@ char	*join_char_or_back_slash_char(char *str, const char **word)
 	char	s[3];
 	char	*res;
 
-	if (**word == BACK_SLASH)
+	if (**word == BACKSLASH)
 	{
-		s[0] = BACK_SLASH;
+		s[0] = BACKSLASH;
 		(*word)++;
 		if (**word != '\0')
 		{
@@ -67,7 +69,7 @@ char	*escape_string(const char *str)
 		return (NULL);
 	while (*str != '\0')
 	{
-		if (*str == '\'' || *str == '"' || *str == BACK_SLASH)
+		if (*str == BACKSLASH || is_quote(*str))
 		{
 			tmp = res;
 			res = ft_strjoin(tmp, "\\");

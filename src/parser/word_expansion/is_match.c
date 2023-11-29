@@ -6,13 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:22:22 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 17:16:28 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/30 01:40:25 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include "utils.h"
 #include "word_expansion_internal.h"
 
 static void	destroy_dp(bool **dp, size_t height)
@@ -57,8 +58,7 @@ static bool	new_dp_value(t_match_table *table, char pat_char, char text_char,
 	dp = table->dp;
 	i = table->i;
 	j = table->j;
-	if ((pat_char == '"' || pat_char == '\'')
-		&& (*quote == '\0' || *quote == pat_char))
+	if (is_quote(pat_char) && (*quote == '\0' || *quote == pat_char))
 	{
 		if (*quote == '\0')
 			*quote = pat_char;

@@ -12,6 +12,8 @@
 
 #include "lexer_internal.h"
 #include "token.h"
+#include "characters.h"
+#include "utils.h"
 
 static t_token	*tokenize_operators(t_lexer *lexer)
 {
@@ -50,11 +52,11 @@ static void	get_next_token_helper(t_lexer *lexer)
 
 static void	tokenize_quote_and_escape(t_lexer *lexer)
 {
-	if (get_cur_char(lexer) == BACK_SLASH)
+	if (get_cur_char(lexer) == BACKSLASH)
 	{
 		set_cur_token_type(lexer, TK_WORD);
 		read_char(lexer);
-		if (get_quote_char(lexer) != '\'' && *get_input(lexer) != '\0')
+		if (get_quote_char(lexer) != SINGLE_QUOTE && *get_input(lexer) != '\0')
 			read_char(lexer);
 		return ;
 	}
@@ -87,7 +89,7 @@ t_token	*get_next_token(t_lexer *lexer)
 	while (!has_empty_input(lexer))
 	{
 		cur_char = get_cur_char(lexer);
-		if (cur_char == BACK_SLASH || cur_char == '\'' || cur_char == '"')
+		if (cur_char == BACKSLASH || is_quote(cur_char))
 			tokenize_quote_and_escape(lexer);
 		else if (is_quoted(lexer))
 			read_char(lexer);
