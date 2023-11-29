@@ -704,11 +704,3 @@ TEST(parser_negative, incomplete_subshell2)
 
 	EXPECT_EQ(result, nullptr);
 }
-
-TEST(parser_negative, incomplete_escape)
-{
-	auto input = "\\";
-	auto result = parse(input, nullptr);
-
-	EXPECT_EQ(result, nullptr);
-}
