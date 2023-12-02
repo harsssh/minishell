@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:23:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 23:29:20 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "fcntl.h"
 #include "libft.h"
 #include "parser_internal.h"
+#include "readline/rltypedefs.h"
 #include "sig.h"
 #include <errno.h>
 #include <stdio.h>
@@ -91,32 +92,26 @@ static t_redirect	*new_here_doc(char *delimiter)
 	return (redirect);
 }
 
-t_redirect	*do_heredoc(char *delimiter)
-{
-	rl_hook_func_t	*tmp;
-	t_redirect		*ret;
-
-	tmp = rl_event_hook;
-	rl_event_hook = heredoc_readline_hook;
-	ret = new_here_doc(delimiter);
-	rl_event_hook = tmp;
-	return (ret);
-}
-
 // When parsing here document, a tmporary file will be created and
 // the file name will be stored in the filename field of the redirect
 // structure. The following token will be used as the delimiter
 // if the token type is TK_WORD.
 t_redirect	*parse_here_doc(t_parser *parser)
 {
-	char	*delimiter;
+	char			*delimiter;
+	rl_hook_func_t	*tmp;
+	t_redirect		*ret;
 
 	if (consume_token(parser, TK_REDIRECT_HERE_DOC))
 	{
 		delimiter = parse_word(parser);
 		if (delimiter == NULL)
 			return (NULL);
-		return (do_heredoc(delimiter));
+		tmp = rl_event_hook;
+		rl_event_hook = heredoc_readline_hook;
+		ret = new_here_doc(delimiter);
+		rl_event_hook = tmp;
+		return (ret);
 	}
 	else
 		return (NULL);
