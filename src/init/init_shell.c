@@ -6,10 +6,11 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 01:03:34 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/30 17:55:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 00:50:08 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "hooks.h"
 #include "init.h"
 #include "init_internal.h"
 #include "libft.h"
@@ -23,18 +24,6 @@
 
 #define DEFAULT_PATH		"/usr/local/bin:/bin:/usr/bin:."
 #define DEFAULT_SHELL_NAME	"minishell"
-
-static int	rl_hook_func(void)
-{
-	if (g_sig == SIGINT)
-	{
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		rl_done = true;
-	}
-	return (EXIT_SUCCESS);
-}
 
 static int	set_default_values(t_context *ctx)
 {
@@ -86,7 +75,7 @@ int	init_shell(t_context *ctx, char **argv, char **envp)
 	if (ctx->is_interactive)
 	{
 		rl_outstream = stderr;
-		rl_event_hook = rl_hook_func;
+		rl_event_hook = sigint_event_hook;
 	}
 	return (EXIT_SUCCESS);
 }

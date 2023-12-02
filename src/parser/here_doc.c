@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 00:43:03 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 01:02:31 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,12 @@
 #include "parser/word_expansion/word_expansion_internal.h"
 #include "parser_internal.h"
 #include "sig.h"
+#include "hooks.h"
 #include <stdio.h>
 #include <errno.h>
 #include <readline/readline.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-static int	heredoc_readline_hook(void)
-{
-	if (g_sig == SIGINT)
-	{
-		rl_done = 1;
-	}
-	return (EXIT_SUCCESS);
-}
 
 static int	open_here_doc(t_redirect *redirect)
 {
@@ -80,6 +72,15 @@ static char	*expand_parameters_in_heredoc(char *line, t_context *ctx,
 	return (expanded_line);
 }
 
+static t_redirect	*terminate_heredoc(int fd, char *line, t_redirect *redirect)
+{
+	close(fd);
+	free(line);
+	if (errno != 0)
+		return (destroy_redirect_and_return_null(redirect));
+	return (redirect);
+}
+
 static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 {
 	t_redirect	*redirect;
@@ -94,13 +95,7 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 	{
 		line = readline("> ");
 		if (line == NULL || g_sig == SIGINT)
-		{
-			close(fd);
-			free(line);
-			if (errno != 0)
-				return (destroy_redirect_and_return_null(redirect));
-			return (redirect);
-		}
+			return (terminate_heredoc(fd, line, redirect));
 		if (ft_strcmp(delimiter, line) == 0)
 		{
 			free(line);
@@ -121,7 +116,6 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 t_redirect	*parse_here_doc(t_parser *parser)
 {
 	char			*delimiter;
-	rl_hook_func_t	*tmp;
 	t_redirect		*ret;
 
 	if (consume_token(parser, TK_REDIRECT_HERE_DOC))
@@ -129,10 +123,9 @@ t_redirect	*parse_here_doc(t_parser *parser)
 		delimiter = parse_word(parser);
 		if (delimiter == NULL)
 			return (NULL);
-		tmp = rl_event_hook;
-		rl_event_hook = heredoc_readline_hook;
+		rl_event_hook = heredoc_sigint_event_hook;
 		ret = new_here_doc(delimiter, parser->ctx);
-		rl_event_hook = tmp;
+		rl_event_hook = sigint_event_hook;
 		free(delimiter);
 		return (ret);
 	}
