@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:54:38 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 21:42:31 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 22:36:58 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_parser	*new_parser(char *input, t_context *ctx)
 	{
 		if (tokenize_result == TRESULT_UNMATCHING_QUOTE)
 			print_simple_error(ctx, "parser", "unexpected end of file");
+		ctx->last_exit_status = EXIT_SYNTAX_ERROR;
 		return (NULL);
 	}
 	parser = ft_calloc(1, sizeof(t_parser));

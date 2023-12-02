@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 22:29:33 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 22:36:37 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_ast_node	*parse(const char *input, t_context *ctx)
 			print_simple_error(ctx, "parser", "unexpected end of file");
 		else
 			print_syntax_error(ctx, parser);
+		ctx->last_exit_status = EXIT_SYNTAX_ERROR;
 		destroy_parser(parser);
 		destroy_node(result);
 		return (NULL);

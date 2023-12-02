@@ -6,12 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:05:07 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 21:14:58 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 22:36:23 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_INTERNAL_H
 # define PARSER_INTERNAL_H
+
+# define EXIT_SYNTAX_ERROR 2
 
 # include "parser.h"
 # include "token.h"
