@@ -15,16 +15,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-typedef struct s_proc_state
-{
-	const char			*path;
-	char				*result;
-	char				*cur;
-	bool				check_existence;
-}						t_proc_state;
-
-typedef t_proc_state	(*t_handler)(t_proc_state);
-
 static t_proc_state	handle_skip(t_proc_state s)
 {
 	++s.path;
