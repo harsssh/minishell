@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:29:20 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 23:32:13 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 #include "fcntl.h"
 #include "libft.h"
 #include "parser_internal.h"
-#include "readline/rltypedefs.h"
 #include "sig.h"
-#include <errno.h>
 #include <stdio.h>
+#include <errno.h>
 #include <readline/readline.h>
 #include <stdlib.h>
 #include <unistd.h>
