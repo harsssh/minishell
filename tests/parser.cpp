@@ -5,12 +5,14 @@
 extern "C" {
 #include "parser_internal.h"
 #include "parser.h"
+#include "utils/context.hpp"
 }
 
 TEST(parser, normal)
 {
 	auto input = "ls";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("ls");
 
@@ -21,7 +23,8 @@ TEST(parser, normal)
 TEST(parser, pipe)
 {
 	auto input = "cmd1 | cmd2 | cmd3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -37,7 +40,8 @@ TEST(parser, pipe)
 TEST(parser, redirect)
 {
 	auto input = "cat > file1 < file2 >> file3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_OUT, "file1").addRedirect(REDIRECT_IN, "file2").addRedirect(REDIRECT_APPEND, "file3");
@@ -49,7 +53,8 @@ TEST(parser, redirect)
 TEST(parser, redirect2)
 {
 	auto input = "cat < file1 < file2 < file3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_IN, "file1").addRedirect(REDIRECT_IN, "file2").addRedirect(REDIRECT_IN, "file3");
@@ -61,7 +66,8 @@ TEST(parser, redirect2)
 TEST(parser, redirect3)
 {
 	auto input = "cat > file1 > file2 > file3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_OUT, "file1").addRedirect(REDIRECT_OUT, "file2").addRedirect(REDIRECT_OUT, "file3");
@@ -73,7 +79,8 @@ TEST(parser, redirect3)
 TEST(parser, redirect4)
 {
 	auto input = "cat >> file1 >> file2 >> file3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addArgument("cat")
 		.addRedirect(REDIRECT_APPEND, "file1").addRedirect(REDIRECT_APPEND, "file2").addRedirect(REDIRECT_APPEND, "file3");
@@ -85,7 +92,8 @@ TEST(parser, redirect4)
 TEST(parser, and_or)
 {
 	auto input = "./cmd1 && cmd2 || /bin/cmd3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_COMMAND).addArgument("./cmd1")
@@ -101,7 +109,8 @@ TEST(parser, and_or)
 TEST(parser, pipe_and_pipe)
 {
 	auto input = "cmd1 | cmd2 && cmd3 | cmd4";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_AND)
 		.moveToLeft(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -120,7 +129,8 @@ TEST(parser, pipe_and_pipe)
 TEST(parser, pipe_and_or)
 {
 	auto input = "cmd1 | cmd2 && cmd3 || cmd4";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_PIPE)
@@ -140,7 +150,8 @@ TEST(parser, pipe_and_or)
 TEST(parser, redirect_before_and)
 {
 	auto input = "cmd1 > file1 && cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_AND)
 		.moveToLeft(N_COMMAND).addArgument("cmd1").addRedirect(REDIRECT_OUT, "file1")
 		.moveToRoot()
@@ -153,7 +164,8 @@ TEST(parser, redirect_before_and)
 TEST(parser, redirect_before_or)
 {
 	auto input = "cmd1 > file1 || cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_COMMAND).addArgument("cmd1").addRedirect(REDIRECT_OUT, "file1")
 		.moveToRoot()
@@ -166,7 +178,8 @@ TEST(parser, redirect_before_or)
 TEST(parser, redirect_before_pipe)
 {
 	auto input = "cmd1 > file1 | cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1").addRedirect(REDIRECT_OUT, "file1")
 		.moveToRoot()
@@ -179,7 +192,8 @@ TEST(parser, redirect_before_pipe)
 TEST(parser, pipe_and_or_with_redirect)
 {
 	auto input = "cmd1 | cmd2 > file1 && cmd3 || cmd4";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_PIPE)
@@ -199,7 +213,8 @@ TEST(parser, pipe_and_or_with_redirect)
 TEST(parser, go_crazy)
 {
 	auto input = "ls | cat > file1 < file2 >> file3 && cmd2 < file4 > file5 || /bin/cmd3 < file6 > file7";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_OR)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_PIPE)
@@ -219,7 +234,8 @@ TEST(parser, go_crazy)
 TEST(parser, only_redirect)
 {
 	auto input = "> a";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addRedirect(REDIRECT_OUT, "a");
 
@@ -230,7 +246,8 @@ TEST(parser, only_redirect)
 TEST(parser, redirect_both)
 {
 	auto input = "> a < b";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND)
 		.addRedirect(REDIRECT_OUT, "a")
 		.addRedirect(REDIRECT_IN, "b");
@@ -242,7 +259,8 @@ TEST(parser, redirect_both)
 TEST(parser, redirect_cmd_redirect)
 {
 	auto input = "> out cmd < in";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND).addArgument("cmd").addRedirect(REDIRECT_OUT, "out") .addRedirect(REDIRECT_IN, "in");
 
 	EXPECT_NE(result, nullptr);
@@ -252,7 +270,8 @@ TEST(parser, redirect_cmd_redirect)
 TEST(parser, empty)
 {
 	auto input = "";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -260,7 +279,8 @@ TEST(parser, empty)
 TEST(parser, empty2)
 {
 	auto input = "  ";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -268,7 +288,8 @@ TEST(parser, empty2)
 TEST(parser, subshell)
 {
 	auto input = "(cmd)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_COMMAND).addArgument("cmd");
 
@@ -279,7 +300,8 @@ TEST(parser, subshell)
 TEST(parser, redirect_in_subshell)
 {
 	auto input = "(> out cmd < in)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_COMMAND).addArgument("cmd").addRedirect(REDIRECT_OUT, "out").addRedirect(REDIRECT_IN, "in");
 
@@ -290,7 +312,8 @@ TEST(parser, redirect_in_subshell)
 TEST(parser, pipe_in_subshell)
 {
 	auto input = "(cmd1 | cmd2)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -304,7 +327,8 @@ TEST(parser, pipe_in_subshell)
 TEST(parser, and_in_subshell)
 {
 	auto input = "(cmd1 && cmd2)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -318,7 +342,8 @@ TEST(parser, and_in_subshell)
 TEST(parser, subshell_piped)
 {
 	auto input = "(cmd1 | cmd2) | cmd3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_SUBSHELL)
 		.moveToLeft(N_PIPE)
@@ -335,7 +360,8 @@ TEST(parser, subshell_piped)
 TEST(parser, subshell_piped2)
 {
 	auto input = "cmd1 | (cmd2 | cmd3)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
 		.moveToRoot()
@@ -352,7 +378,8 @@ TEST(parser, subshell_piped2)
 TEST(parser, subshell_piped3)
 {
 	auto input = "(cmd1 | cmd2) | (cmd3 | cmd4)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_SUBSHELL)
 		.moveToLeft(N_PIPE)
@@ -373,7 +400,8 @@ TEST(parser, subshell_piped3)
 TEST(parser, subshell_and_subshell)
 {
 	auto input = "(cmd1 && cmd2) && (cmd3 && cmd4)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_AND)
 		.moveToLeft(N_SUBSHELL)
 		.moveToLeft(N_AND)
@@ -394,7 +422,8 @@ TEST(parser, subshell_and_subshell)
 TEST(parser, subshell_redirect)
 {
 	auto input = "(cmd1) > file1 < file2 >> file3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL).addRedirect(REDIRECT_OUT, "file1").addRedirect(REDIRECT_IN, "file2").addRedirect(REDIRECT_APPEND, "file3")
 		.moveToLeft(N_COMMAND).addArgument("cmd1");
 
@@ -405,7 +434,8 @@ TEST(parser, subshell_redirect)
 TEST(parser, subshell_in_subshell)
 {
 	auto input = "((cmd1))";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_SUBSHELL)
 		.moveToLeft(N_COMMAND).addArgument("cmd1");
@@ -417,7 +447,8 @@ TEST(parser, subshell_in_subshell)
 TEST(parser, subshell_in_subshell2)
 {
 	auto input = "((cmd1 | cmd2) | cmd3) | cmd4";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_PIPE)
 		.moveToLeft(N_SUBSHELL)
 		.moveToLeft(N_PIPE)
@@ -440,7 +471,8 @@ TEST(parser, subshell_in_subshell2)
 TEST(parser, subshell_with_space)
 {
 	auto input = "(  cmd1  )";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_COMMAND).addArgument("cmd1");
 
@@ -452,7 +484,8 @@ TEST(parser, subshell_with_space)
 TEST(parser, semicolon)
 {
 	auto input = "cmd1; cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SEMICOLON)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
 		.moveToRoot()
@@ -466,7 +499,8 @@ TEST(parser, semicolon)
 TEST(parser, and_semicolon)
 {
 	auto input = "cmd1 && cmd2; cmd3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SEMICOLON)
 		.moveToLeft(N_AND)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -483,7 +517,8 @@ TEST(parser, and_semicolon)
 TEST(parser, pipe_semicolon)
 {
 	auto input = "cmd1 | cmd2; cmd3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SEMICOLON)
 		.moveToLeft(N_PIPE)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -500,7 +535,8 @@ TEST(parser, pipe_semicolon)
 TEST(parser, subshell_semicolon)
 {
 	auto input = "(cmd1); cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SEMICOLON)
 		.moveToLeft(N_SUBSHELL)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -515,7 +551,8 @@ TEST(parser, subshell_semicolon)
 TEST(parser, semicolon_in_subshell)
 {
 	auto input = "(cmd1; cmd2)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SUBSHELL)
 		.moveToLeft(N_SEMICOLON)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -530,7 +567,8 @@ TEST(parser, semicolon_in_subshell)
 TEST(parser, semicolon_semicolon)
 {
 	auto input = "cmd1; cmd2; cmd3";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_SEMICOLON)
 		.moveToLeft(N_SEMICOLON)
 		.moveToLeft(N_COMMAND).addArgument("cmd1")
@@ -547,7 +585,8 @@ TEST(parser, semicolon_semicolon)
 TEST(parser, tail_semicolon)
 {
 	auto input = "cmd1;";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 	auto expected = ASTBuilder(N_COMMAND).addArgument("cmd1");
 
 	EXPECT_NE(result, nullptr);
@@ -578,7 +617,8 @@ TEST(parser, escape_double_quote)
 TEST(parser_negative, no_command)
 {
 	auto input = "|";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -586,7 +626,8 @@ TEST(parser_negative, no_command)
 TEST(parser_negative, no_command2)
 {
 	auto input = ">";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -594,7 +635,8 @@ TEST(parser_negative, no_command2)
 TEST(parser_negative, no_command3)
 {
 	auto input = "&&";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -602,7 +644,8 @@ TEST(parser_negative, no_command3)
 TEST(parser_negative, incomplete)
 {
 	auto input = "cmd |";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -610,7 +653,8 @@ TEST(parser_negative, incomplete)
 TEST(parser_negative, incomplete2)
 {
 	auto input = "cmd >";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -618,7 +662,8 @@ TEST(parser_negative, incomplete2)
 TEST(parser_negative, incomplete3)
 {
 	auto input = "cmd &&";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -627,7 +672,8 @@ TEST(parser_negative, incomplete3)
 TEST(parser_negative, consecutive_special_token)
 {
 	auto input = "cmd1 && | cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -635,7 +681,8 @@ TEST(parser_negative, consecutive_special_token)
 TEST(parser_negative, consecutive_special_token2)
 {
 	auto input = "cmd1 && && cmd2";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -643,7 +690,8 @@ TEST(parser_negative, consecutive_special_token2)
 TEST(parser_negative, unknown_token)
 {
 	auto input = "cmd >>> file";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -652,7 +700,8 @@ TEST(parser_negative, unknown_token)
 TEST(parser_negative, not_supported)
 {
 	auto input = "cmd <<< string";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -660,7 +709,8 @@ TEST(parser_negative, not_supported)
 TEST(parser_negative, not_supported2)
 {
 	auto input = "cmd <> file";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -668,7 +718,8 @@ TEST(parser_negative, not_supported2)
 TEST(parser_negative, not_supported3)
 {
 	auto input = "cmd >| file";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -676,7 +727,8 @@ TEST(parser_negative, not_supported3)
 TEST(parser_negative, redirect_before_subshell)
 {
 	auto input = "> file (cmd)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -684,7 +736,8 @@ TEST(parser_negative, redirect_before_subshell)
 TEST(parser_negative, consecutive_subshell)
 {
 	auto input = "(cmd1) (cmd2)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -692,7 +745,8 @@ TEST(parser_negative, consecutive_subshell)
 TEST(parser_negative, incomplete_subshell)
 {
 	auto input = "(cmd1";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -700,7 +754,8 @@ TEST(parser_negative, incomplete_subshell)
 TEST(parser_negative, incomplete_subshell2)
 {
 	auto input = "cmd1)";
-	auto result = parse(input, nullptr);
+	auto ctx = Context().getCtx();
+	auto result = parse(input, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }

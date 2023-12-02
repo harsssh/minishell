@@ -4,12 +4,15 @@ extern "C" {
 #include "lexer_internal.h"
 #include "token.h"
 #include "lexer.h"
+#include "utils/context.hpp"
 }
 
 TEST(lexer, normal)
 {
 	char	*input = "ls";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result, {{TK_WORD, "ls"}, {TK_EOF, ""}}));
@@ -18,7 +21,9 @@ TEST(lexer, normal)
 TEST(lexer, pipe)
 {
 	char	*input = "ls | ls | ls";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -33,7 +38,9 @@ TEST(lexer, pipe)
 TEST(lexer, redirect)
 {
 	char	*input = "cat > file1 < file2 >> file3";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -50,7 +57,9 @@ TEST(lexer, redirect)
 TEST(lexer, and_or)
 {
 	char	*input = "./cmd1 && cmd2 || /bin/cmd3";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -65,7 +74,9 @@ TEST(lexer, and_or)
 TEST(lexer, quote)
 {
 	char	*input = "echo \"hello world\" 'hello world'";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -78,7 +89,9 @@ TEST(lexer, quote)
 TEST(lexer, error_quote)
 {
 	char	*input = "echo \"hello world\" 'hello world' \"hello world";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -86,7 +99,9 @@ TEST(lexer, error_quote)
 TEST(lexer, error_quote2)
 {
 	char	*input = "echo 'hello world\"";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_EQ(result, nullptr);
 }
@@ -95,7 +110,9 @@ TEST(lexer, error_quote2)
 TEST(lexer, no_space)
 {
 	char	*input = "ls|ls|ls";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -111,7 +128,9 @@ TEST(lexer, no_space)
 TEST(lexer, quote_nest)
 {
 	char	*input = "echo \"'''42'''\"";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -124,7 +143,9 @@ TEST(lexer, quote_nest)
 TEST(lexer, quote_concat)
 {
 	char	*input = "echo \"42\"\"42\"";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -137,7 +158,9 @@ TEST(lexer, quote_concat)
 TEST(lexer, variables)
 {
 	char	*input = "echo $A$B$C$D";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -150,7 +173,9 @@ TEST(lexer, variables)
 TEST(lexer, quote_not_quote)
 {
 	char	*input = "echo $A \"$B\" '$C' $D";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -166,7 +191,9 @@ TEST(lexer, quote_not_quote)
 TEST(lexer, export)
 {
 	char	*input = "export A=1 B=2";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -180,7 +207,9 @@ TEST(lexer, export)
 TEST(lexer, redirect_pipe)
 {
 	char	*input = "cat > file1 | cat < file2 | cat >> file3 | cat << EOF";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -206,7 +235,9 @@ TEST(lexer, redirect_pipe)
 TEST(lexer, heredoc)
 {
 	char	*input = "cat << $DELIMITER";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -220,7 +251,9 @@ TEST(lexer, heredoc)
 TEST(lexer, heredoc_quoted)
 {
 	char	*input = "cat << ' DELIMITER '";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -234,7 +267,9 @@ TEST(lexer, heredoc_quoted)
 TEST(lexer, mix_omit_space)
 {
 	char	*input = "echo \"$A\"|cat>file2|cat&&cat||cat";
-	auto	result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -256,7 +291,9 @@ TEST(lexer, mix_omit_space)
 TEST(lexer, empty)
 {
 	char *input = "";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result, {{TK_EOF, ""}}));
@@ -265,7 +302,9 @@ TEST(lexer, empty)
 TEST(lexer, empty2)
 {
 	char *input = "  ";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result, {{TK_EOF, ""}}));
@@ -274,7 +313,9 @@ TEST(lexer, empty2)
 TEST(lexer, subshell)
 {
 	char *input = "(cmd)";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -288,7 +329,9 @@ TEST(lexer, subshell)
 TEST(lexer, semicolon)
 {
 	char *input = "cmd1;cmd2;cmd3";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -304,7 +347,9 @@ TEST(lexer, semicolon)
 TEST(lexer, and_semicolon)
 {
 	char *input = "cmd1&&cmd2;cmd3";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -320,7 +365,9 @@ TEST(lexer, and_semicolon)
 TEST(lexer, pipe_semicolon)
 {
 	char *input = "cmd1|cmd2;cmd3";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -336,7 +383,9 @@ TEST(lexer, pipe_semicolon)
 TEST(lexer, subshell_semicolon)
 {
 	char *input = "(cmd1);cmd2";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -352,7 +401,9 @@ TEST(lexer, subshell_semicolon)
 TEST(lexer, semicolon_in_subshell)
 {
 	char *input = "(cmd1;cmd2)";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -367,7 +418,9 @@ TEST(lexer, semicolon_in_subshell)
 TEST(lexer, back_slash)
 {
 	char *input = "\\";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -378,7 +431,9 @@ TEST(lexer, back_slash)
 TEST(lexer, escape_single_quote1)
 {
 	char *input = "\\'"; // \'
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -389,7 +444,9 @@ TEST(lexer, escape_single_quote1)
 TEST(lexer, escape_single_quote2)
 {
 	char *input = "\\'&& \\'"; // \'&& \'
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -402,7 +459,9 @@ TEST(lexer, escape_single_quote2)
 TEST(lexer, back_slash_in_single_quote)
 {
 	char *input = "'\\' hello";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -414,7 +473,9 @@ TEST(lexer, back_slash_in_single_quote)
 TEST(lexer, escape_double_quote)
 {
 	char *input = "\\\""; // \"
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -426,7 +487,9 @@ TEST(lexer, escape_double_quote)
 TEST(lexer, escape_double_quote2)
 {
 	char *input = "\\\"&& \\\""; // \"&& \"
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,

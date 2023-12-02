@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 22:16:44 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 23:23:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "libft.h"
 #include "parser_internal.h"
 #include "sig.h"
+#include <errno.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <stdlib.h>
@@ -57,6 +58,12 @@ static int	open_here_doc(t_redirect *redirect)
 	return (fd);
 }
 
+static void	*destroy_and_return_null(t_redirect *redirect)
+{
+	destroy_redirect(redirect);
+	return (NULL);
+}
+
 static t_redirect	*new_here_doc(char *delimiter)
 {
 	t_redirect	*redirect;
@@ -66,18 +73,16 @@ static t_redirect	*new_here_doc(char *delimiter)
 	redirect = new_redirect(REDIRECT_HERE_DOC, NULL);
 	fd = open_here_doc(redirect);
 	if (redirect == NULL || fd == -1)
-	{
-		destroy_redirect(redirect);
-		return (NULL);
-	}
+		return (destroy_and_return_null(redirect));
 	while (1)
 	{
 		line = readline("> ");
 		if (line == NULL || g_sig == SIGINT)
 		{
 			close(fd);
-			destroy_redirect(redirect);
-			return (NULL);
+			if (errno != 0)
+				return (destroy_and_return_null(redirect));
+			break ;
 		}
 		if (ft_strcmp(delimiter, line) == 0)
 			break ;

@@ -6,11 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:02:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/09/25 19:03:08 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 22:01:45 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "context.h"
 #include "ft_ctype.h"
+#include "lexer.h"
 #include "lexer_internal.h"
 #include <stdlib.h>
 #include "token.h"
@@ -39,22 +41,30 @@ int	push_tokens(t_lexer *lexer, t_token_stream *stream)
 	return (EXIT_SUCCESS);
 }
 
-t_token_stream	*tokenize(char *input)
+t_tokenize_result	tokenize(char *input,
+							t_token_stream **stream, t_context *ctx)
 {
 	t_lexer			*lexer;
-	t_token_stream	*stream;
 	int				is_tokenize_failed;
 
 	if (input == NULL)
-		return (NULL);
+		return (TRESULT_MALLOC_ERROR);
 	lexer = new_lexer(input);
-	stream = new_token_stream();
-	is_tokenize_failed = push_tokens(lexer, stream);
-	destroy_lexer(lexer);
+	*stream = new_token_stream();
+	is_tokenize_failed = push_tokens(lexer, *stream);
 	if (lexer == NULL || stream == NULL || is_tokenize_failed)
 	{
-		destroy_token_stream(stream);
-		return (NULL);
+		destroy_token_stream(*stream);
+		*stream = NULL;
+		if (get_quote_char(lexer) != '\0')
+		{
+			print_unmatching_quote_error(lexer, ctx);
+			destroy_lexer(lexer);
+			return (TRESULT_UNMATCHING_QUOTE);
+		}
+		destroy_lexer(lexer);
+		return (TRESULT_MALLOC_ERROR);
 	}
-	return (stream);
+	destroy_lexer(lexer);
+	return (TRESULT_OK);
 }
