@@ -11,9 +11,11 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 #include "context.h"
 #include "word_expansion_internal.h"
+#include "characters.h"
+#include "utils.h"
+#include <stdlib.h>
 
 static void	*destroy_and_return_null(t_list *list, char *s)
 {
@@ -66,14 +68,14 @@ t_list	*expand_parameters(const char *word, t_context *ctx)
 	quote = '\0';
 	while (*word != '\0')
 	{
-		if (*word == '$' && quote != '\'')
+		if (*word == '$' && quote != SINGLE_QUOTE)
 		{
 			res = expand_paramters_helper(res, &word, ctx);
 			if (res == NULL)
 				return (NULL);
 			continue ;
 		}
-		else if (*word == '\'' || *word == '"')
+		else if (is_quote(*word))
 			update_quote(&quote, &word);
 		res = join_char_or_back_slash_char(res, &word);
 		if (res == NULL)

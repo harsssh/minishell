@@ -18,8 +18,6 @@
 # include "libft.h"
 # include <dirent.h>
 
-# define BACK_SLASH '\\'
-
 typedef struct s_match_table
 {
 	bool	**dp;

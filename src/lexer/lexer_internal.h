@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 11:08:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/20 20:04:43 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/30 01:40:37 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "token.h"
 # include <stdbool.h>
-
-# define BACK_SLASH '\\'
 
 typedef struct s_lexer
 {

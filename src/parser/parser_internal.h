@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:05:07 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/19 17:08:57 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/30 01:53:46 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include "parser.h"
 # include "token.h"
 
-typedef struct s_parser {
+typedef struct s_parser
+{
 	t_token_stream	*stream;
 	t_token			*cur_token;
 	t_context		*ctx;

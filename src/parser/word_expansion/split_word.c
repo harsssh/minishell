@@ -12,11 +12,13 @@
 
 #include "ft_list.h"
 #include "libft.h"
+#include "characters.h"
+#include "utils.h"
 #include <stdlib.h>
 
 static void	eat_escape_and_quote(char **input, char *quote)
 {
-	if (**input == '\\')
+	if (**input == BACKSLASH)
 		(*input)++;
 	else if (*quote == '\0')
 		*quote = **input;
@@ -38,7 +40,7 @@ static char	*get_next_word(char **input)
 	p = *input;
 	while (*p != '\0')
 	{
-		if (*p == '\\' || *p == '\'' || *p == '"')
+		if (*p == BACKSLASH || is_quote(*p))
 			eat_escape_and_quote(&p, &quote);
 		else if (quote != '\0')
 			p++;
