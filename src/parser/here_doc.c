@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:41:54 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 23:45:00 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 	redirect = new_redirect(REDIRECT_HERE_DOC, NULL);
 	fd = open_here_doc(redirect);
 	if (redirect == NULL || fd == -1)
-		return (destroy_and_return_null(redirect));
+		return (destroy_redirect_and_return_null(redirect));
 	while (1)
 	{
 		line = readline("> ");
@@ -94,14 +94,14 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 		{
 			close(fd);
 			if (errno != 0)
-				return (destroy_and_return_null(redirect));
+				return (destroy_redirect_and_return_null(redirect));
 			return (redirect);
 		}
 		if (ft_strcmp(delimiter, line) == 0)
 			return (redirect);
 		line = expand_parameters_in_heredoc(line, ctx, delimiter);
 		if (line == NULL)
-			return (destroy_and_return_null(redirect));
+			return (destroy_redirect_and_return_null(redirect));
 		ft_putendl_fd(line, fd);
 	}
 }
