@@ -69,7 +69,7 @@ gtest_discover_tests(test_get_environ)
 add_executable(test_lexer lexer.cpp utils/compare_list.cpp utils/context.cpp $<TARGET_OBJECTS:src_obj>)
 gtest_discover_tests(test_lexer)
 
-add_executable(test_parser parser.cpp utils/ast_builder.cpp utils/compare_ast.cpp $<TARGET_OBJECTS:src_obj>)
+add_executable(test_parser parser.cpp utils/ast_builder.cpp utils/compare_ast.cpp utils/context.cpp $<TARGET_OBJECTS:src_obj>)
 gtest_discover_tests(test_parser)
 
 add_executable(test_word_expansion word_expansion.cpp utils/compare_list.cpp utils/context.cpp $<TARGET_OBJECTS:src_obj>)
