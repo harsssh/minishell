@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:31:08 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 23:39:10 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@
 #include <unistd.h>
 #include "libft.h"
 #include "characters.h"
+#include "sig.h"
+
+static int	heredoc_readline_hook(void)
+{
+	if (g_sig == SIGINT)
+	{
+		rl_done = 1;
+	}
+	return (EXIT_SUCCESS);
+}
 
 static int	open_here_doc(t_redirect *redirect)
 {
@@ -86,7 +96,7 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 	while (1)
 	{
 		line = readline("> ");
-		if (line == NULL)
+		if (line == NULL || g_sig == SIGINT)
 		{
 			close(fd);
 			if (errno != 0)
@@ -108,14 +118,20 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 // if the token type is TK_WORD.
 t_redirect	*parse_here_doc(t_parser *parser)
 {
-	char	*delimiter;
+	char			*delimiter;
+	rl_hook_func_t	*tmp;
+	t_redirect		*ret;
 
 	if (consume_token(parser, TK_REDIRECT_HERE_DOC))
 	{
 		delimiter = parse_word(parser);
 		if (delimiter == NULL)
 			return (NULL);
-		return (new_here_doc(delimiter, parser->ctx));
+		tmp = rl_event_hook;
+		rl_event_hook = heredoc_readline_hook;
+		ret = new_here_doc(delimiter);
+		rl_event_hook = tmp;
+		return (ret);
 	}
 	else
 		return (NULL);
