@@ -6,24 +6,24 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:45:00 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 00:43:03 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+#include "characters.h"
 #include "context.h"
+#include "fcntl.h"
 #include "ft_list.h"
+#include "libft.h"
 #include "parser/word_expansion/word_expansion_internal.h"
 #include "parser_internal.h"
-#include "fcntl.h"
-#include <errno.h>
+#include "sig.h"
 #include <stdio.h>
+#include <errno.h>
 #include <readline/readline.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft.h"
-#include "characters.h"
-#include "sig.h"
 
 static int	heredoc_readline_hook(void)
 {
@@ -63,18 +63,21 @@ static int	open_here_doc(t_redirect *redirect)
 }
 
 static char	*expand_parameters_in_heredoc(char *line, t_context *ctx,
-										char *delimiter)
+		char *delimiter)
 {
-	t_list	*res;
+	t_list	*expand_result;
+	char	*expanded_line;
 
-	if (ft_strchr(delimiter, SINGLE_QUOTE)
-		|| ft_strchr(delimiter, DOUBLE_QUOTE))
+	if (ft_strchr(delimiter, SINGLE_QUOTE) || ft_strchr(delimiter,
+			DOUBLE_QUOTE))
 		return (line);
-	res = expand_parameters(line, ctx);
+	expand_result = expand_parameters(line, ctx);
 	free(line);
-	if (res == NULL)
+	if (expand_result == NULL)
 		return (NULL);
-	return (res->head->data);
+	expanded_line = ft_strdup(expand_result->head->data);
+	ft_list_destroy(expand_result, free);
+	return (expanded_line);
 }
 
 static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
@@ -93,16 +96,21 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 		if (line == NULL || g_sig == SIGINT)
 		{
 			close(fd);
+			free(line);
 			if (errno != 0)
 				return (destroy_redirect_and_return_null(redirect));
 			return (redirect);
 		}
 		if (ft_strcmp(delimiter, line) == 0)
+		{
+			free(line);
 			return (redirect);
+		}
 		line = expand_parameters_in_heredoc(line, ctx, delimiter);
 		if (line == NULL)
 			return (destroy_redirect_and_return_null(redirect));
 		ft_putendl_fd(line, fd);
+		free(line);
 	}
 }
 
@@ -125,6 +133,7 @@ t_redirect	*parse_here_doc(t_parser *parser)
 		rl_event_hook = heredoc_readline_hook;
 		ret = new_here_doc(delimiter, parser->ctx);
 		rl_event_hook = tmp;
+		free(delimiter);
 		return (ret);
 	}
 	else
