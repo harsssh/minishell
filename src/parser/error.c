@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 18:34:26 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 21:40:06 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/12/02 21:07:32 by smatsuo           #+#    #+#             */
+/*   Updated: 2023/12/02 21:15:51 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "parser/parser_internal.h"
+#include "context.h"
+#include <unistd.h> 
 
-# include "token.h"
-# include "context.h"
-
-typedef enum e_tokenize_result
+void	print_syntax_error(t_context *ctx, t_parser *parser)
 {
-	TRESULT_OK,
-	TRESULT_UNMATCHING_QUOTE,
-	TRESULT_MALLOC_ERROR,
-}	t_tokenize_result;
-
-t_tokenize_result	tokenize(char *input,
-						t_token_stream **stream, t_context *ctx);
-
-#endif
+	ft_dprintf(STDERR_FILENO, "%s: syntax error near unexpected token `%s'\n",
+		ctx->shell_name, get_token_literal(get_cur_token(parser)));
+}

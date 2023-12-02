@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 11:08:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/05 20:48:23 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 21:37:42 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEXER_INTERNAL_H
 
 # include "token.h"
+# include "context.h"
 
 typedef struct s_lexer
 {
@@ -45,5 +46,6 @@ char			*get_input_snapshot(t_lexer *lexer);
 t_token			*get_next_token(t_lexer *lexer);
 void			skip_char(t_lexer *lexer);
 int				peek_input(t_lexer *lexer, char *expected);
+void			print_unmatching_quote_error(t_lexer *lexer, t_context *ctx);
 
 #endif

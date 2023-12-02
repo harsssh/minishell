@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/16 21:53:33 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 21:15:32 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_ast_node	*parse(const char *input, t_context *ctx)
 	result = parse_complete_command(parser);
 	if (!is_eof(parser))
 	{
+		print_syntax_error(ctx, parser);
 		destroy_parser(parser);
 		destroy_node(result);
 		return (NULL);
