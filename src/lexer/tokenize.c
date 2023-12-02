@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 04:02:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 21:41:10 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 22:01:45 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_tokenize_result	tokenize(char *input,
 	if (lexer == NULL || stream == NULL || is_tokenize_failed)
 	{
 		destroy_token_stream(*stream);
+		*stream = NULL;
 		if (get_quote_char(lexer) != '\0')
 		{
 			print_unmatching_quote_error(lexer, ctx);
