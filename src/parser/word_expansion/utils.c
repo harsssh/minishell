@@ -6,12 +6,34 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 13:48:14 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/20 13:48:48 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 21:49:04 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer/lexer_internal.h"
 #include "libft.h"
+#include "word_expansion_internal.h"
+#include "characters.h"
+#include "utils.h"
 #include <stdlib.h>
+
+char	*join_char_or_back_slash_char(char *str, const char **word)
+{
+	char	s[3];
+	char	*res;
+	size_t	join_len;
+
+	ft_bzero(s, 3);
+	if (**word == BACKSLASH && (*word)[1] != '\0')
+		join_len = 2;
+	else
+		join_len = 1;
+	ft_memcpy(s, *word, join_len);
+	*word += join_len;
+	res = ft_strjoin(str, s);
+	free(str);
+	return (res);
+}
 
 char	*join_char(char *str, const char **word)
 {
@@ -23,5 +45,28 @@ char	*join_char(char *str, const char **word)
 	res = ft_strjoin(str, s);
 	free(str);
 	(*word)++;
+	return (res);
+}
+
+char	*escape_string(const char *str)
+{
+	char		*res;
+	char		*tmp;
+
+	res = ft_strdup("");
+	if (res == NULL)
+		return (NULL);
+	while (*str != '\0')
+	{
+		if (*str == BACKSLASH || is_quote(*str))
+		{
+			tmp = res;
+			res = ft_strjoin(tmp, "\\");
+			free(tmp);
+			if (res == NULL)
+				return (NULL);
+		}
+		res = join_char(res, &str);
+	}
 	return (res);
 }

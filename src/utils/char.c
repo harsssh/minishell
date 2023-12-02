@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quote.c                                            :+:      :+:    :+:   */
+/*   char.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/18 13:20:38 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/20 20:06:16 by smatsuo          ###   ########.fr       */
+/*   Created: 2023/11/30 01:36:47 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/11/30 01:37:56 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "characters.h"
+#include "utils.h"
 
-int	is_quoted(t_lexer *lexer)
+bool	is_quote(int c)
 {
-	return (lexer->quote_char != '\0');
-}
-
-void	set_quote_char(t_lexer *lexer, char quote_char)
-{
-	lexer->quote_char = quote_char;
-}
-
-void	end_quote(t_lexer *lexer)
-{
-	lexer->quote_char = '\0';
+	return (c == SINGLE_QUOTE || c == DOUBLE_QUOTE);
 }

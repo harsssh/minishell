@@ -6,14 +6,16 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 00:03:47 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/11 16:47:22 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/29 23:21:34 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 #include "context.h"
 #include "word_expansion_internal.h"
+#include "characters.h"
+#include "utils.h"
+#include <stdlib.h>
 
 static void	*destroy_and_return_null(t_list *list, char *s)
 {
@@ -22,16 +24,16 @@ static void	*destroy_and_return_null(t_list *list, char *s)
 	return (NULL);
 }
 
-static void	update_quote(char *quote, char c)
+static void	update_quote(char *quote, const char **word)
 {
 	if (*quote == '\0')
-		*quote = c;
-	else if (*quote == c)
+		*quote = **word;
+	else if (*quote == **word)
 		*quote = '\0';
 }
 
 static char	*expand_paramters_helper(char *res, const char **word,
-									t_context *ctx)
+								t_context *ctx)
 {
 	char	*param;
 	char	*joined;
@@ -66,16 +68,16 @@ t_list	*expand_parameters(const char *word, t_context *ctx)
 	quote = '\0';
 	while (*word != '\0')
 	{
-		if (*word == '$' && quote != '\'')
+		if (*word == '$' && quote != SINGLE_QUOTE)
 		{
 			res = expand_paramters_helper(res, &word, ctx);
 			if (res == NULL)
 				return (NULL);
 			continue ;
 		}
-		else if (*word == '\'' || *word == '"')
-			update_quote(&quote, *word);
-		res = join_char(res, &word);
+		else if (is_quote(*word))
+			update_quote(&quote, &word);
+		res = join_char_or_back_slash_char(res, &word);
 		if (res == NULL)
 			return (NULL);
 	}

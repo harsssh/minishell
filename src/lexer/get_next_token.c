@@ -6,12 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 18:54:23 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/16 20:37:31 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/29 23:42:35 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_internal.h"
 #include "token.h"
+#include "characters.h"
+#include "utils.h"
 
 static t_token	*tokenize_operators(t_lexer *lexer)
 {
@@ -48,8 +50,16 @@ static void	get_next_token_helper(t_lexer *lexer)
 	reset_token_len(lexer);
 }
 
-static void	tokenize_quotes(t_lexer *lexer)
+static void	tokenize_quote_and_escape(t_lexer *lexer)
 {
+	if (get_cur_char(lexer) == BACKSLASH)
+	{
+		set_cur_token_type(lexer, TK_WORD);
+		read_char(lexer);
+		if (get_quote_char(lexer) != SINGLE_QUOTE && *get_input(lexer) != '\0')
+			read_char(lexer);
+		return ;
+	}
 	if (!is_quoted(lexer))
 	{
 		set_quote_char(lexer, get_cur_char(lexer));
@@ -79,8 +89,8 @@ t_token	*get_next_token(t_lexer *lexer)
 	while (!has_empty_input(lexer))
 	{
 		cur_char = get_cur_char(lexer);
-		if (cur_char == '\'' || cur_char == '"')
-			tokenize_quotes(lexer);
+		if (cur_char == BACKSLASH || is_quote(cur_char))
+			tokenize_quote_and_escape(lexer);
 		else if (is_quoted(lexer))
 			read_char(lexer);
 		else if (ft_isspace(cur_char) || (is_startwith_operator(lexer)

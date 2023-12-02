@@ -6,13 +6,15 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 12:16:28 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/31 12:07:27 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/11/30 01:55:14 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "characters.h"
 #include "libft.h"
-#include <stdlib.h>
+#include "utils.h"
 #include "word_expansion_internal.h"
+#include <stdlib.h>
 
 static void	read_quote(const char **s, char *quote)
 {
@@ -30,13 +32,21 @@ static char	*remove_quote(const char *s)
 
 	quote = '\0';
 	res = ft_strdup("");
+	if (res == NULL)
+		return (NULL);
 	while (*s != '\0')
 	{
-		if ((*s == '\'' || *s == '"') && (quote == '\0' || quote == *s))
+		if (is_quote(*s) && (quote == '\0' || quote == *s))
 			read_quote(&s, &quote);
 		else
 		{
-			res = join_char(res, &s);
+			if (quote == SINGLE_QUOTE || (*s == BACKSLASH && s[1] != '\0'
+					&& ((quote == '\0' && ft_strchr("\\'\"$", s[1]))
+						|| (quote == DOUBLE_QUOTE
+							&& ft_strchr("\\\"$", s[1]))) && s++))
+				res = join_char(res, &s);
+			else
+				res = join_char_or_back_slash_char(res, &s);
 			if (res == NULL)
 				return (NULL);
 		}
