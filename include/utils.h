@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:34:27 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/30 01:51:35 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/30 01:37:13 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,8 @@ int		bindpwd(t_context *ctx);
 
 // message.c
 void	display_exit_message(t_context *ctx);
+
+// char.c
+bool	is_quote(int c);
 
 #endif
