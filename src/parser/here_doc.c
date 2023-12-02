@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:39:10 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 23:40:08 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,6 @@ static int	open_here_doc(t_redirect *redirect)
 				O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
 	}
 	return (fd);
-}
-
-static void	*destroy_and_return_null(t_redirect *redirect)
-{
-	destroy_redirect(redirect);
-	return (NULL);
 }
 
 static char	*expand_parameters_in_heredoc(char *line, t_context *ctx,
