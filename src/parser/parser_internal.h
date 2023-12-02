@@ -6,14 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:05:07 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:23:04 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 23:33:01 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_INTERNAL_H
 # define PARSER_INTERNAL_H
 
-#include "context.h"
+# include "context.h"
 # define EXIT_SYNTAX_ERROR 2
 
 # include "parser.h"
