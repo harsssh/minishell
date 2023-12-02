@@ -6,13 +6,14 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:05:07 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:23:52 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/02 23:44:36 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_INTERNAL_H
 # define PARSER_INTERNAL_H
 
+# include "context.h"
 # define EXIT_SYNTAX_ERROR 2
 
 # include "parser.h"
@@ -51,6 +52,7 @@ t_list			*expand_word(char *word, t_context *ctx, bool has_dollar,
 void			destroy_word(void *word);
 void			destroy_parser(t_parser *parser);
 void			*destroy_nodes_and_return_null(t_ast_node *n1, t_ast_node *n2);
+void			*destroy_redirect_and_return_null(t_redirect *redirect);
 void			print_syntax_error(t_context *ctx, t_parser *parser);
 
 #endif
