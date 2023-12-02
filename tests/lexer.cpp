@@ -418,7 +418,9 @@ TEST(lexer, semicolon_in_subshell)
 TEST(lexer, back_slash)
 {
 	char *input = "\\";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -429,7 +431,9 @@ TEST(lexer, back_slash)
 TEST(lexer, escape_single_quote1)
 {
 	char *input = "\\'"; // \'
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -440,7 +444,9 @@ TEST(lexer, escape_single_quote1)
 TEST(lexer, escape_single_quote2)
 {
 	char *input = "\\'&& \\'"; // \'&& \'
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -453,7 +459,9 @@ TEST(lexer, escape_single_quote2)
 TEST(lexer, back_slash_in_single_quote)
 {
 	char *input = "'\\' hello";
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -465,7 +473,9 @@ TEST(lexer, back_slash_in_single_quote)
 TEST(lexer, escape_double_quote)
 {
 	char *input = "\\\""; // \"
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
@@ -477,7 +487,9 @@ TEST(lexer, escape_double_quote)
 TEST(lexer, escape_double_quote2)
 {
 	char *input = "\\\"&& \\\""; // \"&& \"
-	auto result = tokenize(input);
+	auto	ctx = Context().getCtx();
+	t_token_stream *result;
+	tokenize(input, &result, ctx);
 
 	EXPECT_NE(result, nullptr);
 	ASSERT_TRUE(compareTokenStream(result,
