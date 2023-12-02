@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 03:25:00 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/16 03:25:18 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/13 17:01:54 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define ERR_GETCWD "getcwd: cannot access parent directories"
+
 void	sync_working_directory(struct s_context *ctx, char *for_whom)
 {
 	free(ctx->cwd);
 	ctx->cwd = getcwd(NULL, 0);
 	if (ctx->cwd == NULL)
 		ft_dprintf(STDERR_FILENO,
-			"%s: getcwd: cannot access parent directories: %s\n",
-			for_whom, strerror(errno));
+			"%s: error retrieving current directory: %s: %s\n",
+			for_whom, ERR_GETCWD, strerror(errno));
 }
 
 // This function sets `ctx->cwd` and returns its copy

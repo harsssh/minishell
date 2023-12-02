@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 17:20:07 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/09/23 04:44:13 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/13 17:17:22 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static void	set_working_directory(t_context *ctx, char *path)
+static void	set_working_directory(t_context *ctx, const char *path)
 {
 	free(ctx->cwd);
 	ctx->cwd = ft_strdup(path);
@@ -46,6 +46,25 @@ bool	get_absolute_destination_path(t_context *ctx, const char *newdir,
 	return (true);
 }
 
+static int	retry_chdir(t_context *ctx, const char *newdir)
+{
+	int		ret;
+	char	*cwd_on_failure;
+
+	ret = chdir(newdir);
+	if (ret == 0)
+	{
+		cwd_on_failure = join_path(ctx->cwd, newdir);
+		if (cwd_on_failure == NULL)
+			return (-1);
+		sync_working_directory(ctx, "cd");
+		if (ctx->cwd == NULL)
+			set_working_directory(ctx, cwd_on_failure);
+		free(cwd_on_failure);
+	}
+	return (ret);
+}
+
 // return the value of chdir
 int	change_directory(t_context *ctx, const char *newdir)
 {
@@ -54,6 +73,8 @@ int	change_directory(t_context *ctx, const char *newdir)
 	bool	is_canon_success;
 
 	is_canon_success = get_absolute_destination_path(ctx, newdir, &path);
+	if (path == NULL)
+		return (-1);
 	ret = chdir(path);
 	if (ret == 0)
 	{
@@ -62,6 +83,8 @@ int	change_directory(t_context *ctx, const char *newdir)
 		if (is_canon_success || ctx->cwd == NULL)
 			set_working_directory(ctx, path);
 	}
+	else
+		ret = retry_chdir(ctx, newdir);
 	free(path);
 	return (ret);
 }

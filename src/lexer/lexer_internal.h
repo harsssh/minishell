@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 11:08:16 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 21:37:42 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 23:05:26 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "token.h"
 # include "context.h"
+# include <stdbool.h>
 
 typedef struct s_lexer
 {
@@ -22,6 +23,7 @@ typedef struct s_lexer
 	char			*input_snapshot;
 	size_t			cur_token_len;
 	char			quote_char;
+	bool			do_escape_next_char;
 	t_token_type	cur_type;
 }	t_lexer;
 

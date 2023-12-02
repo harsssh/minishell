@@ -6,21 +6,26 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:15:00 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/29 04:21:04 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/11/29 23:39:07 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_list.h"
 #include "libft.h"
+#include "characters.h"
+#include "utils.h"
 #include <stdlib.h>
 
-static void	read_quote(char **input, char *quote)
+static void	eat_escape_and_quote(char **input, char *quote)
 {
-	if (*quote == '\0')
+	if (**input == BACKSLASH)
+		(*input)++;
+	else if (*quote == '\0')
 		*quote = **input;
 	else if (**input == *quote)
 		*quote = '\0';
-	(*input)++;
+	if (**input != '\0')
+		(*input)++;
 }
 
 static char	*get_next_word(char **input)
@@ -35,8 +40,8 @@ static char	*get_next_word(char **input)
 	p = *input;
 	while (*p != '\0')
 	{
-		if (*p == '\'' || *p == '"')
-			read_quote(&p, &quote);
+		if (*p == BACKSLASH || is_quote(*p))
+			eat_escape_and_quote(&p, &quote);
 		else if (quote != '\0')
 			p++;
 		else if (ft_strchr(" \t\n", *p) != NULL)

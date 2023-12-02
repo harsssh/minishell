@@ -593,6 +593,26 @@ TEST(parser, tail_semicolon)
 	ASSERT_TRUE(expected == result);
 }
 
+TEST(parser, escape_single_quote)
+{
+	auto input = "\\'";
+	auto result = parse(input, nullptr);
+	auto expected = ASTBuilder(N_COMMAND).addArgument("\\'");
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(expected == result);
+}
+
+TEST(parser, escape_double_quote)
+{
+	auto input = "\\\"";
+	auto result = parse(input, nullptr);
+	auto expected = ASTBuilder(N_COMMAND).addArgument("\\\"");
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(expected == result);
+}
+
 /* 異常系 */
 TEST(parser_negative, no_command)
 {

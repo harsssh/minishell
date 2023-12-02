@@ -414,3 +414,75 @@ TEST(lexer, semicolon_in_subshell)
 		{TK_RPAREN, ")"},
 		{TK_EOF, ""}}));
 }
+
+TEST(lexer, back_slash)
+{
+	char *input = "\\";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "\\"},
+		{TK_EOF, ""}}));
+}
+
+TEST(lexer, escape_single_quote1)
+{
+	char *input = "\\'"; // \'
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "\\'"},
+		{TK_EOF, ""}}));
+}
+
+TEST(lexer, escape_single_quote2)
+{
+	char *input = "\\'&& \\'"; // \'&& \'
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "\\'"},
+		{TK_AND, "&&"},
+		{TK_WORD, "\\'"},
+		{TK_EOF, ""}}));
+}
+
+TEST(lexer, back_slash_in_single_quote)
+{
+	char *input = "'\\' hello";
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "'\\'"},
+		{TK_WORD, "hello"},
+		{TK_EOF, ""}}));
+}
+
+TEST(lexer, escape_double_quote)
+{
+	char *input = "\\\""; // \"
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "\\\""},
+		{TK_EOF, ""}}));
+
+}
+
+TEST(lexer, escape_double_quote2)
+{
+	char *input = "\\\"&& \\\""; // \"&& \"
+	auto result = tokenize(input);
+
+	EXPECT_NE(result, nullptr);
+	ASSERT_TRUE(compareTokenStream(result,
+		{{TK_WORD, "\\\""},
+		{TK_AND, "&&"},
+		{TK_WORD, "\\\""},
+		{TK_EOF, ""}}));
+}
