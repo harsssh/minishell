@@ -6,17 +6,28 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/16 23:01:42 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 22:16:44 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-#include "parser_internal.h"
 #include "fcntl.h"
+#include "libft.h"
+#include "parser_internal.h"
+#include "sig.h"
 #include <stdio.h>
 #include <readline/readline.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include "libft.h"
+
+static int	heredoc_readline_hook(void)
+{
+	if (g_sig == SIGINT)
+	{
+		rl_done = 1;
+	}
+	return (EXIT_SUCCESS);
+}
 
 static int	open_here_doc(t_redirect *redirect)
 {
@@ -62,7 +73,7 @@ static t_redirect	*new_here_doc(char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (line == NULL)
+		if (line == NULL || g_sig == SIGINT)
 		{
 			close(fd);
 			destroy_redirect(redirect);
@@ -73,6 +84,18 @@ static t_redirect	*new_here_doc(char *delimiter)
 		ft_putendl_fd(line, fd);
 	}
 	return (redirect);
+}
+
+t_redirect	*do_heredoc(char *delimiter)
+{
+	rl_hook_func_t	*tmp;
+	t_redirect		*ret;
+
+	tmp = rl_event_hook;
+	rl_event_hook = heredoc_readline_hook;
+	ret = new_here_doc(delimiter);
+	rl_event_hook = tmp;
+	return (ret);
 }
 
 // When parsing here document, a tmporary file will be created and
@@ -88,7 +111,7 @@ t_redirect	*parse_here_doc(t_parser *parser)
 		delimiter = parse_word(parser);
 		if (delimiter == NULL)
 			return (NULL);
-		return (new_here_doc(delimiter));
+		return (do_heredoc(delimiter));
 	}
 	else
 		return (NULL);
