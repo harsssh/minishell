@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 23:40:08 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 23:41:54 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ t_redirect	*parse_here_doc(t_parser *parser)
 			return (NULL);
 		tmp = rl_event_hook;
 		rl_event_hook = heredoc_readline_hook;
-		ret = new_here_doc(delimiter);
+		ret = new_here_doc(delimiter, parser->ctx);
 		rl_event_hook = tmp;
 		return (ret);
 	}
