@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 13:48:14 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/30 00:00:41 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/02 21:45:21 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,15 @@ char	*join_char_or_back_slash_char(char *str, const char **word)
 {
 	char	s[3];
 	char	*res;
+	size_t	join_len;
 
-	if (**word == BACK_SLASH)
-	{
-		s[0] = BACK_SLASH;
-		(*word)++;
-		if (**word != '\0')
-		{
-			s[1] = **word;
-			(*word)++;
-		}
-		else
-			s[1] = '\0';
-		s[2] = '\0';
-	}
+	ft_bzero(s, 3);
+	if (**word == BACK_SLASH && (*word)[1] != '\0')
+		join_len = 2;
 	else
-	{
-		s[0] = **word;
-		(*word)++;
-		s[1] = '\0';
-	}
+		join_len = 1;
+	ft_memcpy(s, *word, join_len);
+	*word += join_len;
 	res = ft_strjoin(str, s);
 	free(str);
 	return (res);
