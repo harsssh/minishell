@@ -36,7 +36,7 @@ protected:
 TEST(expand_parameters, normal) {
 	auto input = "'hello '$USER' 42'";
 	auto ctx = Context({{"USER", "root"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"'hello 'root' 42'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -45,7 +45,7 @@ TEST(expand_parameters, normal) {
 TEST(expand_parameters, no_param) {
 	auto input = "'hello world'";
 	auto ctx = Context({{"USER", "root"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"'hello world'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -54,7 +54,7 @@ TEST(expand_parameters, no_param) {
 TEST(expand_parameters, expand_in_double_quotes) {
 	auto input = "\"hello $USER 42\"";
 	auto ctx = Context({{"USER", "root"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"\"hello root 42\""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -65,7 +65,7 @@ TEST(expand_parameters, multiple) {
 	auto ctx = Context({{"a", "1"},
 						{"b", "2"},
 						{"c", "3"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"123"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -75,7 +75,7 @@ TEST(expand_parameters, undefined) {
 	auto input = "$a$b$c";
 	auto ctx = Context({{"a", "1"},
 						{"c", "3"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"13"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -85,7 +85,7 @@ TEST(expand_parameters, undefined2) {
 	auto input = "$a$b$c";
 	auto ctx = Context({{"a", "1"},
 						{"b", "2"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"12"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -95,7 +95,7 @@ TEST(expand_parameters, undefined3) {
 	auto input = "$a$b$c";
 	auto ctx = Context({{"b", "2"},
 						{"c", "3"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"23"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -104,7 +104,7 @@ TEST(expand_parameters, undefined3) {
 TEST(expand_parameters, undefined4) {
 	auto input = "$a$b$c";
 	auto ctx = Context({}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -113,7 +113,7 @@ TEST(expand_parameters, undefined4) {
 TEST(expand_parameters, empty) {
 	auto input = "";
 	auto ctx = Context({}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -122,7 +122,7 @@ TEST(expand_parameters, empty) {
 TEST(expand_parameters, empty2) {
 	auto input = "$a";
 	auto ctx = Context({{"a", ""}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -131,7 +131,7 @@ TEST(expand_parameters, empty2) {
 TEST(expand_parameters, single_quote) {
 	auto input = "'$a'";
 	auto ctx = Context({}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"'$a'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -140,7 +140,7 @@ TEST(expand_parameters, single_quote) {
 TEST(expand_parameters, single_double) {
 	auto input = "'\"$a\"'";
 	auto ctx = Context({}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"'\"$a\"'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -149,7 +149,7 @@ TEST(expand_parameters, single_double) {
 TEST(expand_parameters, double_single) {
 	auto input = "\"'$a'\"";
 	auto ctx = Context({{"a", "1"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"\"'1'\""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -158,7 +158,7 @@ TEST(expand_parameters, double_single) {
 TEST(expand_parameters, expanded_single_quote) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "'1'"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"\\'1\\'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -167,7 +167,7 @@ TEST(expand_parameters, expanded_single_quote) {
 TEST(expand_parameters, expanded_mixed_quotes) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "\"'1'\""}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"\\\"\\'1\\'\\\""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -176,7 +176,7 @@ TEST(expand_parameters, expanded_mixed_quotes) {
 TEST(expand_parameters, expanded_double_quote) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "\"1\""}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"\\\"1\\\""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -185,7 +185,7 @@ TEST(expand_parameters, expanded_double_quote) {
 TEST(expand_parameters, expanded_back_slash) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "\\"}}).getCtx();
-	auto result = expand_parameters(input, ctx);
+	auto result = expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	auto expected = {"\\\\"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -194,7 +194,7 @@ TEST(expand_parameters, expanded_back_slash) {
 TEST(split_word, normal) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	auto expected = {"hello", "world"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -205,7 +205,7 @@ TEST(split_word, multiple) {
 	auto ctx = Context({{"a", "  hello  "},
 						{"b", "  world  "},
 						{"c", "  42  "}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	auto expected = {"hello", "world", "42"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -214,7 +214,7 @@ TEST(split_word, multiple) {
 TEST(split_word, empty) {
 	auto input = "$a";
 	auto ctx = Context({{"a", ""}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	vector<const char *> expected = {};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -225,7 +225,7 @@ TEST(split_word, empty2) {
 	auto ctx = Context({{"a", ""},
 						{"b", ""},
 						{"c", ""}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	vector<const char *> expected = {};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -236,7 +236,7 @@ TEST(split_word, mixed_empty) {
 	auto ctx = Context({{"a", "hello"},
 						{"b", "  "},
 						{"c", "world"}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	vector<const char *> expected = {"hello", "world"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -245,7 +245,7 @@ TEST(split_word, mixed_empty) {
 TEST(split_word, double_quote) {
 	auto input = "\"$a\"";
 	auto ctx = Context({{"a", "  hello  world  "}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	vector<const char *> expected = {"\"  hello  world  \""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -254,7 +254,7 @@ TEST(split_word, double_quote) {
 TEST(split_word, expanded_quote) {
 	auto input = "$a";
 	auto ctx = Context({{"a", "'hello  world'"}}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	vector<const char *> expected = {"\\'hello", "world\\'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -263,7 +263,7 @@ TEST(split_word, expanded_quote) {
 TEST(split_word, single_quote_with_variable) {
 	auto input = "'$a'";
 	auto ctx = Context({}).getCtx();
-	auto result = split_word(expand_parameters(input, ctx));
+	auto result = split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE));
 	vector<const char *> expected = {"'$a'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -272,7 +272,7 @@ TEST(split_word, single_quote_with_variable) {
 TEST_F(ExpandFilenameTest, forward) {
 	auto input = "*.minish";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"a.minish", "b.minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
@@ -281,7 +281,7 @@ TEST_F(ExpandFilenameTest, forward) {
 TEST_F(ExpandFilenameTest, backward) {
 	auto input = ".mini*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {".minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -290,7 +290,7 @@ TEST_F(ExpandFilenameTest, backward) {
 TEST_F(ExpandFilenameTest, middle) {
 	auto input = "*minishe*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"a.minishe", "minishell"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
@@ -299,7 +299,7 @@ TEST_F(ExpandFilenameTest, middle) {
 TEST_F(ExpandFilenameTest, no_expansion) {
 	auto input = "*.no";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"*.no"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -308,7 +308,7 @@ TEST_F(ExpandFilenameTest, no_expansion) {
 TEST_F(ExpandFilenameTest, no_expansion2) {
 	auto input = "*.minishell";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"*.minishell"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -317,7 +317,7 @@ TEST_F(ExpandFilenameTest, no_expansion2) {
 TEST_F(ExpandFilenameTest, quote) {
 	auto input = "'*.minish'";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"'*.minish'"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -326,7 +326,7 @@ TEST_F(ExpandFilenameTest, quote) {
 TEST_F(ExpandFilenameTest, quote2) {
 	auto input = "\"*.minish\"";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"\"*.minish\""};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -335,7 +335,7 @@ TEST_F(ExpandFilenameTest, quote2) {
 TEST_F(ExpandFilenameTest, quote3) {
 	auto input = "*'.minish'";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"a.minish", "b.minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
@@ -344,7 +344,7 @@ TEST_F(ExpandFilenameTest, quote3) {
 TEST_F(ExpandFilenameTest, quote4) {
 	auto input = "*\".minish\"";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"a.minish", "b.minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
@@ -353,7 +353,7 @@ TEST_F(ExpandFilenameTest, quote4) {
 TEST_F(ExpandFilenameTest, quote5) {
 	auto input = ".mini*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {".minish"};
 
 	ASSERT_TRUE(compareStrList(result, expected));
@@ -362,7 +362,7 @@ TEST_F(ExpandFilenameTest, quote5) {
 TEST_F(ExpandFilenameTest, quote6) {
 	auto input = "\"\"*";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"a.minish", "b.minish", "minishell", "a.txt", "a.minishe", "\\'.quote", "\\\".quote"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
@@ -390,7 +390,7 @@ TEST_F(ExpandFilenameTest, quote_no_match2) {
 TEST_F(ExpandFilenameTest, quote_in_file) {
 	auto input = "*.quote";
 	auto *ctx = Context("/tmp/minishell").getCtx();
-	auto result = expand_filenames(split_word(expand_parameters(input, ctx)));
+	auto result = expand_filenames(split_word(expand_parameters(input, ctx, NOT_EXPAND_IN_SINGLE_QUOTE)));
 	auto expected = {"\\'.quote", "\\\".quote"};
 
 	ASSERT_TRUE(compareStrList(result, expected, ANY_ORDER));
