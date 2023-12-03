@@ -90,6 +90,7 @@ static int	execute_builtin(t_context *ctx, t_pipeline_info *info,
 	{
 		close(saved_stdin_fd);
 		close(saved_stdout_fd);
+		ctx->last_exit_status = EXIT_FAILURE;
 		return (EXIT_FAILURE);
 	}
 	ctx->last_exit_status = call_builtin_func(ctx, func, ast->argv);
