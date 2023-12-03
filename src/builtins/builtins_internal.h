@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 20:19:23 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/16 12:43:24 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:44:54 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,16 @@
 # define ERR_STDOUT			"stdout"
 # define ERR_IDENTIFIER		"not a valid identifier"
 
-typedef enum e_getopt_status
+typedef enum e_get_opt_status
 {
-	OPT_SUCCESS,
-	OPT_ILLEGAL,
-	OPT_END_OF_ARG,
-	OPT_END_OF_OPTIONS
-}					t_getopt_status;
+	END_OF_ARG,
+	END_OF_OPTIONS,
+	ILLEGAL_OPTION,
+	INITIALIZE,
+}					t_get_opt_status;
 
 void				init_get_next_option(void);
-t_getopt_status		get_next_option(const char *arg,
-						const char *valid_options, char *option);
+t_get_opt_status	get_next_option(const char *arg, const char *optstring);
 const char			**ignore_options(const char **args);
 
 #endif
