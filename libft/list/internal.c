@@ -17,7 +17,7 @@ t_node	*ft_node_create(void *data)
 {
 	t_node	*node;
 
-	node = xmalloc(sizeof(t_node));
+	node = ft_xmalloc(sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->data = data;

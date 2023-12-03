@@ -20,7 +20,7 @@ char	**list_to_string_array(t_list *list, char *(*f)(void *data))
 	char	**cur;
 	t_node	*node;
 
-	array = (char **)xmalloc(sizeof(char *) * (list->size + 1));
+	array = (char **) ft_xmalloc(sizeof(char *) * (list->size + 1));
 	if (array == NULL)
 		return (NULL);
 	cur = array;

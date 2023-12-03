@@ -19,7 +19,7 @@ t_pipeline_info	*new_pipeline_info(void)
 {
 	t_pipeline_info	*info;
 
-	info = xmalloc(sizeof(t_pipeline_info));
+	info = ft_xmalloc(sizeof(t_pipeline_info));
 	if (info == NULL)
 		return (NULL);
 	info->fd_in = STDIN_FILENO;
@@ -43,7 +43,7 @@ int	push_fd_close_list(t_list *fd_close_list, int fd)
 {
 	int	*fd_ptr;
 
-	fd_ptr = xmalloc(sizeof(int));
+	fd_ptr = ft_xmalloc(sizeof(int));
 	if (fd_ptr == NULL)
 		return (-1);
 	*fd_ptr = fd;

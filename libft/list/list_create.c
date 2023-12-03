@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include "ft_list.h"
-#include <stdlib.h>
+#include "ft_stdlib.h"
 
 t_list	*ft_list_create(void)
 {
 	t_list	*list;
 
-	list = xmalloc(sizeof(t_list));
+	list = ft_xmalloc(sizeof(t_list));
 	if (list == NULL)
 		return (NULL);
 	list->head = NULL;

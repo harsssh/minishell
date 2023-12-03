@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "stdlib.h"
+#include "ft_stdlib.h"
 #include <stdlib.h>
 
 // create a new node and add it to the head of the list
@@ -23,13 +23,13 @@ t_buffer_list	*push_front_new_node(t_buffer_list **list, int fd)
 
 	if (list == NULL)
 		return (NULL);
-	buf = xmalloc(sizeof(t_buffer));
+	buf = ft_xmalloc(sizeof(t_buffer));
 	if (buf == NULL)
 		return (NULL);
 	buf->fd = fd;
 	buf->len = 0;
 	buf->read_failed = false;
-	node = xmalloc(sizeof(t_buffer_list));
+	node = ft_xmalloc(sizeof(t_buffer_list));
 	if (node == NULL)
 	{
 		free(buf);

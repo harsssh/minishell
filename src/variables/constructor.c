@@ -19,7 +19,7 @@ t_variable	*variable_create(const char *name, const char *value)
 {
 	t_variable	*var;
 
-	var = xmalloc(sizeof(t_variable));
+	var = ft_xmalloc(sizeof(t_variable));
 	if (var == NULL)
 		return (NULL);
 	var->name = name;

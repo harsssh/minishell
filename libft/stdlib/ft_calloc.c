@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_string.h"
+#include "ft_stdlib.h"
 #include <stdlib.h>
 
 void	*ft_calloc(size_t count, size_t size)
@@ -21,7 +22,7 @@ void	*ft_calloc(size_t count, size_t size)
 	bytes = count * size;
 	if (size != 0 && bytes / size != count)
 		return (NULL);
-	buf = xmalloc(bytes);
+	buf = ft_xmalloc(bytes);
 	if (!buf)
 		return (NULL);
 	return (ft_memset(buf, 0, bytes));

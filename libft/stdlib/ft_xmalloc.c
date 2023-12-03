@@ -16,7 +16,7 @@
 
 #define XMALLOC_EXIT_STATUS 2
 
-void	*xmalloc(size_t size)
+void	*ft_xmalloc(size_t size)
 {
 	void	*ptr;
 
