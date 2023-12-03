@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 01:02:31 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:56:58 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static t_redirect	*terminate_heredoc(int fd, char *line, t_redirect *redirect)
 {
 	close(fd);
 	free(line);
-	if (errno != 0)
+	if (g_sig != 0 || errno != 0)
 		return (destroy_redirect_and_return_null(redirect));
 	return (redirect);
 }

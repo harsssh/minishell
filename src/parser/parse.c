@@ -6,13 +6,15 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 00:55:27 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:43:39 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "parser_internal.h"
 #include "ast.h"
+#include <stdio.h>
+#include "readline/readline.h"
 #include "token.h"
 #include "utils.h"
 
@@ -32,9 +34,9 @@ t_ast_node	*parse(const char *input, t_context *ctx)
 	result = parse_complete_command(parser);
 	if (result == NULL || !is_eof(parser))
 	{
-		if (get_stream(parser)->size == 0)
+		if (get_stream(parser)->size == 0 && rl_catch_signals == 0)
 			print_simple_error(ctx, "parser", "unexpected end of file");
-		else
+		else if (rl_catch_signals == 0)
 			print_syntax_error(ctx, parser);
 		ctx->last_exit_status = EXIT_SYNTAX_ERROR;
 		destroy_parser(parser);
