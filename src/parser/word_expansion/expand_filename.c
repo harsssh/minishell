@@ -70,6 +70,7 @@ t_list	*get_cur_dir_filenames(void)
 	return (res);
 }
 
+// Make sure that the pattern has NOT already been added to the result.
 t_list	*maybe_add_pattern_to_expand_result(t_list *expand_result, char *pat)
 {
 	if (expand_result->size == 0)
