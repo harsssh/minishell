@@ -12,6 +12,7 @@
 
 #include "get_next_line.h"
 #include "ft_string.h"
+#include "ft_stdlib.h"
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -39,7 +40,7 @@ static char	*copy_prefix_and_shift(t_buffer *buf, size_t len)
 	n = 0;
 	while (n < len && buf->buf[n])
 		n++;
-	prefix = malloc((n + 1) * sizeof(char));
+	prefix = xmalloc((n + 1) * sizeof(char));
 	if (prefix == NULL)
 		return (NULL);
 	ft_memmove(prefix, buf->buf, n);

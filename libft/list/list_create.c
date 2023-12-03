@@ -17,7 +17,7 @@ t_list	*ft_list_create(void)
 {
 	t_list	*list;
 
-	list = malloc(sizeof(t_list));
+	list = xmalloc(sizeof(t_list));
 	if (list == NULL)
 		return (NULL);
 	list->head = NULL;
