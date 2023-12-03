@@ -42,6 +42,8 @@ int	execute_ast(t_context *ctx, t_ast_node *ast)
 	if (info == NULL)
 		return (EXIT_FAILURE);
 	ret = execute_ast_impl(ctx, info, ast);
+	if (ctx->last_exit_status == EXIT_SUCCESS && ret != EXIT_SUCCESS)
+		ctx->last_exit_status = ret;
 	wait_children_and_set_exit_status(ctx, info->last_command_pid);
 	destroy_pipeline_info(info);
 	return (ret);
