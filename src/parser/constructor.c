@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:54:38 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 22:36:58 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 18:10:28 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_parser	*new_parser(char *input, t_context *ctx)
 	t_token_stream		*stream;
 	t_tokenize_result	tokenize_result;
 
+	if (*input == '\0')
+		return (NULL);
 	tokenize_result = tokenize(input, &stream, ctx);
 	if (tokenize_result != TRESULT_OK)
 	{
