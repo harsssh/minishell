@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 18:51:10 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:16:51 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	*expand_parameters_in_heredoc(char *line, t_context *ctx,
 	if (ft_strchr(delimiter, SINGLE_QUOTE) || ft_strchr(delimiter,
 			DOUBLE_QUOTE))
 		return (line);
-	expand_result = expand_parameters(line, ctx);
+	expand_result = expand_parameters(line, ctx, EXPAND_ANYWAY);
 	free(line);
 	if (expand_result == NULL)
 		return (NULL);

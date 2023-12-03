@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 00:03:47 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/29 23:21:34 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:14:01 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "word_expansion_internal.h"
 #include "characters.h"
 #include "utils.h"
+#include <stdbool.h>
 #include <stdlib.h>
 
 static void	*destroy_and_return_null(t_list *list, char *s)
@@ -58,7 +59,8 @@ static char	*expand_paramters_helper(char *res, const char **word,
 // char * -> t_list<char *>
 // Returns a list with a single word, 
 // assuming that param `word` is not NULL.
-t_list	*expand_parameters(const char *word, t_context *ctx)
+t_list	*expand_parameters(const char *word, t_context *ctx,
+						bool do_force_expand)
 {
 	char	*res;
 	char	quote;
@@ -68,7 +70,7 @@ t_list	*expand_parameters(const char *word, t_context *ctx)
 	quote = '\0';
 	while (*word != '\0')
 	{
-		if (*word == '$' && quote != SINGLE_QUOTE)
+		if (*word == '$' && (do_force_expand || quote != SINGLE_QUOTE))
 		{
 			res = expand_paramters_helper(res, &word, ctx);
 			if (res == NULL)
