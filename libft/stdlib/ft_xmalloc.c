@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   xmalloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/18 20:52:47 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/20 09:05:04 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/12/03 16:17:43 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/12/03 16:22:53 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_string.h"
-#include "ft_stdlib.h"
+#include "ft_stdio.h"
 #include <stdlib.h>
+#include <unistd.h>
 
-void	*ft_calloc(size_t count, size_t size)
+#define XMALLOC_EXIT_STATUS 2
+
+void	*ft_xmalloc(size_t size)
 {
-	void	*buf;
-	size_t	bytes;
+	void	*ptr;
 
-	bytes = count * size;
-	if (size != 0 && bytes / size != count)
-		return (NULL);
-	buf = ft_xmalloc(bytes);
-	if (!buf)
-		return (NULL);
-	return (ft_memset(buf, 0, bytes));
+	ptr = malloc(size);
+	if (ptr == NULL)
+	{
+		ft_dprintf(STDERR_FILENO, "xmalloc: cannot allocate %lu bytes\n", size);
+		exit(XMALLOC_EXIT_STATUS);
+	}
+	return (ptr);
 }

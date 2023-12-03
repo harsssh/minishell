@@ -6,12 +6,12 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 11:45:58 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/18 21:25:13 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 01:38:24 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "word_expansion_internal.h"
+#include <stdlib.h>
 
 static void	*destroy_and_return_null(char *s, t_list *l, DIR *d)
 {
@@ -70,6 +70,19 @@ t_list	*get_cur_dir_filenames(void)
 	return (res);
 }
 
+// Make sure that the pattern has NOT already been added to the result.
+t_list	*maybe_add_pattern_to_expand_result(t_list *expand_result, char *pat)
+{
+	if (expand_result->size == 0)
+	{
+		if (ft_list_push_back(expand_result, pat) == NULL)
+			return (destroy_and_return_null(pat, expand_result, NULL));
+	}
+	else
+		free(pat);
+	return (expand_result);
+}
+
 t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
 {
 	t_list	*res;
@@ -94,7 +107,5 @@ t_list	*expand_filename(char *pat, t_list *cur_dir_filenames)
 			return (destroy_and_return_null(pat, res, NULL));
 		filename_node = filename_node->next;
 	}
-	if (res->size == 0 && ft_list_push_back(res, pat) == NULL)
-		return (destroy_and_return_null(pat, res, NULL));
-	return (res);
+	return (maybe_add_pattern_to_expand_result(res, pat));
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_string.h"
+#include "ft_stdlib.h"
 #include <stdlib.h>
 
 char	*ft_strdup(const char *src)
@@ -19,7 +20,7 @@ char	*ft_strdup(const char *src)
 	char	*buf;
 
 	n = ft_strlen(src);
-	buf = (char *)malloc(n + 1);
+	buf = (char *) ft_xmalloc(n + 1);
 	if (buf == NULL)
 		return (NULL);
 	ft_strlcpy(buf, src, n + 1);

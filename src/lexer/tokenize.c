@@ -52,7 +52,7 @@ t_tokenize_result	tokenize(char *input,
 	lexer = new_lexer(input);
 	*stream = new_token_stream();
 	is_tokenize_failed = push_tokens(lexer, *stream);
-	if (lexer == NULL || stream == NULL || is_tokenize_failed)
+	if (lexer == NULL || *stream == NULL || is_tokenize_failed)
 	{
 		destroy_token_stream(*stream);
 		*stream = NULL;

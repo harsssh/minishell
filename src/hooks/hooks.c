@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/18 20:52:47 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/20 09:05:04 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/12/03 00:47:10 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/12/03 00:49:56 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_string.h"
-#include "ft_stdlib.h"
+#include "hooks.h"
+#include "sig.h"
+#include <stdio.h>
+#include <readline/readline.h>
+#include <signal.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
-void	*ft_calloc(size_t count, size_t size)
+int	heredoc_sigint_event_hook(void)
 {
-	void	*buf;
-	size_t	bytes;
+	if (g_sig == SIGINT)
+	{
+		rl_done = true;
+	}
+	return (EXIT_SUCCESS);
+}
 
-	bytes = count * size;
-	if (size != 0 && bytes / size != count)
-		return (NULL);
-	buf = ft_xmalloc(bytes);
-	if (!buf)
-		return (NULL);
-	return (ft_memset(buf, 0, bytes));
+int	sigint_event_hook(void)
+{
+	if (g_sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		rl_done = true;
+	}
+	return (EXIT_SUCCESS);
 }

@@ -55,7 +55,6 @@ static int	execute_right(t_context *ctx, t_pipeline_info *info,
 	return (ret);
 }
 
-// TODO: handle malloc failure of `push_fd_close_list`
 /*
  * - Closes unnecessary fds immediately.
  * - Minimizes open fds by executing the right AST subtree first.

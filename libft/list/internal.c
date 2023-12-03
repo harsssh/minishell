@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include "ft_list.h"
-#include <stdlib.h>
+#include "ft_stdlib.h"
 
 t_node	*ft_node_create(void *data)
 {
 	t_node	*node;
 
-	node = malloc(sizeof(t_node));
+	node = ft_xmalloc(sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->data = data;

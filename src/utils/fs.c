@@ -36,7 +36,7 @@ char	*join_path(const char *base, const char *relpath)
 
 	if (base == NULL || relpath == NULL)
 		return (NULL);
-	joined_path = malloc(ft_strlen(base) + ft_strlen(relpath) + 2);
+	joined_path = ft_xmalloc(ft_strlen(base) + ft_strlen(relpath) + 2);
 	if (joined_path == NULL)
 		return (NULL);
 	p = joined_path;

@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   hooks.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/18 20:52:47 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/05/20 09:05:04 by kemizuki         ###   ########.fr       */
+/*   Created: 2023/12/03 00:45:13 by kemizuki          #+#    #+#             */
+/*   Updated: 2023/12/03 01:46:49 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_string.h"
-#include "ft_stdlib.h"
-#include <stdlib.h>
+#ifndef HOOKS_H
+# define HOOKS_H
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*buf;
-	size_t	bytes;
+int	sigint_event_hook(void);
+int	heredoc_sigint_event_hook(void);
 
-	bytes = count * size;
-	if (size != 0 && bytes / size != count)
-		return (NULL);
-	buf = ft_xmalloc(bytes);
-	if (!buf)
-		return (NULL);
-	return (ft_memset(buf, 0, bytes));
-}
+#endif
