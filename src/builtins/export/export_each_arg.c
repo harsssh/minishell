@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:18:02 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/30 17:05:15 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 19:23:35 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static int	handle_assignment(
 {
 	t_variable	*var;
 	char		*new_value;
+	int			ret;
 
 	var = getvar(ctx, result.name);
 	if (var == NULL || result.operation == OP_SET)
@@ -31,7 +32,9 @@ static int	handle_assignment(
 		new_value = ft_strjoin(var->value, result.value);
 		if (new_value == NULL)
 			return (EXIT_FAILURE);
-		return (exportvar(ctx, result.name, new_value));
+		ret = exportvar(ctx, result.name, new_value);
+		free(new_value);
+		return (ret);
 	}
 	return (EXIT_SUCCESS);
 }
