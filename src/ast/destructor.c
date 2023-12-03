@@ -6,18 +6,21 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 16:57:55 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/10/12 18:59:12 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 16:53:18 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 #include "ft_list.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 void	destroy_redirect(t_redirect *redirect)
 {
 	if (redirect == NULL)
 		return ;
+	if (redirect->type == REDIRECT_HERE_DOC)
+		unlink(redirect->filename);
 	free(redirect->filename);
 	free(redirect);
 }
