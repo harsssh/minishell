@@ -171,3 +171,43 @@ TEST(builtins_echo, not_n_option) {
 	EXPECT_EQ(ret, EXIT_SUCCESS);
 	EXPECT_EQ(output, "-a hello world\n");
 }
+
+// -- あり
+// echoでは特別扱いしない
+TEST(builtins_echo, double_hyphen) {
+	testing::internal::CaptureStdout();
+	const char *args[] = {"--", "hello", "world", nullptr};
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtins_echo(&ctx, args);
+
+	auto output = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(ret, EXIT_SUCCESS);
+	EXPECT_EQ(output, "-- hello world\n");
+}
+
+// -- -n
+TEST(builtins_echo, double_hyphen_n_option) {
+	testing::internal::CaptureStdout();
+	const char *args[] = {"--", "-n", "hello", "world", nullptr};
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtins_echo(&ctx, args);
+
+	auto output = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(ret, EXIT_SUCCESS);
+	EXPECT_EQ(output, "-- -n hello world\n");
+}
+
+// -n --
+TEST(builtins_echo, n_option_double_hyphen) {
+	testing::internal::CaptureStdout();
+	const char *args[] = {"-n", "--", "hello", "world", nullptr};
+	t_context ctx = {.shell_name = "minishell"};
+	int ret = builtins_echo(&ctx, args);
+
+	auto output = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(ret, EXIT_SUCCESS);
+	EXPECT_EQ(output, "-- hello world");
+}
