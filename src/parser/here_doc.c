@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 19:16:51 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/07 20:21:00 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ t_redirect	*parse_here_doc(t_parser *parser)
 		if (word == NULL)
 			return (NULL);
 		delimiter = remove_quote(word);
+		free(word);
 		if (delimiter == NULL)
 			return (NULL);
 		rl_event_hook = heredoc_sigint_event_hook;
