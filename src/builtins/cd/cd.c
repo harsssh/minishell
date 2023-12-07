@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 01:53:09 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/10/17 17:10:47 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/07 22:26:26 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	builtins_cd(t_context *ctx, const char **args)
 	const char	*dirname;
 
 	args = ignore_options(args);
-	if (*args == NULL || ft_strcmp(*args, "-") == 0)
+	if (*args == NULL || **args == '\0' || ft_strcmp(*args, "-") == 0)
 	{
 		print_simple_error(ctx, "cd", ERR_NOT_IMPL);
 		return (EXIT_FAILURE);
