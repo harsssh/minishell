@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:58:11 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/29 23:21:17 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:16:05 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include "libft.h"
 # include <dirent.h>
 
+# define NOT_EXPAND_IN_SINGLE_QUOTE 0
+# define EXPAND_ANYWAY 1
+
 typedef struct s_match_table
 {
 	bool	**dp;
@@ -27,7 +30,8 @@ typedef struct s_match_table
 	size_t	j;
 }	t_match_table;
 
-t_list				*expand_parameters(const char *word, t_context *ctx);
+t_list				*expand_parameters(const char *word, t_context *ctx,
+						bool do_force_expand);
 char				*expand_first_param(const char **word, t_context *ctx);
 t_list				*split_word(t_list *list);
 char				*join_char(char *str, const char **word);

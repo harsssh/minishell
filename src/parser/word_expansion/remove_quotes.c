@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 12:16:28 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/11/30 01:55:14 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/03 18:51:59 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	read_quote(const char **s, char *quote)
 	(*s)++;
 }
 
-static char	*remove_quote(const char *s)
+char	*remove_quote(const char *s)
 {
 	char	quote;
 	char	*res;

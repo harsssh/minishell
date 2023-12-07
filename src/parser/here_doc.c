@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 17:00:15 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/07 20:21:00 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	*expand_parameters_in_heredoc(char *line, t_context *ctx,
 	if (ft_strchr(delimiter, SINGLE_QUOTE) || ft_strchr(delimiter,
 			DOUBLE_QUOTE))
 		return (line);
-	expand_result = expand_parameters(line, ctx);
+	expand_result = expand_parameters(line, ctx, EXPAND_ANYWAY);
 	free(line);
 	if (expand_result == NULL)
 		return (NULL);
@@ -115,12 +115,17 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 // if the token type is TK_WORD.
 t_redirect	*parse_here_doc(t_parser *parser)
 {
+	char			*word;
 	char			*delimiter;
 	t_redirect		*ret;
 
 	if (consume_token(parser, TK_REDIRECT_HERE_DOC))
 	{
-		delimiter = parse_word(parser);
+		word = parse_word(parser);
+		if (word == NULL)
+			return (NULL);
+		delimiter = remove_quote(word);
+		free(word);
 		if (delimiter == NULL)
 			return (NULL);
 		rl_event_hook = heredoc_sigint_event_hook;
