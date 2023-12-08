@@ -30,7 +30,7 @@ jobs:
           find . -type f -name "*.c" | xargs sed -i 's/sys_siglist\[\(.*\)\]/strsignal(\1)/g'
 
       - name: Build
-        run: make
+        run: make CC=clang
 
       - name: Test
         run: e2e_tests/run.sh
