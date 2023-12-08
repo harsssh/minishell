@@ -1,0 +1,37 @@
+---
+name: E2E Test
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "libft/**"
+      - "src/**"
+      - "e2e_tests/**"
+  pull_request:
+    paths:
+      - "libft/**"
+      - "src/**"
+      - "e2e_tests/**"
+  workflow_dispatch:
+
+jobs:
+  ctest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Initialize submodules
+        run: git submodule update --init
+
+      # HACK
+      - name: Replace sys_siglist with strsignal
+        run: |
+          find . -type f -name "*.c" | xargs sed -i 's/sys_siglist\[\(.*\)\]/strsignal(\1)/g'
+
+      - name: Build
+        run: make
+
+      - name: Test
+        run: e2e_tests/run.sh
+

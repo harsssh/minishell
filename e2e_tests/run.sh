@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
-make -C ../
 
 # テストケースをtestsディレクトリから取得して、拡張子を除いたファイル名のリストを作成
 tests=$(find tests -type f -name '*.in' | sort | sed -e 's/\..*$//')
