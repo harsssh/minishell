@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 17:00:15 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/08 20:45:11 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,25 @@ static t_redirect	*terminate_heredoc(int fd, char *line, t_redirect *redirect)
 	return (redirect);
 }
 
+static char	*read_command_line(t_context *ctx)
+{
+	char	*line;
+	char	*tmp;
+
+	if (ctx->is_interactive)
+		line = readline("> ");
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line == NULL)
+			return (NULL);
+		tmp = line;
+		line = ft_strtrim(tmp, "\n");
+		free(tmp);
+	}
+	return (line);
+}
+
 static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 {
 	t_redirect	*redirect;
@@ -93,7 +112,7 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 		return (destroy_redirect_and_return_null(redirect));
 	while (1)
 	{
-		line = readline("> ");
+		line = read_command_line(ctx);
 		if (line == NULL || g_sig == SIGINT)
 			return (terminate_heredoc(fd, line, redirect));
 		if (ft_strcmp(delimiter, line) == 0)
