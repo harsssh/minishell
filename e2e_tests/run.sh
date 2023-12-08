@@ -21,20 +21,24 @@ do
     diff -u --color tests/$test_name.expected diff/$test_name.out > /dev/null
     is_diff=$?
 
-    if [[ $is_diff -ne 0 || ($is_err_case -eq 1 && $exit_status -eq 0) ]]
+    if [[ $is_diff -ne 0 || ($is_err_case -eq 1 && $exit_status -eq 0) || ($is_err_case -eq 0 && $exit_status -ne 0)]]
     then
         is_failed=1
-        printf "$test \033[31mfailed\033[m\n" >&2
+        printf "\033[31mfailed\033[m $test\n" >&2
         if [ $is_err_case -eq 1 -a $exit_status -eq 0 ]
         then
             printf "  └── exit status: expected non-zero, but got 0\n" >&2;
+        fi
+        if [ $is_err_case -eq 0 -a $exit_status -ne 0 ]
+        then
+            printf "  └── exit status: expected 0, but got $exit_status\n" >&2;
         fi
         if [ $is_diff -ne 0 ]
         then
             diff -u --color tests/$test_name.expected diff/$test_name.out
         fi
     else
-        printf "$test \033[32mpassed\033[m\n"
+        printf "\033[32mpassed\033[m $test\n"
     fi
 done
 

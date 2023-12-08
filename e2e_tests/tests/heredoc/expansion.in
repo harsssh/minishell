@@ -1,0 +1,4 @@
+export a=hello
+cat <<EOF
+$a
+EOF
