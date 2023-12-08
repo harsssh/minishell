@@ -55,5 +55,6 @@ void			*destroy_nodes_and_return_null(t_ast_node *n1, t_ast_node *n2);
 void			*destroy_redirect_and_return_null(t_redirect *redirect);
 void			print_syntax_error(t_context *ctx, t_parser *parser);
 char			*read_command_line(t_context *ctx);
+char			*remove_quote(const char *s);
 
 #endif

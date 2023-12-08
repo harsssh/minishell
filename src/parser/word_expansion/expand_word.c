@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 23:57:53 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/02 22:40:48 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/03 19:16:30 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_list	*expand_word(const char *word, t_context *ctx)
 	t_list				*res;
 	t_list				*tmp;
 
-	res = expand_parameters(word, ctx);
+	res = expand_parameters(word, ctx, NOT_EXPAND_IN_SINGLE_QUOTE);
 	if (res == NULL)
 		return (NULL);
 	tmp = res;
