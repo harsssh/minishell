@@ -42,7 +42,7 @@ void	print_simple_error(t_context *ctx, const char *cmd, const char *msg);
 // directory.c
 void	sync_working_directory(struct s_context *ctx, char *for_whom);
 char	*get_working_directory(struct s_context *ctx, char *for_whom);
-int		bindpwd(t_context *ctx);
+int		bindpwd(t_context *ctx, char *for_whom);
 
 // message.c
 void	display_exit_message(t_context *ctx);

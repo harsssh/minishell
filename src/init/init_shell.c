@@ -34,8 +34,10 @@ static int	set_default_values(t_context *ctx)
 	}
 	if (getenv("PWD") == NULL)
 	{
-		if (bindpwd(ctx) == EXIT_FAILURE || exportvar(ctx, "PWD", NULL) == -1)
-			return (EXIT_FAILURE);
+		if (bindpwd(ctx, "shell-init") == EXIT_SUCCESS) {
+			if (exportvar(ctx, "PWD", NULL) == -1)
+				return (EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
