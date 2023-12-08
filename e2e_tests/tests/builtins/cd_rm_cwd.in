@@ -1,0 +1,4 @@
+mkdir -p /tmp/foo
+cd /tmp/foo
+rm -r ../foo
+cd .
