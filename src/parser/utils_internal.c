@@ -6,11 +6,12 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:08:34 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/12/08 20:52:53 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/08 20:58:14 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+#include <stdio.h>
 #include <readline/readline.h>
 #include "context.h"
 #include <unistd.h>
