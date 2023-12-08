@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 01:03:34 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/12/03 00:50:08 by kemizuki         ###   ########.fr       */
+/*   Updated: 2023/12/09 01:34:12 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int	init_context(t_context *ctx, char **argv, char **envp)
 		return (destroy_and_return_failure(ctx));
 	ctx->is_login = (**argv == '-');
 	ctx->is_interactive = (isatty(STDIN_FILENO) && isatty(STDERR_FILENO));
+	errno = 0;
 	if (inherit_env(ctx, envp) == EXIT_FAILURE)
 		return (destroy_and_return_failure(ctx));
 	if (set_default_values(ctx) == EXIT_FAILURE)
