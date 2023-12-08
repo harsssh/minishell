@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/03 17:01:15 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/08 17:08:13 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "sig.h"
 #include "token.h"
 #include "utils.h"
+
+#define ERR_MESSAGE "syntax error near unexpected token `newline'"
 
 t_ast_node	*parse(const char *input, t_context *ctx)
 {
@@ -33,8 +35,8 @@ t_ast_node	*parse(const char *input, t_context *ctx)
 	result = parse_complete_command(parser);
 	if (result == NULL || !is_eof(parser))
 	{
-		if (get_stream(parser)->size == 0 && g_sig != SIGINT && errno == 0)
-			print_simple_error(ctx, "parser", "unexpected end of file");
+		if (is_eof(parser) && g_sig != SIGINT && errno == 0)
+			print_simple_error(ctx, "syntax error", ERR_MESSAGE);
 		else if (g_sig != SIGINT && errno == 0)
 			print_syntax_error(ctx, parser);
 		ctx->last_exit_status = EXIT_SYNTAX_ERROR;
