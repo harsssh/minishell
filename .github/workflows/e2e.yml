@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ctest:
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
