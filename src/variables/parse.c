@@ -89,8 +89,6 @@ static t_parse_status	parse_pair(
 		return (ASSIGN_PARSE_INTERNAL_ERROR);
 	if (!is_valid_identifier(result->name))
 		status = ASSIGN_PARSE_INVALID_IDENTIFIER;
-	else if (ft_strcmp(result->name, "_") == 0)
-		status = ASSIGN_PARSE_IGNORE;
 	if (status != ASSIGN_PARSE_SUCCESS)
 	{
 		free(result->name);

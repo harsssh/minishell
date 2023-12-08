@@ -212,15 +212,3 @@ TEST(parse_assignment, hyphen)
 	EXPECT_EQ(result.name, nullptr);
 	EXPECT_EQ(result.value, nullptr);
 }
-
-// nameがアンダースコア
-TEST(parse_assignment, name_underscore)
-{
-	t_parse_status status;
-	t_parsed_assignment result;
-
-	status = parse_assignment(&result, "_=VALUE");
-	EXPECT_EQ(status, ASSIGN_PARSE_IGNORE);
-	EXPECT_EQ(result.name, nullptr);
-	EXPECT_EQ(result.value, nullptr);
-}

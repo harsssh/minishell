@@ -45,8 +45,6 @@ static int	process_parse_result(
 		t_parse_status status,
 		t_parsed_assignment result)
 {
-	if (status == ASSIGN_PARSE_IGNORE)
-		return (EXIT_SUCCESS);
 	if (status == ASSIGN_PARSE_INVALID_IDENTIFIER)
 	{
 		print_quoted_error(ctx, "export", arg, ERR_IDENTIFIER);
