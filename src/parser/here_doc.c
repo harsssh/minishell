@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/08 23:49:51 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/09 01:41:21 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ t_redirect	*parse_here_doc(t_parser *parser)
 		word = parse_word(parser);
 		if (word == NULL)
 			return (NULL);
-		do_expand = ft_strchr(word, SINGLE_QUOTE)
-			|| ft_strchr(word, DOUBLE_QUOTE);
+		do_expand = (ft_strchr(word, SINGLE_QUOTE)
+				|| ft_strchr(word, DOUBLE_QUOTE));
 		delimiter = remove_quote(word);
 		free(word);
 		if (delimiter == NULL)
