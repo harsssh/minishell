@@ -18,6 +18,6 @@
 void	print_unmatching_quote_error(t_lexer *lexer, t_context *ctx)
 {
 	ft_dprintf(STDERR_FILENO,
-		"%s: unexpected EOF while looking for matching `%c'\n",
+		"%s: unexpected token `newline' while looking for matching `%c'\n",
 		ctx->shell_name, get_quote_char(lexer));
 }

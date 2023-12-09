@@ -1,2 +1,2 @@
-minishell: unexpected EOF while looking for matching `"'
-minishell: parser: unexpected end of file
+minishell: unexpected token `newline' while looking for matching `"'
+minishell: parser: unexpected token `newline'
