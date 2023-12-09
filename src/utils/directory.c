@@ -40,12 +40,12 @@ char	*get_working_directory(struct s_context *ctx, char *for_whom)
 	return (ft_strdup(ctx->cwd));
 }
 
-int	bindpwd(t_context *ctx)
+int	bindpwd(t_context *ctx, char *for_whom)
 {
 	char	*dirname;
 	int		result;
 
-	dirname = get_working_directory(ctx, "cd");
+	dirname = get_working_directory(ctx, for_whom);
 	if (dirname == NULL)
 		return (EXIT_FAILURE);
 	if (setvar(ctx, "PWD", dirname, 1) == 0)

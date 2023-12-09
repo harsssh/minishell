@@ -19,6 +19,8 @@
 #include "token.h"
 #include "utils.h"
 
+#define ERR_MESSAGE "syntax error near unexpected token `newline'"
+
 t_ast_node	*parse(const char *input, t_context *ctx)
 {
 	t_parser	*parser;
@@ -35,8 +37,8 @@ t_ast_node	*parse(const char *input, t_context *ctx)
 	result = parse_complete_command(parser);
 	if (result == NULL || !is_eof(parser))
 	{
-		if (get_stream(parser)->size == 0 && g_sig != SIGINT && errno == 0)
-			print_simple_error(ctx, "parser", "unexpected end of file");
+		if (is_eof(parser) && g_sig != SIGINT && errno == 0)
+			print_simple_error(ctx, "syntax error", ERR_MESSAGE);
 		else if (g_sig != SIGINT && errno == 0)
 			print_syntax_error(ctx, parser);
 		ctx->last_exit_status = EXIT_SYNTAX_ERROR;

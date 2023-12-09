@@ -6,7 +6,7 @@
 /*   By: kemizuki <kemizuki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 01:03:34 by kemizuki          #+#    #+#             */
-/*   Updated: 2023/12/09 01:34:12 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/09 09:24:57 by kemizuki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@ static int	set_default_values(t_context *ctx)
 	}
 	if (getenv("PWD") == NULL)
 	{
-		if (bindpwd(ctx) == EXIT_FAILURE || exportvar(ctx, "PWD", NULL) == -1)
-			return (EXIT_FAILURE);
+		if (bindpwd(ctx, "shell-init") == EXIT_SUCCESS)
+		{
+			if (exportvar(ctx, "PWD", NULL) == -1)
+				return (EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
