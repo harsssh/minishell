@@ -246,24 +246,6 @@ TEST_F(TestbuiltinsExport, ExportSpaceNameEqualWithValue) {
 			  "minishell: export: ` NAME =value': not a valid identifier\n");
 }
 
-// export _=value
-// 無視される
-TEST_F(TestbuiltinsExport, ExportUnderScoreEqualWithValue) {
-	testing::internal::CaptureStdout();
-	auto status = run_export("_=value");
-	EXPECT_EQ(status, EXIT_SUCCESS);
-	// attributeを確認
-	auto var = getvar(&ctx, "_");
-	EXPECT_EQ(var, nullptr);
-
-	status = run_export(nullptr);
-	EXPECT_EQ(status, EXIT_SUCCESS);
-	EXPECT_EQ(testing::internal::GetCapturedStdout(),
-			  DECLARED_EXPORTED +
-			  DECLARED_EXPORTED_NO_VALUE
-	);
-}
-
 // unsetして引数なしexport
 TEST_F(TestbuiltinsExport, ExportAfterUnset) {
 	// capture

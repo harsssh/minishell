@@ -1,0 +1,10 @@
+cd /tmp
+echo $PWD
+cd ../
+echo $PWD
+cd .
+echo $PWD
+cd ../
+echo $PWD
+cd tmp
+echo $PWD

@@ -6,7 +6,7 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 18:19:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/07 20:21:00 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/09 01:41:21 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 #include "context.h"
 #include "fcntl.h"
 #include "ft_list.h"
+#include "ft_string.h"
 #include "libft.h"
 #include "parser/word_expansion/word_expansion_internal.h"
 #include "parser_internal.h"
 #include "sig.h"
 #include "hooks.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <errno.h>
 #include <readline/readline.h>
@@ -55,13 +57,12 @@ static int	open_here_doc(t_redirect *redirect)
 }
 
 static char	*expand_parameters_in_heredoc(char *line, t_context *ctx,
-		char *delimiter)
+		bool do_expand)
 {
 	t_list	*expand_result;
 	char	*expanded_line;
 
-	if (ft_strchr(delimiter, SINGLE_QUOTE) || ft_strchr(delimiter,
-			DOUBLE_QUOTE))
+	if (do_expand)
 		return (line);
 	expand_result = expand_parameters(line, ctx, EXPAND_ANYWAY);
 	free(line);
@@ -81,7 +82,8 @@ static t_redirect	*terminate_heredoc(int fd, char *line, t_redirect *redirect)
 	return (redirect);
 }
 
-static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
+static t_redirect	*new_here_doc(char *delimiter, t_context *ctx,
+								bool do_expand)
 {
 	t_redirect	*redirect;
 	int			fd;
@@ -93,7 +95,7 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 		return (destroy_redirect_and_return_null(redirect));
 	while (1)
 	{
-		line = readline("> ");
+		line = read_command_line(ctx);
 		if (line == NULL || g_sig == SIGINT)
 			return (terminate_heredoc(fd, line, redirect));
 		if (ft_strcmp(delimiter, line) == 0)
@@ -101,7 +103,7 @@ static t_redirect	*new_here_doc(char *delimiter, t_context *ctx)
 			free(line);
 			return (redirect);
 		}
-		line = expand_parameters_in_heredoc(line, ctx, delimiter);
+		line = expand_parameters_in_heredoc(line, ctx, do_expand);
 		if (line == NULL)
 			return (destroy_redirect_and_return_null(redirect));
 		ft_putendl_fd(line, fd);
@@ -118,18 +120,21 @@ t_redirect	*parse_here_doc(t_parser *parser)
 	char			*word;
 	char			*delimiter;
 	t_redirect		*ret;
+	bool			do_expand;
 
 	if (consume_token(parser, TK_REDIRECT_HERE_DOC))
 	{
 		word = parse_word(parser);
 		if (word == NULL)
 			return (NULL);
+		do_expand = (ft_strchr(word, SINGLE_QUOTE)
+				|| ft_strchr(word, DOUBLE_QUOTE));
 		delimiter = remove_quote(word);
 		free(word);
 		if (delimiter == NULL)
 			return (NULL);
 		rl_event_hook = heredoc_sigint_event_hook;
-		ret = new_here_doc(delimiter, parser->ctx);
+		ret = new_here_doc(delimiter, parser->ctx, do_expand);
 		rl_event_hook = sigint_event_hook;
 		free(delimiter);
 		return (ret);

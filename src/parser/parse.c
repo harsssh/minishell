@@ -6,11 +6,13 @@
 /*   By: smatsuo <smatsuo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 20:01:43 by smatsuo           #+#    #+#             */
-/*   Updated: 2023/12/08 17:08:13 by smatsuo          ###   ########.fr       */
+/*   Updated: 2023/12/09 01:30:20 by smatsuo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "ft_stdio.h"
+#include "libft.h"
 #include "parser_internal.h"
 #include "ast.h"
 #include "sig.h"

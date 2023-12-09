@@ -27,7 +27,7 @@ t_parser	*new_parser(char *input, t_context *ctx)
 	if (tokenize_result != TRESULT_OK)
 	{
 		if (tokenize_result == TRESULT_UNMATCHING_QUOTE)
-			print_simple_error(ctx, "parser", "unexpected end of file");
+			print_simple_error(ctx, "parser", "unexpected token `newline'");
 		ctx->last_exit_status = EXIT_SYNTAX_ERROR;
 		return (NULL);
 	}
