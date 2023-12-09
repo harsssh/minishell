@@ -1,1 +1,1 @@
-minishell: parser: unexpected end of file
+minishell: syntax error: syntax error near unexpected token `newline'
