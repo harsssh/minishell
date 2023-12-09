@@ -29,7 +29,7 @@ int	builtins_cd(t_context *ctx, const char **args)
 	}
 	dirname = args[0];
 	if (change_directory(ctx, dirname) == 0)
-		return (bindpwd(ctx));
+		return (bindpwd(ctx, "cd"));
 	perror_verbose(ctx, "cd", dirname);
 	return (EXIT_FAILURE);
 }
