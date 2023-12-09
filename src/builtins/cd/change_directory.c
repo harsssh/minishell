@@ -54,9 +54,10 @@ static int	retry_chdir(t_context *ctx, const char *newdir)
 	ret = chdir(newdir);
 	if (ret == 0)
 	{
-		cwd_on_failure = join_path(ctx->cwd, newdir);
-		if (cwd_on_failure == NULL)
-			return (-1);
+		if (ctx->cwd == NULL)
+			cwd_on_failure = ft_strdup(newdir);
+		else
+			cwd_on_failure = join_path(ctx->cwd, newdir);
 		sync_working_directory(ctx, "cd");
 		if (ctx->cwd == NULL)
 			set_working_directory(ctx, cwd_on_failure);
@@ -73,10 +74,9 @@ int	change_directory(t_context *ctx, const char *newdir)
 	bool	is_canon_success;
 
 	is_canon_success = get_absolute_destination_path(ctx, newdir, &path);
-	if (path == NULL)
-		return (-1);
-	ret = chdir(path);
-	if (ret == 0)
+	if (path != NULL)
+		ret = chdir(path);
+	if (path != NULL && ret == 0)
 	{
 		if (!is_canon_success)
 			sync_working_directory(ctx, "cd");
